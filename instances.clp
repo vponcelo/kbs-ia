@@ -151,6 +151,15 @@
 	(muscular_problems knee_ligaments)
 	(weight 52))
 
+([bpc8] of  BasicPhysicalCondition
+
+	(blood_max_pressure 112)
+	(blood_min_pressure 75)
+	(diet lack_calcium)
+	(height 176)
+	(muscular_problems limited_mobility)
+	(weight 76))
+
 ([bpc9] of  BasicPhysicalCondition
 
 	(blood_max_pressure 120)
@@ -168,15 +177,6 @@
 	(height 178)
 	(muscular_problems none)
 	(weight 77))
-
-([bpc8] of  BasicPhysicalCondition
-
-	(blood_max_pressure 112)
-	(blood_min_pressure 75)
-	(diet lack_calcium)
-	(height 176)
-	(muscular_problems limited_mobility)
-	(weight 76))
 )
 
 (definstances TestPerson
