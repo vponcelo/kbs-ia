@@ -20,13 +20,13 @@
 
 
 (defmessage-handler Person print primary ()
-	(printout t crlf crlf "------------USER INFO-------------" crlf) 
-	(printout t "    *Nombre:" ?self:name_  crlf) 
-	(printout t "    *Apellidos:" ?self:last_name  crlf) 
-;	(printout t "    *DNI:" ?self:dni  crlf) 
-;	(printout t "    *Edad:" ?self:edad  crlf) 
-;	(printout t "    *Email:" ?self:email  crlf) 
-	(printout t "----------------------------------" crlf crlf) 
+	(printout t crlf crlf)
+	(printout t "------------Person Basic Information-------------" crlf) 
+	(printout t "    Name:" ?self:name_  crlf) 
+	(printout t "    LastName:" ?self:last_name  crlf) 
+	(printout t "    age:" ?self:age  crlf) 
+	(printout t "    goal:" ?self:goal  crlf) 
+	(printout t "-------------------------------------------------" crlf crlf) 
 )
 
 
@@ -37,13 +37,13 @@
 )
 
 
-(deffunction set-numero (?pregunta ?min ?max)
-	(printout t "¿Cual es tu " ?pregunta "?" crlf)
-	(bind ?a (read))
-	if (> ?a  ?min)		; & ?a < ?max)
-	 then (?a)
-	 else ("-1")
-)
+;(deffunction set-numero (?pregunta ?min ?max)
+;	(printout t "¿Cual es tu " ?pregunta "?" crlf)
+;	(bind ?a (read))
+;	if (> ?a  ?min)		; & ?a < ?max)
+;	 then (?a)
+;	 else ("-1")
+;)
 
 
 (defrule crea-persona
@@ -54,8 +54,8 @@
         (send [User1] put-name_ ?res)
 	(bind ?res (set-valor "apellido"))
         (send [User1] put-last_name ?res)
-	 (bind ?res (set-numero "edad" 1 100)
-	(printout t "tu edad es: " ?res crlf)
+	;(bind ?res (set-numero "edad" 1 100)
+	;(printout t "tu edad es: " ?res crlf)
 	(send [User1] print)
 	
 
@@ -72,7 +72,7 @@
 	(printout t "|                    FITNESS                     |" crlf)
 	(printout t "|                                                |" crlf)
 	(printout t "+------------------------------------------------+" crlf)
-	(focus preguntas-persona)
+	;(focus preguntas-persona)
 )
 
 
