@@ -349,7 +349,7 @@
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
-(defclass bike
+(defclass Bike
 	(is-a WithoutWeights)
 	(role concrete)
 	(multislot goal
@@ -388,7 +388,7 @@
 		(cardinality 0 8)
 		(create-accessor read-write)))
 
-(defclass run
+(defclass Run
 	(is-a WithoutWeights)
 	(role concrete)
 	(multislot goal
@@ -427,7 +427,7 @@
 		(cardinality 0 8)
 		(create-accessor read-write)))
 
-(defclass floor
+(defclass Floor
 	(is-a WithoutWeights)
 	(role concrete)
 	(multislot goal
