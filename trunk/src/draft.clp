@@ -1,4 +1,3 @@
-;(defmodule MAIN (export ?ALL))
 ;
 ;
 ;(defmodule preguntas-persona
@@ -21,31 +20,38 @@
 
 
 
-
+(defmodule MAIN (export ?ALL))
 (defrule start "Startup rule"
 	(declare (salience 9999))
 	=>
+	(ppdefinstances Person)
 	(printout t crlf)
 	(printout t "+-------------------------------------------+" crlf)
 	(printout t "|                                           |" crlf)
 	(printout t "|         WELCOME TO OUR FITNESS GYM        |" crlf)
 	(printout t "|                                           |" crlf)
 	(printout t "+-------------------------------------------+" crlf)
-	(printout t "Select an option:" crlf)
-	(printout t "1. Create a new person" crlf)
-	(printout t "2. Select an existing person" crlf)
-	(printout t "3. Exit" crlf)
-	(bind ?opc (read))
+	(bind ?opc -1)
+	(while (or(< ?opc 1)(> ?opc 3))
+		(printout t "Select an option:" crlf)
+		(printout t "1. Create a new person" crlf)
+		(printout t "2. Select an existing person" crlf)
+		(printout t "3. Exit" crlf)
+		(bind ?opc (read))
+	)
 	(switch ?opc
    		(case 1 then
 			(printout t "Creando persona" crlf)
+			(focus create-person)
 		)
 		(case 2 then
 			(printout t "Seleccionando existente" crlf)
+			(focus existing-person)
 		)
 		(case 3 then
 			(printout t "Have a nice day!" crlf)
-			(exit)
+			(reset)
+			(clear)
 		)
 	)
 			
@@ -106,27 +112,33 @@
 	?n
 )
 
-
+(defmodule create-person (export ?ALL)(import MAIN ?ALL))
 (defrule create-person
 	(declare (salience 9998))
 	=>
-	(make-instance User1 of Person)
+	(bind ?new (make-instance User1 of Person))
 	(bind ?res (set-value "name"))
-        (send [User1] put-name_ ?res)
+        (send ?new put-name_ ?res)
 	(bind ?res (set-value "last_name"))
-        (send [User1] put-last_name ?res)
+        (send ?new put-last_name ?res)
 	(printout t  "Allowed values:"(slot-range Person age) crlf) 
 	(bind ?res (set-number "How old are you" 16 130))
 	
 	;(bind ?res (set-number "How old are you" (slot-range Person age)))
-	(send [User1] put-age ?res)
-	(send [User1] print)
+	(send ?new put-age ?res)
+	(send ?new print)
 	
 
 )
 	;(focus modulo_condiciones_generales)
-
-
+(defmodule existing-person (export ?ALL)(import MAIN ?ALL))
+(defrule existing-person
+	(declare (salience 9997))
+	=>
+	(printout t "Selecciona una persona existente" crlf)
+	(ppdefinstances Person) ; Esto falla, tiene que ver con los imports y los exports... desde el main si va... :S
+	
+)
 
 
 
