@@ -22,6 +22,34 @@
 
 
 
+(defrule start "Startup rule"
+	(declare (salience 9999))
+	=>
+	(printout t crlf)
+	(printout t "+-------------------------------------------+" crlf)
+	(printout t "|                                           |" crlf)
+	(printout t "|         WELCOME TO OUR FITNESS GYM        |" crlf)
+	(printout t "|                                           |" crlf)
+	(printout t "+-------------------------------------------+" crlf)
+	(printout t "Select an option:" crlf)
+	(printout t "1. Create a new person" crlf)
+	(printout t "2. Select an existing person" crlf)
+	(printout t "3. Exit" crlf)
+	(bind ?opc (read))
+	(switch ?opc
+   		(case 1 then
+			(printout t "Creando persona" crlf)
+		)
+		(case 2 then
+			(printout t "Seleccionando existente" crlf)
+		)
+		(case 3 then
+			(printout t "Have a nice day!" crlf)
+			(exit)
+		)
+	)
+			
+)
 
 
 
@@ -80,7 +108,7 @@
 
 
 (defrule create-person
-	(declare (salience 10000))
+	(declare (salience 9998))
 	=>
 	(make-instance User1 of Person)
 	(bind ?res (set-value "name"))
@@ -99,17 +127,6 @@
 	;(focus modulo_condiciones_generales)
 
 
-(defrule inicio "Regla inicial de presentacio"
-	(declare (salience 9999))
-	=>
-	(printout t crlf)
-	(printout t "+------------------------------------------------+" crlf)
-	(printout t "|                                                |" crlf)
-	(printout t "|                    FITNESS                     |" crlf)
-	(printout t "|                                                |" crlf)
-	(printout t "+------------------------------------------------+" crlf)
-	;(focus preguntas-persona)
-)
 
 
 
