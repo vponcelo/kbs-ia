@@ -50,17 +50,32 @@
 
 ;Problema 1: En principio en las clases ya hay asignada un rango para la edad de 16 a 99 años,
 ;pero cuando llama al print no hace ni caso y si le entras un 3 asigna un 3 a la edad en la instancia
+; se puede acceder a eso, poniendo: (slot-range Person age) y (slot-allowed-values Person age) pero no se como usarlo luego....
 ;Problema 2: he visto la forma de entrar el rango por parametro y de hacer el if retornando un valor o otro. 
 ;La funcion member es sólo para ver si la variable tiene alguno de los valores del rango (va bien para la goal por ejemplo), 
 ;pero no se como acceder a un valor del rango o cómo indicar que esté entre medio de ese rango
-(deffunction set-number (?pregunta $?range)
-	(printout t "What is your " ?pregunta "?" crlf)
+;yo diría que esto es más para preguntas de respuesta limitada como: si/no, mucho/poco/nada, etc., he creado dos funciones...
+(deffunction set-number (?pregunta ?min ?max)
+	(printout t  ?pregunta "?" crlf)
 	(bind ?n (read))
-	(
-		if (member ?n  ?range)		; & ?a < ?max)
-			then ?n
-		else "-1"
+	(while(or(< ?n  ?min)  (> ?n ?max))
+		(printout t ?pregunta "?" crlf)
+		(bind ?n (read))
 	)
+	?n
+)
+
+
+;Esta funcion recibe como parámetro la pregunta y la lista, y lo muestra por pantalla hasta que introduce un valor válido
+;Ej. set-from-list "Con que frecuencia haces deporte" nada poco mucho
+(deffunction set-from-list (?pregunta $?list)
+	(printout t  ?pregunta "?" crlf)
+	(bind ?n (read))
+	(while(not(member ?n  ?list))		; & ?a < ?max)
+		(printout t ?pregunta "?" crlf)
+		(bind ?n (read))
+	)
+	?n
 )
 
 
@@ -72,7 +87,10 @@
         (send [User1] put-name_ ?res)
 	(bind ?res (set-value "last_name"))
         (send [User1] put-last_name ?res)
-	(bind ?res (set-number "age" 16 130))
+	(printout t  "Allowed values:"(slot-range Person age) crlf) 
+	(bind ?res (set-number "How old are you" 16 130))
+	
+	;(bind ?res (set-number "How old are you" (slot-range Person age)))
 	(send [User1] put-age ?res)
 	(send [User1] print)
 	
