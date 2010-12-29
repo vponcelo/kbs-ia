@@ -152,7 +152,7 @@
 	(single-slot age
 ;+		(comment "Age of the person.")
 		(type INTEGER)
-		(range 16 99)
+		(range 16 130)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot height
