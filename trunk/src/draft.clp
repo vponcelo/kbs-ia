@@ -19,6 +19,16 @@
 ;?res pregunta-abierta 
 
 
+
+
+
+
+
+
+
+
+
+
 (defmessage-handler Person print primary ()
 	(printout t crlf crlf)
 	(printout t "------------Person Basic Information-------------" crlf) 
@@ -30,32 +40,40 @@
 )
 
 
-(deffunction set-valor (?pregunta)
-	(printout t "¿Cual es tu " ?pregunta "?" crlf)
-	(bind ?a (read))
-	?a
+(deffunction set-value (?pregunta)
+	(printout t "What is your " ?pregunta "?" crlf)
+	(bind ?resp (read))
+	?resp
 )
 
 
-;(deffunction set-numero (?pregunta ?min ?max)
-;	(printout t "¿Cual es tu " ?pregunta "?" crlf)
-;	(bind ?a (read))
-;	if (> ?a  ?min)		; & ?a < ?max)
-;	 then (?a)
-;	 else ("-1")
-;)
+
+;Problema 1: En principio en las clases ya hay asignada un rango para la edad de 16 a 99 años,
+;pero cuando llama al print no hace ni caso y si le entras un 3 asigna un 3 a la edad en la instancia
+;Problema 2: he visto la forma de entrar el rango por parametro y de hacer el if retornando un valor o otro. 
+;La funcion member es sólo para ver si la variable tiene alguno de los valores del rango (va bien para la goal por ejemplo), 
+;pero no se como acceder a un valor del rango o cómo indicar que esté entre medio de ese rango
+(deffunction set-number (?pregunta $?range)
+	(printout t "What is your " ?pregunta "?" crlf)
+	(bind ?n (read))
+	(
+		if (member ?n  ?range)		; & ?a < ?max)
+			then ?n
+		else "-1"
+	)
+)
 
 
-(defrule crea-persona
+(defrule create-person
 	(declare (salience 10000))
 	=>
 	(make-instance User1 of Person)
-	(bind ?res (set-valor "nombre"))
+	(bind ?res (set-value "name"))
         (send [User1] put-name_ ?res)
-	(bind ?res (set-valor "apellido"))
+	(bind ?res (set-value "last_name"))
         (send [User1] put-last_name ?res)
-	;(bind ?res (set-numero "edad" 1 100)
-	;(printout t "tu edad es: " ?res crlf)
+	(bind ?res (set-number "age" 16 130))
+	(send [User1] put-age ?res)
 	(send [User1] print)
 	
 
