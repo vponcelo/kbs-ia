@@ -3,14 +3,14 @@
 ;########################################################
 
 
-(definstances Person
+(definstances Persons
 
 ([Alex] of  Person
 
 	(age 18)
 	(basicPhyCondition [bpc1])
 	(goal maintenance)
-	(name "Alex")
+	(name_ "Alex")
 	(test [test1]))
 
 ([Ana] of  Person
@@ -18,7 +18,7 @@
 	(age 35)
 	(basicPhyCondition [bpc2])
 	(goal rehabilitate musculation)
-	(name "Anna")
+	(name_ "Anna")
 	(test [test2]))
 
 ([Javi] of  Person
@@ -26,7 +26,7 @@
 	(age 22)
 	(basicPhyCondition [bpc3])
 	(goal musculation)
-	(name "Javi")
+	(name_ "Javi")
 	(test [test3]))
 
 ([Juan] of  Person
@@ -34,7 +34,7 @@
 	(age 29)
 	(basicPhyCondition [bpc4])
 	(goal get_fit)
-	(name "Juan")
+	(name_ "Juan")
 	(test [test4]))
 
 ([Kevin] of  Person
@@ -42,7 +42,7 @@
 	(age 30)
 	(basicPhyCondition [bpc5])
 	(goal reduce_weight rehabilitate)
-	(name "Kevin")
+	(name_ "Kevin")
 	(test [test5]))
 
 ([Lucas] of  Person
@@ -50,7 +50,7 @@
 	(age 53)
 	(basicPhyCondition [bpc6])
 	(goal reduce_weight rehabilitate)
-	(name "Lucas")
+	(name_ "Lucas")
 	(test [test6]))
 
 ([Maite] of  Person
@@ -58,7 +58,7 @@
 	(age 25)
 	(basicPhyCondition [bpc7])
 	(goal musculation)
-	(name "Maite")
+	(name_ "Maite")
 	(test [test7]))
 
 ([Marc] of  Person
@@ -66,7 +66,7 @@
 	(age 26)
 	(basicPhyCondition [bpc8])
 	(goal flexibility maintenance)
-	(name "Marc")
+	(name_ "Marc")
 	(test [test8]))
 
 ([Pepe] of  Person
@@ -74,7 +74,7 @@
 	(age 42)
 	(basicPhyCondition [bpc9])
 	(goal reduce_weight get_fit rehabilitate)
-	(name "Pepe")
+	(name_ "Pepe")
 	(test [test9]))
 
 ([Victor] of  Person
@@ -82,7 +82,7 @@
 	(age 24)
 	(basicPhyCondition [bpc10])
 	(goal balance)
-	(name "Victor")
+	(name_ "Victor")
 	(test [test10]))
 )
 
