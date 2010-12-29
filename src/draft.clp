@@ -19,12 +19,12 @@
 
 
 
-
+(defglobal ?*user* = null)
 (defmodule MAIN (export ?ALL))
 (defrule start "Startup rule"
 	(declare (salience 9999))
 	=>
-	(ppdefinstances Person)
+	;(ppdefinstances Person)
 	(printout t crlf)
 	(printout t "+-------------------------------------------+" crlf)
 	(printout t "|                                           |" crlf)
@@ -46,6 +46,14 @@
 		)
 		(case 2 then
 			(printout t "Seleccionando existente" crlf)
+			(bind ?i 1)
+			(do-for-all-instances ((?p1 Person))
+				(printout t ?i ". - " ?p1:name_ crlf)
+				(bind ?i (+ ?i 1))
+			)
+			(bind ?*user* (read))
+			;(find-instance ((?person Person))(eq ?person:name_ "?name"))
+			;(printout t ?person crlf)
 			(focus existing-person)
 		)
 		(case 3 then
@@ -134,11 +142,11 @@
 (defmodule existing-person (export ?ALL)(import MAIN ?ALL))
 (defrule existing-person
 	(declare (salience 9997))
+	?pers <- (object (is-a Person)(name_ ?n))
+	(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
 	=>
-	(printout t "Selecciona una persona existente" crlf)
-	(ppdefinstances Person) ; Esto falla, tiene que ver con los imports y los exports... desde el main si va... :S
+	(printout t ?pers get-name_ ?*user* crlf)
+	;(send ?user print) 
 	
 )
-
-
 
