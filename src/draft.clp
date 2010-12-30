@@ -32,7 +32,7 @@
 	(printout t "|                                           |" crlf)
 	(printout t "+-------------------------------------------+" crlf)
 	(bind ?opc -1)
-	(while (or(< ?opc 1)(> ?opc 3))
+	(while (or(< ?opc 1)(> ?opc 3)) do
 		(printout t "Select an option:" crlf)
 		(printout t "1. Create a new person" crlf)
 		(printout t "2. Select an existing person" crlf)
@@ -60,6 +60,7 @@
 			(printout t "Have a nice day!" crlf)
 			(reset)
 			(clear)
+			(halt)
 		)
 	)
 			
@@ -107,38 +108,122 @@
 	?n
 )
 
-
-;Esta funcion recibe como parámetro la pregunta y la lista, y lo muestra por pantalla hasta que introduce un valor válido
-;Ej. set-from-list "Con que frecuencia haces deporte" nada poco mucho
-(deffunction set-from-list (?pregunta $?list)
-	(printout t  ?pregunta "?" crlf)
+(deffunction set-single-from-list (?pregunta $?list)
+	(printout t ?pregunta "?" crlf)
+	(printout t ?list "?" crlf)
 	(bind ?n (read))
 	(while(not(member ?n  ?list))		; & ?a < ?max)
+		(printout t "You have selected something which is not shown in the list" clrf)
 		(printout t ?pregunta "?" crlf)
+		(printout t ?list "?" crlf)
 		(bind ?n (read))
 	)
 	?n
 )
 
+;Esta funcion recibe como parámetro la pregunta y la lista, y lo muestra por pantalla hasta que introduce un valor válido
+;Ej. set-from-list "Con que frecuencia haces deporte" nada poco mucho
+(deffunction set-multi-from-list (?pregunta $?list)
+	(bind ?res yes)
+	(bind ?l (create$))
+	(while(eq ?res yes)
+		(printout t ?pregunta "?" crlf)
+		(printout t ?list "?" crlf)
+		(bind ?n (read))
+		(while(not(member ?n  ?list))		; & ?a < ?max)
+			(printout t "You have selected something which is not shown in the list" clrf)
+			(printout t ?pregunta "?" crlf)
+			(printout t ?list "?" crlf)
+			(bind ?n (read))
+		)
+		(bind ?l (insert$ ?l 1 ?n))
+		(printout t ?l crlf)
+		(printout t "Do you wish to add any new goal?(yes/no)" crlf)
+		(bind ?res (read))
+	)
+	?l
+)
+
 (defmodule create-person (export ?ALL)(import MAIN ?ALL))
+
 (defrule create-person
 	(declare (salience 9998))
 	=>
-	(bind ?new (make-instance User1 of Person))
+	(bind ?usr (make-instance User1 of Person))
 	(bind ?res (set-value "name"))
-        (send ?new put-name_ ?res)
+        (send ?usr put-name_ ?res)
 	(bind ?res (set-value "last_name"))
-        (send ?new put-last_name ?res)
-	(printout t  "Allowed values:"(slot-range Person age) crlf) 
-	(bind ?res (set-number "How old are you" 16 130))
-	
-	;(bind ?res (set-number "How old are you" (slot-range Person age)))
-	(send ?new put-age ?res)
-	(send ?new print)
-	
+        (send ?usr put-last_name ?res)
+	(focus age-module)
 
+	;(printout t  "Allowed values:"(slot-range Person age) crlf) 
+	;(bind ?res (set-age "How old are you" 16 130))
+	;(bind ?res (set-number "How old are you" (slot-range Person age)))
+	
+	;(send ?new put-goal ?res)
+	;(send ?new put-age ?res)
+	;(send ?new print)
 )
-	;(focus modulo_condiciones_generales)
+
+(defmodule age-module (export ?ALL)(import create-person ?ALL))
+
+(defrule set-inidata
+	(declare (salience 9997))
+	?inidata <- (personalData  (age unknown) (goal unknown))
+	=>
+	(bind ?res (set-number "How old are you" 16 130))
+	(bind ?res2 (set-multi-from-list "What is/are your goal/s in the gym (select one firstly)" (slot-allowed-values Person goal)))
+	(modify ?inidata (age ?res) (goal ?res2))
+)
+
+(defrule set-habits
+	(declare (salience 9996))
+	?habits <- (habit (duration unknown) (frequency unknown))
+	=>
+	
+	(bind ?add yes)
+	(bind ?i 1)
+	(bind ?l (create$))
+	(while(eq ?add yes)
+		(bind ?nomhab (+ "Hab" ?i))
+		(printout t ?nomhab crlf)
+		(bind ?type (set-single-from-list "Insert the type of habit" InWork OutWork Movements))
+		(bind ?res (set-number "What is the duration of this habit (in minutes)" 1 1440))
+		;(modify ?habits (duration ?res) (frequency ?res2)) Esto habra que cambiarlo...
+		(bind ?res2 (set-single-from-list "What is the frequency of this habit (in minutes)" (slot-allowed-values Habit frequency)))	
+		
+		(switch ?type
+			(case InWork then
+				(bind ?new (make-instance ?nomhab of InWork))
+			)
+			(case OutWork then
+				(bind ?new (make-instance ?nomhab of OutWork))
+			)
+			(case Movements then
+				(bind ?new (make-instance ?nomhab of Movements))
+			)					
+		)
+		(send ?new put-duration ?res)
+ 		(send ?new put-frequency ?res2)
+		(bind ?l (insert$ ?l 1 ?new))
+		(bind ?i (+ ?i 1))
+		(printout t "Do you wish to add any new habit?(yes/no)" crlf)
+		(bind ?add(read))
+	)
+ 	(printout t ?l crlf)
+	;(make-instance User2 of Person(habits Hab1))
+	(bind ?usr (nth$ 1 (find-instance ((?inst Person)) (eq a a)))) ;La primera es la ultima que se ha creado...
+	(send ?usr put-habits ?l) ;FUNCIONAAA :)
+	(printout t "Habitos: "(send ?usr get-habits) crlf)
+	;(send [User1] print)
+	;(printout t "Nombre:" (send ?usr get-name_) crlf)
+	;(instances)
+	
+	;(send ?usr put-habits ?new)
+	; (bind ?self:habits <-?new)
+)
+
+
 (defmodule existing-person (export ?ALL)(import MAIN ?ALL))
 (defrule existing-person
 	(declare (salience 9997))
