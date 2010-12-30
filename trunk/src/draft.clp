@@ -79,6 +79,14 @@
 	(printout t "    LastName:" ?self:last_name  crlf) 
 	(printout t "    age:" ?self:age  crlf) 
 	(printout t "    goal:" ?self:goal  crlf) 
+	(printout t "    habits:" ?self:habits  crlf) 
+	(bind ?i 1)
+	(while (<= ?i (length$ ?self:habits))	;recorre el multislot de habitos y los muestra
+	do
+	(bind ?habit (nth$ ?i ?self:habits))
+		(printout t "    "(class ?habit) " " (send ?habit get-frequency)  " " (send ?habit get-duration) crlf)
+		(bind ?i (+ ?i 1))
+	)
 	(printout t "-------------------------------------------------" crlf crlf) 
 )
 
@@ -182,11 +190,8 @@
 	=>
 	
 	(bind ?add yes)
-	(bind ?i 1)
 	(bind ?l (create$))
 	(while(eq ?add yes)
-		(bind ?nomhab (+ "Hab" ?i))
-		(printout t ?nomhab crlf)
 		(bind ?type (set-single-from-list "Insert the type of habit" InWork OutWork Movements))
 		(bind ?res (set-number "What is the duration of this habit (in minutes)" 1 1440))
 		;(modify ?habits (duration ?res) (frequency ?res2)) Esto habra que cambiarlo...
@@ -194,19 +199,18 @@
 		
 		(switch ?type
 			(case InWork then
-				(bind ?new (make-instance ?nomhab of InWork))
+				(bind ?new (make-instance (sym-cat hab- (gensym)) of InWork))
 			)
 			(case OutWork then
-				(bind ?new (make-instance ?nomhab of OutWork))
+				(bind ?new (make-instance (sym-cat hab- (gensym)) of OutWork))
 			)
 			(case Movements then
-				(bind ?new (make-instance ?nomhab of Movements))
+				(bind ?new (make-instance (sym-cat hab- (gensym)) of Movements))
 			)					
 		)
 		(send ?new put-duration ?res)
  		(send ?new put-frequency ?res2)
 		(bind ?l (insert$ ?l 1 ?new))
-		(bind ?i (+ ?i 1))
 		(printout t "Do you wish to add any new habit?(yes/no)" crlf)
 		(bind ?add(read))
 	)
@@ -215,7 +219,7 @@
 	(bind ?usr (nth$ 1 (find-instance ((?inst Person)) (eq a a)))) ;La primera es la ultima que se ha creado...
 	(send ?usr put-habits ?l) ;FUNCIONAAA :)
 	(printout t "Habitos: "(send ?usr get-habits) crlf)
-	;(send [User1] print)
+	(send ?usr print)
 	;(printout t "Nombre:" (send ?usr get-name_) crlf)
 	;(instances)
 	
