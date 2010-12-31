@@ -184,6 +184,8 @@
 	(modify ?inidata (age ?res) (goal ?res2))
 )
 
+(defmodule habits-module (export ?ALL)(import age-module ?ALL))
+
 (defrule set-habits
 	(declare (salience 9996))
 	?habits <- (habit (duration unknown) (frequency unknown))
@@ -228,10 +230,34 @@
 	; (bind ?self:habits <-?new)
 )
 
+(defmodule bpc-module (export ?ALL)(import habits-module ?ALL))
+
+(defrule set-bpc
+	(declare (salience 9995))
+	?bpc <- (BasicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown))
+	=>
+	(bind ?h (set-number "How tall are you" 120 240))
+	(bind ?w (set-number "How much you weigh" 25 150))
+	(bind ?ibm (/ ?w (* ?h ?h)))
+	(bind ?maxp (set-number "What is your blood maximum presure" 30 200))
+	(bind ?minp (set-number "What is your blood minimum presure" 30 200))
+	(modify ?bpc (bodyMass ?ibm) (height ?h) (blood_max_pressure ?maxp) (weight ?w) (blood_min_pressure ?minp))
+	(bind ?new (make-instance Bpc of BasicPhysicalCondition))
+	(send ?new put-bodyMass ?ibm)
+ 	(send ?new put-height ?h)
+ 	(send ?new put-blood_max_pressure ?maxp)
+ 	(send ?new put-weight ?w)
+ 	(send ?new put-blood_min_pressure ?minp)
+	(bind ?usr (nth$ 1 (find-instance ((?inst Person)) TRUE))) ;La primera es la ultima que se ha creado...
+	(send ?usr put-basicPhyCondition ?new)
+	;(send ?usr print)		;MODIFICAR message primero
+)
 
 (defmodule existing-person (export ?ALL)(import MAIN ?ALL))
+
 (defrule existing-person
-	(declare (salience 9997))
+	(declare (salience 9995))
+	=>
 	;?pers <- (object (is-a Person)(name_ ?n))
 	;(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
