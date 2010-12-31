@@ -182,6 +182,7 @@
 	(bind ?res (set-number "How old are you" 16 130))
 	(bind ?res2 (set-multi-from-list "What is/are your goal/s in the gym (select one firstly)" (slot-allowed-values Person goal)))
 	(modify ?inidata (age ?res) (goal ?res2))
+	(focus habits-module)
 )
 
 (defmodule habits-module (export ?ALL)(import age-module ?ALL))
@@ -217,17 +218,12 @@
 		(bind ?add(read))
 	)
  	(printout t ?l crlf)
-	;(make-instance User2 of Person(habits Hab1))
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons)) ;La ultima instancia (length) es la ultima que se ha creado...
 	(send ?usr put-habits ?l) ;FUNCIONAAA :)
 	(printout t "Habitos: "(send ?usr get-habits) crlf)
+	(focus bpc-module)
 	(send ?usr print)
-	;(printout t "Nombre:" (send ?usr get-name_) crlf)
-	;(instances)
-	
-	;(send ?usr put-habits ?new)
-	; (bind ?self:habits <-?new)
 )
 
 (defmodule bpc-module (export ?ALL)(import habits-module ?ALL))
@@ -256,7 +252,7 @@
 (defmodule existing-person (export ?ALL)(import MAIN ?ALL))
 
 (defrule existing-person
-	(declare (salience 9995))
+	(declare (salience 9990))
 	=>
 	;?pers <- (object (is-a Person)(name_ ?n))
 	;(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
