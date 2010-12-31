@@ -216,7 +216,8 @@
 	)
  	(printout t ?l crlf)
 	;(make-instance User2 of Person(habits Hab1))
-	(bind ?usr (nth$ 1 (find-instance ((?inst Person)) (eq a a)))) ;La primera es la ultima que se ha creado...
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ (length$ ?persons) ?persons)) ;La ultima instancia (length) es la ultima que se ha creado...
 	(send ?usr put-habits ?l) ;FUNCIONAAA :)
 	(printout t "Habitos: "(send ?usr get-habits) crlf)
 	(send ?usr print)
@@ -231,11 +232,13 @@
 (defmodule existing-person (export ?ALL)(import MAIN ?ALL))
 (defrule existing-person
 	(declare (salience 9997))
-	?pers <- (object (is-a Person)(name_ ?n))
-	(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
+	;?pers <- (object (is-a Person)(name_ ?n))
+	;(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ ?*user* ?persons)) ;Cogemos el index que ha introducido el user...
 	=>
-	(printout t ?pers get-name_ ?*user* crlf)
-	;(send ?user print) 
+	;(printout t ?pers get-name_ ?*user* crlf)
+	(send ?usr print) 
 	
 )
 
