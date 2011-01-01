@@ -479,7 +479,7 @@
 (defclass InWork
 	(is-a Habit)
 	(role concrete)
-	(single-slot type_in
+	(single-slot type_hab
 ;+		(comment "Type of habit in Work")
 		(type SYMBOL)
 		(allowed-values sitting weight_charge standing)
@@ -489,7 +489,7 @@
 (defclass OutWork
 	(is-a Habit)
 	(role concrete)
-	(single-slot type_out
+	(single-slot type_hab
 ;+		(comment "Type of habit out Work")
 		(type SYMBOL)
 		(allowed-values stairs homeworks)
@@ -499,7 +499,7 @@
 (defclass Movements
 	(is-a Habit)
 	(role concrete)
-	(single-slot type_mov
+	(single-slot type_hab
 ;+		(comment "Type of habit of movements")
 		(type SYMBOL)
 		(allowed-values walking with_bike with_motorVehicle)

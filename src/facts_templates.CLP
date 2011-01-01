@@ -4,12 +4,16 @@
 
 ; Template con la edad y objetivos
 (deftemplate personalData
+	(slot name_)
+	(slot last_name)
 	(slot age)
 	(multislot goal)
 )
 
 (deffacts persDat
 	(personalData
+		(name_ unknown)
+		(last_name unknown)
 		(age unknown)
 		(goal unknown)
 	)
@@ -17,15 +21,13 @@
 
 
 ; Template con los habitos
-(deftemplate habit
-	(slot duration)
-	(slot frequency)
+(deftemplate habitsPerson
+	(multislot habits)
 )
 
-(deffacts hab
-	(habit
-		(duration unknown)
-		(frequency unknown)
+(deffacts habs
+	(habitsPerson
+		(habits unknown)
 	)
 )
 
