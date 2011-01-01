@@ -1,4 +1,4 @@
-; Sat Jan 01 18:28:22 CET 2011
+; Sat Jan 01 20:33:26 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -24,6 +24,9 @@
 	(age 18)
 	(basicPhyCondition [bpc1])
 	(goal maintenance)
+	(habits
+		[up_stairs]
+		[walk])
 	(name "Alex")
 	(test [test1]))
 
@@ -32,6 +35,7 @@
 	(age 35)
 	(basicPhyCondition [bpc2])
 	(goal rehabilitate musculation)
+	(habits [sitting])
 	(name "Anna")
 	(test [test2]))
 
@@ -208,7 +212,12 @@
 
 	(age 22)
 	(basicPhyCondition [bpc3])
-	(goal musculation)
+	(goal musculation rehabilitate)
+	(habits
+		[bike]
+		[walk]
+		[up_stairs]
+		[homework])
 	(name "Javi")
 	(test [test3]))
 
@@ -217,6 +226,7 @@
 	(age 29)
 	(basicPhyCondition [bpc4])
 	(goal get_fit)
+	(habits [homework])
 	(name "Juan")
 	(test [test4]))
 
@@ -233,6 +243,7 @@
 	(age 53)
 	(basicPhyCondition [bpc6])
 	(goal reduce_weight rehabilitate)
+	(habits [weight_charge])
 	(name "Lucas")
 	(test [test6]))
 
@@ -248,7 +259,8 @@
 
 	(age 26)
 	(basicPhyCondition [bpc8])
-	(goal flexibility maintenance)
+	(goal flexibility maintenance rehabilitate)
+	(habits [walk])
 	(name "Marc")
 	(test [test8]))
 
@@ -429,6 +441,10 @@
 	(age 24)
 	(basicPhyCondition [bpc10])
 	(goal balance)
+	(habits
+		[sitting]
+		[bike]
+		[homework])
 	(name "Victor")
 	(test [test10]))
 
