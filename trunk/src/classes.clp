@@ -496,7 +496,7 @@
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
-(defclass Movements
+(defclass Movement
 	(is-a Habit)
 	(role concrete)
 	(single-slot type_hab

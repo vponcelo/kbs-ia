@@ -462,14 +462,14 @@
 
 (definstances Movements
 
-([walk] of  Movements
+([walk] of  Movement
 
 	(duration 30)
 	(frequency medium)
 	(name_habit "walk")
 	(type_hab walking))
 
-([bike] of  Movements
+([bike] of  Movement
 
 	(duration 10)
 	(frequency medium)
