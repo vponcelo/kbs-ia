@@ -3,29 +3,26 @@
 
 ;############ ESTO IRA EN FUNCTIONS ##############
 
+;Esta función recibe por parámetro la pregunta y devuelve el valor que introduce el usuario
 (deffunction set-value (?pregunta)
 	(printout t "What is your " ?pregunta "?" crlf)
 	(bind ?resp (read))
 	?resp
 )
 
-;Problema 1: En principio en las clases ya hay asignada un rango para la edad de 16 a 99 años,
-;pero cuando llama al print no hace ni caso y si le entras un 3 asigna un 3 a la edad en la instancia
-; se puede acceder a eso, poniendo: (slot-range Person age) y (slot-allowed-values Person age) pero no se como usarlo luego....
-;Problema 2: he visto la forma de entrar el rango por parametro y de hacer el if retornando un valor o otro. 
-;La funcion member es sólo para ver si la variable tiene alguno de los valores del rango (va bien para la goal por ejemplo), 
-;pero no se como acceder a un valor del rango o cómo indicar que esté entre medio de ese rango
-;yo diría que esto es más para preguntas de respuesta limitada como: si/no, mucho/poco/nada, etc., he creado dos funciones...
+;Esta función recibe por parámetro la pregunta y el rango de números mediante el mínimo y máximo. Devuelve el valor que introduce el usuario
 (deffunction set-number (?pregunta ?min ?max)
 	(printout t  ?pregunta "?" crlf)
 	(bind ?n (read))
-	(while(or(< ?n  ?min)  (> ?n ?max))
+	(while(or(<= ?n  ?min)  (>= ?n ?max))
 		(printout t ?pregunta "?" crlf)
 		(bind ?n (read))
 	)
 	?n
 )
 
+;Esta funcion recibe como parámetro la pregunta y la lista, y lo muestra por pantalla hasta que introduce un valor válido
+;Ej. set-from-list "Con que frecuencia haces deporte" nada poco mucho
 (deffunction set-single-from-list (?pregunta $?list)
 	(printout t ?pregunta "?" crlf)
 	(printout t ?list "?" crlf)
@@ -39,8 +36,7 @@
 	?n
 )
 
-;Esta funcion recibe como parámetro la pregunta y la lista, y lo muestra por pantalla hasta que introduce un valor válido
-;Ej. set-from-list "Con que frecuencia haces deporte" nada poco mucho
+;Esta funcion recibe como parámetro la pregunta y la lista, y lo muestra por pantalla hasta que introduce un valor válido, puede introducir mas de un valor
 (deffunction set-multi-from-list (?pregunta $?list)
 	(bind ?res yes)
 	(bind ?l (create$))
@@ -56,10 +52,22 @@
 		)
 		(bind ?l (insert$ ?l 1 ?n))
 		(printout t ?l crlf)
-		(printout t "Do you wish to add any new goal?(yes/no)" crlf)
+		(printout t "Do you wish to add another? (yes/no)" crlf)
 		(bind ?res (read))
 	)
 	?l
+)
+
+;Esta función calcula la dificultad o intensidad inicial que puede soportar el usuario a partir de sus hábitos
+(deffunction set-difficulty ()
+	; Criterios usados:
+		; Si hábito = mucho ejercicio, entonces augmenta dificultad
+		; Si hábito = indiferente (no afecta a las condiciones físicas), entonces dificultad no se altera
+		; Si hábito = malo (afecta negativamente a las condiciones físicas), entonces baja dificultad
+		; -------------
+		; media aproximada de dificultades en los hábitos = dificultad intensidad inicial
+	; Cuando habito es mucho o poco ejercicio?
+		; Ahora lo pienso, voy a cenar xD
 )
 
 
@@ -72,6 +80,9 @@
 	(printout t "    LastName: " ?self:last_name  crlf) 
 	(printout t "    age: " ?self:age " years " crlf) 
 	(printout t "    goal: " ?self:goal  crlf) 
+	(if (not(eq ?self:difficulty_intensity [nil])) then
+		(printout t "    Initial difficulty or intensity can be supported: " ?self:difficulty_intensity  crlf) 
+	)	
 	(if (eq (length$ ?self:habits) 0) then				;aqui miramos la longitud del slot (no es required)
 		(printout t "" crlf)
 		(printout t " -------------------------------------------------" crlf crlf) 	
@@ -95,6 +106,8 @@
 			(printout t "    index of body mass:" (send ?self:basicPhyCondition get-bodyMass)   crlf)
 			(printout t "    blood maximum pressure:" (send ?self:basicPhyCondition get-blood_max_pressure) " sistolic " crlf)
 			(printout t "    blood minimum pressure:" (send ?self:basicPhyCondition get-blood_min_pressure) " diastolic " crlf)
+			(printout t "    diet:" (send ?self:basicPhyCondition get-diet) crlf)
+			(printout t "    muscular problems:" (send ?self:basicPhyCondition get-muscular_problems) crlf)
 			(printout t "-------------------------------------------------" crlf crlf crlf) 
 		)
 	)
@@ -171,7 +184,7 @@
 (defmodule habits-module (export ?ALL)(import createPerson-module ?ALL))
 
 (defrule set-habits
-	(declare (salience 9996))
+	(declare (salience 9997))
 	?habs <- (habitsPerson (habits unknown))
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
@@ -221,8 +234,8 @@
 (defmodule bpc-module (export ?ALL)(import habits-module ?ALL))
 
 (defrule set-bpc
-	(declare (salience 9995))
-	?bpc <- (basicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown))
+	(declare (salience 9996))
+	?bpc <- (basicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown) (diet unknown) (muscular_problems unknown))
 	=>
 	(bind ?h (set-number "How tall are you (in cm) (between 120-240)" 120 240))
 	(bind ?w (set-number "How much you weigh (in kg) (between 25-150)" 25 150))
@@ -230,17 +243,22 @@
 	(bind ?ibm (/ ?w (* ?hmeters ?hmeters)))
 	(bind ?maxp (set-number "What is your blood maximum presure (between 30-200)" 30 200))
 	(bind ?minp (set-number "What is your blood minimum presure (between 30-200)" 30 200))
+	(bind ?diet (set-multi-from-list "What is/are the feature/s or problem/s of your kind of diet (select from this list)" (slot-allowed-values BasicPhysicalCondition diet)))
+	(bind ?muscprob (set-multi-from-list "What is/are your muscular problems (select from this list)" (slot-allowed-values BasicPhysicalCondition muscular_problems)))
 	(bind ?new (make-instance Bpc of BasicPhysicalCondition))
-	(modify ?bpc (bodyMass ?ibm) (height ?h) (blood_max_pressure ?maxp) (weight ?w) (blood_min_pressure ?minp))
+	(modify ?bpc (bodyMass ?ibm) (height ?h) (blood_max_pressure ?maxp) (weight ?w) (blood_min_pressure ?minp) (diet ?diet) (muscular_problems ?muscprob))
 	(send ?new put-bodyMass ?ibm)
  	(send ?new put-height ?h)
  	(send ?new put-blood_max_pressure ?maxp)
  	(send ?new put-weight ?w)
  	(send ?new put-blood_min_pressure ?minp)
+ 	(send ?new put-diet ?diet)
+	(send ?new put-muscular_problems ?muscprob)
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons)) ; La que estamos tratando es la ultima que se ha creado
 	(send ?usr put-basicPhyCondition ?new)
 	(send ?usr print)
+	(focus difficulty_intensity-module)
 )
 
 (defmodule existingPerson-module (export ?ALL)(import MAIN ?ALL))
@@ -255,4 +273,18 @@
 	=>
 	;(printout t ?pers get-name_ ?*user* crlf)
 	(send ?usr print) 
+)
+
+(defmodule difficulty_intensity-module (export ?ALL)(import bpc-module ?ALL)(import existingPerson-module ?ALL))
+
+(defrule difficulty-intensity
+	(declare (salience 9989))
+	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
+	=>
+	(bind ?di easy)						; ESTO LLAMARA UNA FUNCION QUE CALCULARA LA DIFICULTAD A PARTIR DE LOS HABITOS
+	(modify ?dif_intens (difficulty_intensity ?di))
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ (length$ ?persons) ?persons)) 		; CUIDADO, HAY QUE DIFERENCIAR CASOS EN LA VERSION EXTENDIDA, ESTA NORMA DEPENDE DE LA EXISTING PERSON TAMBIEN
+	(send ?usr put-difficulty_intensity ?di)
+	(send ?usr print)
 )

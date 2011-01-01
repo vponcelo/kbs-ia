@@ -13,7 +13,7 @@
 	(habits
 		[up_stairs]
 		[walk])
-	(name "Alex")
+	(name_ "Alex")
 	(test [test1]))
 
 ([Ana] of  Person
@@ -22,7 +22,7 @@
 	(basicPhyCondition [bpc2])
 	(goal rehabilitate musculation)
 	(habits [sitting])
-	(name "Anna")
+	(name_ "Anna")
 	(test [test2]))
 
 ([Javi] of  Person
@@ -35,7 +35,7 @@
 		[walk]
 		[up_stairs]
 		[homework])
-	(name "Javi")
+	(name_ "Javi")
 	(test [test3]))
 
 ([Juan] of  Person
@@ -44,7 +44,7 @@
 	(basicPhyCondition [bpc4])
 	(goal get_fit)
 	(habits [homework])
-	(name "Juan")
+	(name_ "Juan")
 	(test [test4]))
 
 ([Kevin] of  Person
@@ -52,7 +52,7 @@
 	(age 30)
 	(basicPhyCondition [bpc5])
 	(goal reduce_weight rehabilitate)
-	(name "Kevin")
+	(name_ "Kevin")
 	(test [test5]))
 
 ([Lucas] of  Person
@@ -61,7 +61,7 @@
 	(basicPhyCondition [bpc6])
 	(goal reduce_weight rehabilitate)
 	(habits [weight_charge])
-	(name "Lucas")
+	(name_ "Lucas")
 	(test [test6]))
 
 ([Maite] of  Person
@@ -69,7 +69,7 @@
 	(age 25)
 	(basicPhyCondition [bpc7])
 	(goal musculation)
-	(name "Maite")
+	(name_ "Maite")
 	(test [test7]))
 
 ([Marc] of  Person
@@ -78,7 +78,7 @@
 	(basicPhyCondition [bpc8])
 	(goal flexibility maintenance rehabilitate)
 	(habits [walk])
-	(name "Marc")
+	(name_ "Marc")
 	(test [test8]))
 
 ([Pepe] of  Person
@@ -86,7 +86,7 @@
 	(age 42)
 	(basicPhyCondition [bpc9])
 	(goal reduce_weight get_fit rehabilitate)
-	(name "Pepe")
+	(name_ "Pepe")
 	(test [test9]))
 
 ([Victor] of  Person
@@ -98,7 +98,7 @@
 		[sitting]
 		[bike]
 		[homework])
-	(name "Victor")
+	(name_ "Victor")
 	(test [test10]))
 )
 

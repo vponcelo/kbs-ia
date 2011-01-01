@@ -38,6 +38,8 @@
 	(slot blood_max_pressure)
 	(slot weight)
 	(slot blood_min_pressure)
+	(multislot diet)
+	(multislot muscular_problems)
 )
 (deffacts bpc
 	(basicPhyCond
@@ -46,5 +48,18 @@
 		(blood_max_pressure unknown)
 		(weight unknown) 
 		(blood_min_pressure unknown)
+		(diet unknown)
+		(muscular_problems unknown)
+	)
+)
+
+; Template con la dificultad/intensidad inicial que puede soportar el usuario calculada a partir de sus habitos
+(deftemplate difficultyIntensity
+	(slot difficulty_intensity)
+)
+
+(deffacts dif_intens
+	(difficultyIntensity
+		(difficulty_intensity unknown)
 	)
 )
