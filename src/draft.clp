@@ -64,23 +64,41 @@
 
 
 ;############## ESTO IRA EN MESSAGES ################
+
 (defmessage-handler Person print primary ()
 	(printout t crlf crlf)
-	(printout t "------------Person Basic Information-------------" crlf) 
-	(printout t "    Name:" ?self:name_  crlf) 
-	(printout t "    LastName:" ?self:last_name  crlf) 
-	(printout t "    age:" ?self:age  crlf) 
-	(printout t "    goal:" ?self:goal  crlf) 
-	(printout t "    habits: " crlf) 
-	(bind ?i 1)
-	(while (<= ?i (length$ ?self:habits)) do	;recorre el multislot de habitos y los muestra
-	(bind ?habit (nth$ ?i ?self:habits))
-		(printout t "            "(class ?habit) " " (send ?habit get-name_habit)  " duration:" (send ?habit get-frequency) " frequency:" (send ?habit get-duration) crlf)
-		(bind ?i (+ ?i 1))
+	(printout t "------------Person Basic Information-------------" crlf crlf) 
+	(printout t "    Name: " ?self:name_  crlf) 
+	(printout t "    LastName: " ?self:last_name  crlf) 
+	(printout t "    age: " ?self:age " years " crlf) 
+	(printout t "    goal: " ?self:goal  crlf) 
+	(if (eq (length$ ?self:habits) 0) then				;aqui miramos la longitud del slot (no es required)
+		(printout t "" crlf)
+		(printout t " -------------------------------------------------" crlf crlf) 	
+	else then
+		(printout t crlf)
+		(printout t "------------------Person Habits------------------" crlf crlf) 
+		(bind ?i 1)
+		(while (<= ?i (length$ ?self:habits)) do	;recorre el multislot de habitos de esta persona y los muestra
+			(bind ?habit (nth$ ?i ?self:habits))
+			(printout t "    "(class ?habit) ": " (send ?habit get-name_habit) " " (send ?habit get-duration) " min with frequency: '" (send ?habit get-frequency) "'" crlf)
+			(bind ?i (+ ?i 1))
+		)
+		(if (eq ?self:basicPhyCondition [nil]) then		;aqui comparamos a null el slot (es required)
+			(printout t crlf)
+			(printout t "-------------------------------------------------" crlf crlf) 
+		else then
+			(printout t crlf)
+			(printout t "--------Person Basic Physical Information--------" crlf crlf) 
+			(printout t "    height: "(send ?self:basicPhyCondition get-height) " cm " crlf) 
+			(printout t "    weight:" (send ?self:basicPhyCondition get-weight) " kg " crlf) 
+			(printout t "    index of body mass:" (send ?self:basicPhyCondition get-bodyMass)   crlf)
+			(printout t "    blood maximum pressure:" (send ?self:basicPhyCondition get-blood_max_pressure) " sistolic " crlf)
+			(printout t "    blood minimum pressure:" (send ?self:basicPhyCondition get-blood_min_pressure) " diastolic " crlf)
+			(printout t "-------------------------------------------------" crlf crlf crlf) 
+		)
 	)
-	(printout t "-------------------------------------------------" crlf crlf) 
 )
-
 
 
 ;############# ESTO IRA EN RULES & MODULES ############
@@ -139,13 +157,14 @@
 	(bind ?usr (make-instance User1 of Person))
 	(bind ?res (set-value "name"))
 	(bind ?res2 (set-value "last_name"))
-	(bind ?res3 (set-number "How old are you" 16 130))
+	(bind ?res3 (set-number "How old are you (between 16-130)" 16 130))
 	(bind ?res4 (set-multi-from-list "What is/are your goal/s in the gym (select one firstly)" (slot-allowed-values Person goal)))
         (modify ?inidata (name_ ?res) (last_name ?res2) (age ?res3) (goal ?res4))
 	(send ?usr put-name_ ?res)
 	(send ?usr put-last_name ?res2)
 	(send ?usr put-age ?res3)
 	(send ?usr put-goal ?res4)
+	(send ?usr print)
 	(focus habits-module)
 )
 
@@ -163,13 +182,13 @@
 			(bind ?add yes)
 			(while(eq ?add yes) do
 				(bind ?l (create$))
-				(bind ?subhabit (set-single-from-list "Insert the type of your habit" InWork OutWork Movements))
+				(bind ?subhabit (set-single-from-list "Insert the type of your habit" InWork OutWork Movement))
 				(bind ?habits (find-all-instances ((?h ?subhabit)) TRUE))
 				(bind ?i 1)
 				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
 					(bind ?habit (nth$ ?i ?habits))
 					(bind ?name (send ?habit get-name_habit))	
-					(printout t ?name crlf)			; esto lo printa sin comillas
+					;(printout t ?name crlf)			; esto lo printa sin comillas
 					(bind ?l (insert$ ?l 1 ?name))		; aqui lo añade como string (con comillas)
 					(printout t "    " (send ?habit get-name_habit)": " (send ?habit get-frequency)  " " (send ?habit get-duration)  crlf)
 					(bind ?i (+ ?i 1))
@@ -189,75 +208,39 @@
 			)
 			(modify ?habs (habits ?lhabits))
 			(send ?usr put-habits ?lhabits)
-			(send ?usr print)
 		)
 		(case 2 then 
 			(bind ?usr (nth$ ?*user* ?persons))	;En este caso el usuario introducido ya tiene asignado unos habitos
 			; Para la version extendida
 		)
 	)
+	(send ?usr print)
 	(focus bpc-module)
 )
-
-;(defrule set-habits
-;	(declare (salience 9996))
-;	?habits <- (habit (duration unknown) (frequency unknown))
-;	=>
-;	(bind ?add yes)
-;	(bind ?l (create$))
-;	(while(eq ?add yes)
-;		(bind ?type (set-single-from-list "Insert the type of habit" InWork OutWork Movements))
-;		(bind ?res (set-number "What is the duration of this habit (in minutes)" 1 1440))
-;		;(modify ?habits (duration ?res) (frequency ?res2)) Esto habra que cambiarlo...
-;		(bind ?res2 (set-single-from-list "What is the frequency of this habit (in minutes)" (slot-allowed-values Habit frequency)))	
-;		
-;		(switch ?type
-;			(case InWork then
-;				(bind ?new (make-instance (sym-cat hab- (gensym)) of InWork))
-;			)
-;			(case OutWork then
-;				(bind ?new (make-instance (sym-cat hab- (gensym)) of OutWork))
-;			)
-;			(case Movements then
-;				(bind ?new (make-instance (sym-cat hab- (gensym)) of Movements))
-;			)					
-;		)
-;		(send ?new put-duration ?res)
-; 		(send ?new put-frequency ?res2)
-;		(bind ?l (insert$ ?l 1 ?new))
-;		(printout t "Do you wish to add any new habit?(yes/no)" crlf)
-;		(bind ?add(read))
-;	)
-; 	(printout t ?l crlf)
-;	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-;	(bind ?usr (nth$ (length$ ?persons) ?persons)) ;La ultima instancia (length) es la ultima que se ha creado...
-;	(send ?usr put-habits ?l) ;FUNCIONAAA :)
-;	(printout t "Habitos: "(send ?usr get-habits) crlf)
-;	(focus bpc-module)
-;	(send ?usr print)
-;)
 
 (defmodule bpc-module (export ?ALL)(import habits-module ?ALL))
 
 (defrule set-bpc
 	(declare (salience 9995))
-	?bpc <- (BasicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown))
+	?bpc <- (basicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown))
 	=>
-	(bind ?h (set-number "How tall are you" 120 240))
-	(bind ?w (set-number "How much you weigh" 25 150))
-	(bind ?ibm (/ ?w (* ?h ?h)))
-	(bind ?maxp (set-number "What is your blood maximum presure" 30 200))
-	(bind ?minp (set-number "What is your blood minimum presure" 30 200))
-	(modify ?bpc (bodyMass ?ibm) (height ?h) (blood_max_pressure ?maxp) (weight ?w) (blood_min_pressure ?minp))
+	(bind ?h (set-number "How tall are you (in cm) (between 120-240)" 120 240))
+	(bind ?w (set-number "How much you weigh (in kg) (between 25-150)" 25 150))
+	(bind ?hmeters (/ ?h 100))
+	(bind ?ibm (/ ?w (* ?hmeters ?hmeters)))
+	(bind ?maxp (set-number "What is your blood maximum presure (between 30-200)" 30 200))
+	(bind ?minp (set-number "What is your blood minimum presure (between 30-200)" 30 200))
 	(bind ?new (make-instance Bpc of BasicPhysicalCondition))
+	(modify ?bpc (bodyMass ?ibm) (height ?h) (blood_max_pressure ?maxp) (weight ?w) (blood_min_pressure ?minp))
 	(send ?new put-bodyMass ?ibm)
  	(send ?new put-height ?h)
  	(send ?new put-blood_max_pressure ?maxp)
  	(send ?new put-weight ?w)
  	(send ?new put-blood_min_pressure ?minp)
-	(bind ?usr (nth$ 1 (find-instance ((?inst Person)) TRUE))) ;La primera es la ultima que se ha creado...
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ (length$ ?persons) ?persons)) ; La que estamos tratando es la ultima que se ha creado
 	(send ?usr put-basicPhyCondition ?new)
-	;(send ?usr print)		;MODIFICAR message primero
+	(send ?usr print)
 )
 
 (defmodule existingPerson-module (export ?ALL)(import MAIN ?ALL))
