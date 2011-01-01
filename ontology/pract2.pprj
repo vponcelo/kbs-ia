@@ -1,4 +1,4 @@
-; Tue Dec 28 17:52:55 CET 2010
+; Sat Jan 01 13:29:47 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -21,12 +21,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[pract2_ProjectKB_Class10592]
-		[pract2_ProjectKB_Class10593]
-		[pract2_ProjectKB_Class10594]
-		[pract2_ProjectKB_Class10595]
-		[pract2_ProjectKB_Class10596]
-		[pract2_ProjectKB_Class10597]))
+		[pract2_ProjectKB_Class10120]
+		[pract2_ProjectKB_Class10121]
+		[pract2_ProjectKB_Class10122]
+		[pract2_ProjectKB_Class10123]
+		[pract2_ProjectKB_Class10124]
+		[pract2_ProjectKB_Class10125]))
 
 ([CLSES_TAB] of  Widget
 
@@ -68,6 +68,9 @@
 
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
+([KB_305969_Class6] of  Map
+)
+
 ([KB_580083_Class0] of  String
 
 	(name "factory_class_name")
@@ -76,12 +79,12 @@
 ([KB_580083_Class1] of  Map
 
 	(entries
-		[pract2_ProjectKB_Class10598]
-		[pract2_ProjectKB_Class10599]
-		[pract2_ProjectKB_Class10600]
-		[pract2_ProjectKB_Class10601]
-		[pract2_ProjectKB_Class10603])
-	(referenced_maps [pract2_ProjectKB_Class10602]))
+		[pract2_ProjectKB_Class10126]
+		[pract2_ProjectKB_Class10127]
+		[pract2_ProjectKB_Class10128]
+		[pract2_ProjectKB_Class10129]
+		[pract2_ProjectKB_Class10131])
+	(referenced_maps [pract2_ProjectKB_Class10130]))
 
 ([KB_580083_Class100] of  Property_List
 )
@@ -191,9 +194,6 @@
 ([KB_580083_Class99] of  Property_List
 )
 
-([KB_642159_Class6] of  Map
-)
-
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -280,212 +280,72 @@
 ([pract2_ProjectKB_Class10] of  Property_List
 )
 
-([pract2_ProjectKB_Class10130] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "bodyMass")
-	(property_list [pract2_ProjectKB_Class10131])
-	(widget_class_name "edu.stanford.smi.protege.widget.FloatFieldWidget")
-	(width 100)
-	(x 100)
-	(y 180))
-
-([pract2_ProjectKB_Class10131] of  Property_List
-)
-
-([pract2_ProjectKB_Class10134] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "height")
-	(property_list [pract2_ProjectKB_Class10135])
-	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
-	(width 100)
-	(x 100)
-	(y 120))
-
-([pract2_ProjectKB_Class10135] of  Property_List
-)
-
-([pract2_ProjectKB_Class10148] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "blood_max_pressure")
-	(property_list [pract2_ProjectKB_Class10149])
-	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
-	(width 100)
-	(x 100)
-	(y 60))
-
-([pract2_ProjectKB_Class10149] of  Property_List
-)
-
-([pract2_ProjectKB_Class10154] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "weight")
-	(property_list [pract2_ProjectKB_Class10155])
-	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
-	(width 100)
-	(x 0)
-	(y 180))
-
-([pract2_ProjectKB_Class10155] of  Property_List
-)
-
-([pract2_ProjectKB_Class10156] of  Widget
-
-	(height 60)
-	(is_hidden FALSE)
-	(name "blood_min_pressure")
-	(property_list [pract2_ProjectKB_Class10157])
-	(widget_class_name "edu.stanford.smi.protege.widget.IntegerFieldWidget")
-	(width 100)
-	(x 0)
-	(y 120))
-
-([pract2_ProjectKB_Class10157] of  Property_List
-)
-
-([pract2_ProjectKB_Class10164] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "muscular_problems")
-	(property_list [pract2_ProjectKB_Class10165])
-	(widget_class_name "edu.stanford.smi.protege.widget.SymbolListWidget")
-	(width 200)
-	(x 200)
-	(y 300))
-
-([pract2_ProjectKB_Class10165] of  Property_List
-)
-
-([pract2_ProjectKB_Class10166] of  Widget
-
-	(height 120)
-	(is_hidden FALSE)
-	(name "diet")
-	(property_list [pract2_ProjectKB_Class10167])
-	(widget_class_name "edu.stanford.smi.protege.widget.SymbolListWidget")
-	(width 200)
-	(x 200)
-	(y 60))
-
-([pract2_ProjectKB_Class10167] of  Property_List
-)
-
-([pract2_ProjectKB_Class10336] of  Widget
-
-	(height 240)
-	(is_hidden FALSE)
-	(name "subclass_of")
-	(property_list [pract2_ProjectKB_Class10337])
-	(widget_class_name "edu.stanford.smi.protege.widget.ClsListWidget")
-	(width 200)
-	(x 400)
-	(y 120))
-
-([pract2_ProjectKB_Class10337] of  Property_List
-)
-
-([pract2_ProjectKB_Class10525] of  Widget
-
-	(height 240)
-	(is_hidden FALSE)
-	(name "subclass_of")
-	(property_list [pract2_ProjectKB_Class10526])
-	(widget_class_name "edu.stanford.smi.protege.widget.ClsListWidget")
-	(width 200)
-	(x 400)
-	(y 120))
-
-([pract2_ProjectKB_Class10526] of  Property_List
-)
-
-([pract2_ProjectKB_Class10558] of  Widget
-
-	(height 240)
-	(is_hidden FALSE)
-	(name "subclass_of")
-	(property_list [pract2_ProjectKB_Class10559])
-	(widget_class_name "edu.stanford.smi.protege.widget.ClsListWidget")
-	(width 200)
-	(x 400)
-	(y 120))
-
-([pract2_ProjectKB_Class10559] of  Property_List
-)
-
-([pract2_ProjectKB_Class10592] of  String
+([pract2_ProjectKB_Class10120] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([pract2_ProjectKB_Class10593] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([pract2_ProjectKB_Class10594] of  String
+([pract2_ProjectKB_Class10121] of  String
 
 	(name ":META-CLASS")
 	(string_value "%3ANAME"))
 
-([pract2_ProjectKB_Class10595] of  String
+([pract2_ProjectKB_Class10122] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([pract2_ProjectKB_Class10123] of  String
 
 	(name "Person")
 	(string_value "name"))
 
-([pract2_ProjectKB_Class10596] of  String
-
-	(name "BasicPhysicalCondition")
-	(string_value "weight"))
-
-([pract2_ProjectKB_Class10597] of  String
+([pract2_ProjectKB_Class10124] of  String
 
 	(name "TestPerson")
 	(string_value "pulsations_per_min"))
 
-([pract2_ProjectKB_Class10598] of  Map_Entry
+([pract2_ProjectKB_Class10125] of  String
+
+	(name "BasicPhysicalCondition")
+	(string_value "weight"))
+
+([pract2_ProjectKB_Class10126] of  Map_Entry
 
 	(key "show_collaboration_panel")
 	(key_class "java.lang.String")
 	(value "true")
 	(value_class "java.lang.Boolean"))
 
-([pract2_ProjectKB_Class10599] of  Map_Entry
+([pract2_ProjectKB_Class10127] of  Map_Entry
 
 	(key "chaoProject")
 	(key_class "java.lang.String")
 	(value "annotation_pract2.pprj")
 	(value_class "java.lang.String"))
 
-([pract2_ProjectKB_Class10600] of  Map_Entry
+([pract2_ProjectKB_Class10128] of  Map_Entry
 
 	(key "edu.stanford.smi.protege.collab.annotation.gui.panel.ChatPanel")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([pract2_ProjectKB_Class10601] of  Map_Entry
+([pract2_ProjectKB_Class10129] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
 	(value "true")
 	(value_class "java.lang.String"))
 
-([pract2_ProjectKB_Class10602] of  Map
+([pract2_ProjectKB_Class10130] of  Map
 )
 
-([pract2_ProjectKB_Class10603] of  Map_Entry
+([pract2_ProjectKB_Class10131] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "pract2_ProjectKB_Class10602")
+	(value "pract2_ProjectKB_Class10130")
 	(value_class "java.util.Map"))
 
 ([pract2_ProjectKB_Class11] of  Widget
@@ -856,29 +716,15 @@
 	(property_list [pract2_ProjectKB_Class10])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.metadatatab.OWLMetadataTab"))
 
-([pract2_ProjectKB_Class98] of  Widget
-
-	(height 240)
-	(is_hidden FALSE)
-	(name "subclass_of")
-	(property_list [pract2_ProjectKB_Class99])
-	(widget_class_name "edu.stanford.smi.protege.widget.ClsListWidget")
-	(width 200)
-	(x 400)
-	(y 120))
-
-([pract2_ProjectKB_Class99] of  Property_List
-)
-
 ([PROJECT] of  Project
 
 	(browser_slot_names [BROWSER_SLOT_NAMES])
 	(customized_instance_widgets
+		[INSTANCE_ANNOTATION_FORM_WIDGET]
+		[STANDARD_SLOT_FORM_WIDGET]
 		[STANDARD_FACET_FORM_WIDGET]
 		[PAL_FORM_WIDGET]
-		[STANDARD_CLASS_FORM_WIDGET]
-		[INSTANCE_ANNOTATION_FORM_WIDGET]
-		[STANDARD_SLOT_FORM_WIDGET])
+		[STANDARD_CLASS_FORM_WIDGET])
 	(default_cls_metaclass ":STANDARD-CLASS")
 	(default_facet_metaclass ":STANDARD-FACET")
 	(default_instance_widget_class_name "edu.stanford.smi.protege.widget.FormWidget")

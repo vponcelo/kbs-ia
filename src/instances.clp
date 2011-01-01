@@ -431,12 +431,16 @@
 ([sitting] of  InWork
 
 	(duration 300)
-	(frequency very_high))
+	(frequency very_high)
+	(name_habit "sitting")
+	(type_hab sitting))
 
 ([weight_charge] of  InWork
 
 	(duration 10)
-	(frequency few))
+	(frequency few)
+	(name_habit "weight_charge")
+	(type_hab weight_charge))
 )
 
 (definstances OutWork
@@ -444,7 +448,16 @@
 ([up_stairs] of  OutWork
 
 	(duration 5)
-	(frequency quite))
+	(frequency quite)
+	(name_habit "up_stairs")
+	(type_hab stairs))
+
+([homework] of  OutWork
+
+	(duration 5)
+	(frequency few)
+	(name_habit "hung_clothes")
+	(type_hab homeworks))
 )
 
 (definstances Movements
@@ -452,5 +465,14 @@
 ([walk] of  Movements
 
 	(duration 30)
-	(frequency medium))
+	(frequency medium)
+	(name_habit "walk")
+	(type_hab walking))
+
+([bike] of  Movements
+
+	(duration 10)
+	(frequency medium)
+	(name_habit "bike")
+	(type_hab with_bike))
 )
