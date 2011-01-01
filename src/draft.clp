@@ -202,8 +202,9 @@
 					(bind ?habit (nth$ ?i ?habits))
 					(bind ?name (send ?habit get-name_habit))	
 					;(printout t ?name crlf)			; esto lo printa sin comillas
-					(bind ?l (insert$ ?l 1 ?name))		; aqui lo añade como string (con comillas)
+					(bind ?l (insert$ ?l 1 (send ?habit get-name_habit)))		; aqui lo añade como string (con comillas)
 					(printout t "    " (send ?habit get-name_habit)": " (send ?habit get-frequency)  " " (send ?habit get-duration)  crlf)
+					;(printout t ?habits crlf)
 					(bind ?i (+ ?i 1))
 				)
 				(bind ?h (set-single-from-list "Insert the name of your habit shown (BETWEEN \"\"!)" ?l))
