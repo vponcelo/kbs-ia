@@ -458,6 +458,11 @@
 (defclass Habit
 	(is-a USER)
 	(role abstract)
+	(single-slot name_habit
+;+		(comment "Name of the habit")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot duration
 ;+		(comment "Duration of activity in minutes")
 		(type INTEGER)
@@ -473,15 +478,33 @@
 
 (defclass InWork
 	(is-a Habit)
-	(role concrete))
+	(role concrete)
+	(single-slot type_in
+;+		(comment "Type of habit in Work")
+		(type SYMBOL)
+		(allowed-values sitting weight_charge standing)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 (defclass OutWork
 	(is-a Habit)
-	(role concrete))
+	(role concrete)
+	(single-slot type_out
+;+		(comment "Type of habit out Work")
+		(type SYMBOL)
+		(allowed-values stairs homeworks)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 (defclass Movements
 	(is-a Habit)
-	(role concrete))
+	(role concrete)
+	(single-slot type_mov
+;+		(comment "Type of habit of movements")
+		(type SYMBOL)
+		(allowed-values walking with_bike with_motorVehicle)
+;+		(cardinality 1 1)
+		(create-accessor read-write)))
 
 (defclass TestPerson
 	(is-a USER)
