@@ -524,7 +524,8 @@
 	(multislot testExercises
 		(type INSTANCE)
 ;+		(allowed-classes WithoutWeights)
-		(cardinality 1 3)
+		(default [bike_easy] [run_easy])
+		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot tiredness_sensation
 ;+		(comment "Tiredness sensation.")

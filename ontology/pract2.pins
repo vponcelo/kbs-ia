@@ -1,4 +1,4 @@
-; Sat Jan 01 20:33:26 CET 2011
+; Sun Jan 02 00:06:59 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -348,6 +348,9 @@
 	(dizziness no)
 	(muscular_tension normal)
 	(pulsations_per_min 93)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation few))
 
 ([test10] of  TestPerson
@@ -355,6 +358,9 @@
 	(dizziness few)
 	(muscular_tension quite)
 	(pulsations_per_min 110)
+	(testExercises
+		[run_easy]
+		[bike_easy])
 	(tiredness_sensation normal))
 
 ([test2] of  TestPerson
@@ -362,6 +368,9 @@
 	(dizziness no)
 	(muscular_tension normal)
 	(pulsations_per_min 115)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation normal))
 
 ([test3] of  TestPerson
@@ -369,6 +378,9 @@
 	(dizziness few)
 	(muscular_tension normal)
 	(pulsations_per_min 122)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation quite))
 
 ([test4] of  TestPerson
@@ -376,6 +388,9 @@
 	(dizziness high)
 	(muscular_tension normal)
 	(pulsations_per_min 142)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation quite))
 
 ([test5] of  TestPerson
@@ -383,6 +398,9 @@
 	(dizziness high)
 	(muscular_tension quite)
 	(pulsations_per_min 146)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation huge))
 
 ([test6] of  TestPerson
@@ -390,6 +408,9 @@
 	(dizziness no)
 	(muscular_tension normal)
 	(pulsations_per_min 153)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation normal))
 
 ([test7] of  TestPerson
@@ -397,6 +418,9 @@
 	(dizziness no)
 	(muscular_tension high)
 	(pulsations_per_min 155)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation normal))
 
 ([test8] of  TestPerson
@@ -404,6 +428,9 @@
 	(dizziness high)
 	(muscular_tension normal)
 	(pulsations_per_min 183)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation huge))
 
 ([test9] of  TestPerson
@@ -411,6 +438,9 @@
 	(dizziness high)
 	(muscular_tension quite)
 	(pulsations_per_min 190)
+	(testExercises
+		[bike_easy]
+		[run_easy])
 	(tiredness_sensation huge))
 
 ([triceps] of  WithWeights
