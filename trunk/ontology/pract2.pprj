@@ -1,4 +1,4 @@
-; Sat Jan 01 20:33:19 CET 2011
+; Sun Jan 02 00:06:53 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -21,12 +21,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[pract2_ProjectKB_Class20133]
-		[pract2_ProjectKB_Class20134]
-		[pract2_ProjectKB_Class20135]
-		[pract2_ProjectKB_Class20136]
-		[pract2_ProjectKB_Class20137]
-		[pract2_ProjectKB_Class20138]))
+		[pract2_ProjectKB_Class87]
+		[pract2_ProjectKB_Class88]
+		[pract2_ProjectKB_Class89]
+		[pract2_ProjectKB_Class90]
+		[pract2_ProjectKB_Class91]
+		[pract2_ProjectKB_Class92]))
 
 ([CLSES_TAB] of  Widget
 
@@ -68,7 +68,7 @@
 
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_281163_Class6] of  Map
+([KB_444683_Class6] of  Map
 )
 
 ([KB_580083_Class0] of  String
@@ -79,12 +79,12 @@
 ([KB_580083_Class1] of  Map
 
 	(entries
-		[pract2_ProjectKB_Class20139]
-		[pract2_ProjectKB_Class20140]
-		[pract2_ProjectKB_Class20141]
-		[pract2_ProjectKB_Class20142]
-		[pract2_ProjectKB_Class20144])
-	(referenced_maps [pract2_ProjectKB_Class20143]))
+		[pract2_ProjectKB_Class93]
+		[pract2_ProjectKB_Class94]
+		[pract2_ProjectKB_Class95]
+		[pract2_ProjectKB_Class96]
+		[pract2_ProjectKB_Class98])
+	(referenced_maps [pract2_ProjectKB_Class97]))
 
 ([KB_580083_Class100] of  Property_List
 )
@@ -335,74 +335,6 @@
 
 ([pract2_ProjectKB_Class20] of  Property_List
 )
-
-([pract2_ProjectKB_Class20133] of  String
-
-	(name ":INSTANCE-ANNOTATION")
-	(string_value "%3AANNOTATION-TEXT"))
-
-([pract2_ProjectKB_Class20134] of  String
-
-	(name ":PAL-CONSTRAINT")
-	(string_value "%3APAL-NAME"))
-
-([pract2_ProjectKB_Class20135] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([pract2_ProjectKB_Class20136] of  String
-
-	(name "Person")
-	(string_value "name"))
-
-([pract2_ProjectKB_Class20137] of  String
-
-	(name "BasicPhysicalCondition")
-	(string_value "weight"))
-
-([pract2_ProjectKB_Class20138] of  String
-
-	(name "TestPerson")
-	(string_value "pulsations_per_min"))
-
-([pract2_ProjectKB_Class20139] of  Map_Entry
-
-	(key "show_collaboration_panel")
-	(key_class "java.lang.String")
-	(value "true")
-	(value_class "java.lang.Boolean"))
-
-([pract2_ProjectKB_Class20140] of  Map_Entry
-
-	(key "chaoProject")
-	(key_class "java.lang.String")
-	(value "annotation_pract2.pprj")
-	(value_class "java.lang.String"))
-
-([pract2_ProjectKB_Class20141] of  Map_Entry
-
-	(key "edu.stanford.smi.protege.collab.annotation.gui.panel.ChatPanel")
-	(key_class "java.lang.String")
-	(value "false")
-	(value_class "java.lang.String"))
-
-([pract2_ProjectKB_Class20142] of  Map_Entry
-
-	(key "change_tracking_active")
-	(key_class "java.lang.String")
-	(value "true")
-	(value_class "java.lang.String"))
-
-([pract2_ProjectKB_Class20143] of  Map
-)
-
-([pract2_ProjectKB_Class20144] of  Map_Entry
-
-	(key "InstanceDisplay.yellow_stickies")
-	(key_class "java.lang.String")
-	(value "pract2_ProjectKB_Class20143")
-	(value_class "java.util.Map"))
 
 ([pract2_ProjectKB_Class21] of  Widget
 
@@ -710,11 +642,79 @@
 ([pract2_ProjectKB_Class86] of  Property_List
 )
 
+([pract2_ProjectKB_Class87] of  String
+
+	(name ":INSTANCE-ANNOTATION")
+	(string_value "%3AANNOTATION-TEXT"))
+
+([pract2_ProjectKB_Class88] of  String
+
+	(name ":PAL-CONSTRAINT")
+	(string_value "%3APAL-NAME"))
+
+([pract2_ProjectKB_Class89] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
 ([pract2_ProjectKB_Class9] of  Widget
 
 	(is_hidden TRUE)
 	(property_list [pract2_ProjectKB_Class10])
 	(widget_class_name "edu.stanford.smi.protegex.owl.ui.metadatatab.OWLMetadataTab"))
+
+([pract2_ProjectKB_Class90] of  String
+
+	(name "Person")
+	(string_value "name"))
+
+([pract2_ProjectKB_Class91] of  String
+
+	(name "BasicPhysicalCondition")
+	(string_value "weight"))
+
+([pract2_ProjectKB_Class92] of  String
+
+	(name "TestPerson")
+	(string_value "pulsations_per_min"))
+
+([pract2_ProjectKB_Class93] of  Map_Entry
+
+	(key "show_collaboration_panel")
+	(key_class "java.lang.String")
+	(value "true")
+	(value_class "java.lang.Boolean"))
+
+([pract2_ProjectKB_Class94] of  Map_Entry
+
+	(key "chaoProject")
+	(key_class "java.lang.String")
+	(value "annotation_pract2.pprj")
+	(value_class "java.lang.String"))
+
+([pract2_ProjectKB_Class95] of  Map_Entry
+
+	(key "edu.stanford.smi.protege.collab.annotation.gui.panel.ChatPanel")
+	(key_class "java.lang.String")
+	(value "false")
+	(value_class "java.lang.String"))
+
+([pract2_ProjectKB_Class96] of  Map_Entry
+
+	(key "change_tracking_active")
+	(key_class "java.lang.String")
+	(value "true")
+	(value_class "java.lang.String"))
+
+([pract2_ProjectKB_Class97] of  Map
+)
+
+([pract2_ProjectKB_Class98] of  Map_Entry
+
+	(key "InstanceDisplay.yellow_stickies")
+	(key_class "java.lang.String")
+	(value "pract2_ProjectKB_Class97")
+	(value_class "java.util.Map"))
 
 ([PROJECT] of  Project
 
