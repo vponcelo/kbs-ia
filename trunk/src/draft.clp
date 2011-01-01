@@ -71,11 +71,11 @@
 	(printout t "    LastName:" ?self:last_name  crlf) 
 	(printout t "    age:" ?self:age  crlf) 
 	(printout t "    goal:" ?self:goal  crlf) 
-	(printout t "    habits:" ?self:habits  crlf) 
+	(printout t "    habits: " crlf) 
 	(bind ?i 1)
 	(while (<= ?i (length$ ?self:habits)) do	;recorre el multislot de habitos y los muestra
 	(bind ?habit (nth$ ?i ?self:habits))
-		(printout t "           "(class ?habit) " " (send ?habit get-name_habit)  " duration:" (send ?habit get-frequency) " frequency:" (send ?habit get-duration) crlf)
+		(printout t "            "(class ?habit) " " (send ?habit get-name_habit)  " duration:" (send ?habit get-frequency) " frequency:" (send ?habit get-duration) crlf)
 		(bind ?i (+ ?i 1))
 	)
 	(printout t "-------------------------------------------------" crlf crlf) 
@@ -109,7 +109,7 @@
    		(case 1 then
 			(printout t "Creando persona" crlf)
 			(bind ?*user* -1)
-			(focus create-person)
+			(focus createPerson-module)
 		)
 		(case 2 then
 			(printout t "Seleccionando existente" crlf)
@@ -119,7 +119,7 @@
 				(bind ?i (+ ?i 1))
 			)
 			(bind ?*user* (read))
-			(focus existing-person)
+			(focus existingPerson-module)
 		)
 		(case 3 then
 			(printout t "Have a nice day!" crlf)
@@ -130,40 +130,30 @@
 	)			
 )
 
-(defmodule create-person (export ?ALL)(import MAIN ?ALL))
+(defmodule createPerson-module (export ?ALL)(import MAIN ?ALL))
 
 (defrule create-person
 	(declare (salience 9998))
+	?inidata <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
 	=>
 	(bind ?usr (make-instance User1 of Person))
 	(bind ?res (set-value "name"))
-        (send ?usr put-name_ ?res)
-	(bind ?res (set-value "last_name"))
-        (send ?usr put-last_name ?res)
-	(focus ageGoal-module)
-)
-
-(defmodule ageGoal-module (export ?ALL)(import create-person ?ALL))
-
-(defrule set-inidata
-	(declare (salience 9997))
-	?inidata <- (personalData  (age unknown) (goal unknown))
-	=>
-	(bind ?res (set-number "How old are you" 16 130))
-	(bind ?res2 (set-multi-from-list "What is/are your goal/s in the gym (select one firstly)" (slot-allowed-values Person goal)))
-	(modify ?inidata (age ?res) (goal ?res2))
-	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-	(bind ?usr (nth$ (length$ ?persons) ?persons))
-	(send ?usr put-age ?res)
-	(send ?usr put-goal ?res2)
+	(bind ?res2 (set-value "last_name"))
+	(bind ?res3 (set-number "How old are you" 16 130))
+	(bind ?res4 (set-multi-from-list "What is/are your goal/s in the gym (select one firstly)" (slot-allowed-values Person goal)))
+        (modify ?inidata (name_ ?res) (last_name ?res2) (age ?res3) (goal ?res4))
+	(send ?usr put-name_ ?res)
+	(send ?usr put-last_name ?res2)
+	(send ?usr put-age ?res3)
+	(send ?usr put-goal ?res4)
 	(focus habits-module)
 )
 
-(defmodule habits-module (export ?ALL)(import ageGoal-module ?ALL))
+(defmodule habits-module (export ?ALL)(import createPerson-module ?ALL))
 
 (defrule set-habits
 	(declare (salience 9996))
-	;MODIFY TEMPLATE TO MAKE LHS
+	?habs <- (habitsPerson (habits unknown))
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(switch ?*opc*
@@ -178,15 +168,16 @@
 				(bind ?i 1)
 				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
 					(bind ?habit (nth$ ?i ?habits))
-					(bind ?l (insert$ ?l 1 (send ?habit get-name_habit)))
+					(bind ?name (send ?habit get-name_habit))	
+					(printout t ?name crlf)			; esto lo printa sin comillas
+					(bind ?l (insert$ ?l 1 ?name))		; aqui lo añade como string (con comillas)
 					(printout t "    " (send ?habit get-name_habit)": " (send ?habit get-frequency)  " " (send ?habit get-duration)  crlf)
 					(bind ?i (+ ?i 1))
 				)
-				(bind ?h (set-single-from-list "Insert the name of your habit shown (BETWEEN \"\"!!!)" ?l))
+				(bind ?h (set-single-from-list "Insert the name of your habit shown (BETWEEN \"\"!)" ?l))
 				(bind ?i 1)
 				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y busca el que tiene de nombre ?h
 					(bind ?habit (nth$ ?i ?habits))
-					(printout t (send ?habit get-name_habit) crlf)
 					(if (eq (send ?habit get-name_habit) ?h) then
 						(bind ?lhabits (insert$ ?lhabits 1 ?habit))
 						(break)
@@ -196,11 +187,13 @@
 				(printout t "Do you want to add another habit? yes/no" crlf)
 				(bind ?add (read))
 			)
+			(modify ?habs (habits ?lhabits))
 			(send ?usr put-habits ?lhabits)
 			(send ?usr print)
 		)
 		(case 2 then 
 			(bind ?usr (nth$ ?*user* ?persons))	;En este caso el usuario introducido ya tiene asignado unos habitos
+			; Para la version extendida
 		)
 	)
 	(focus bpc-module)
@@ -267,7 +260,7 @@
 	;(send ?usr print)		;MODIFICAR message primero
 )
 
-(defmodule existing-person (export ?ALL)(import MAIN ?ALL))
+(defmodule existingPerson-module (export ?ALL)(import MAIN ?ALL))
 
 (defrule existing-person
 	(declare (salience 9990))
@@ -280,4 +273,3 @@
 	;(printout t ?pers get-name_ ?*user* crlf)
 	(send ?usr print) 
 )
-
