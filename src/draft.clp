@@ -50,35 +50,37 @@
 			(printout t ?list "?" crlf)
 			(bind ?n (read))
 		)
-		(bind ?l (insert$ ?l 1 ?n))
+		(if (not(member ?n ?l)) then
+			(bind ?l (insert$ ?l 1 ?n))
+		)
+		(if (or(eq none ?n) (eq balanced ?n)) then
+			(bind ?l (create$ ?n))
+			(bind ?res no)
+		else
+			(printout t "Do you wish to add another? (yes/no)" crlf)
+			(bind ?res (read))
+		)
 		(printout t ?l crlf)
-		(printout t "Do you wish to add another? (yes/no)" crlf)
-		(bind ?res (read))
 	)
 	?l
 )
 
 ;Esta función calcula la dificultad o intensidad inicial que puede soportar el usuario a partir de sus hábitos
-(deffunction set-difficulty ()
+(deffunction set-difficulty (?usr)
 	; Criterios usados:
 		; Si hábito = mucho ejercicio, entonces augmenta dificultad
 		; Si hábito = indiferente (no afecta a las condiciones físicas), entonces dificultad no se altera
 		; Si hábito = malo (afecta negativamente a las condiciones físicas), entonces baja dificultad
 		; -------------
-		; media aproximada de dificultades en los hábitos = dificultad intensidad inicial
-	; Cuando habito es mucho o poco ejercicio?
-		; Ahora lo pienso, voy a cenar xD
-	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-	(bind ?usr (nth$ (length$ ?persons) ?persons))
+		; suma de dificultades en los hábitos = dificultad intensidad inicial
+	; Como cuantificar los habitos? --> mirar pseudocódigo report
 	(bind ?habits (send ?usr get-habits))
 	(bind ?i 1)
 	(bind ?j -1)
 	(bind ?sum 0)
-	(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
+	(while (<= ?i (length$ ?habits)) do
 		(bind ?habit (nth$ ?i ?habits))
-		(printout t "    " (send ?habit get-name_habit)  crlf)
 		(bind ?dur (send ?habit get-duration))
-		(printout t "DURACION: " ?dur " nth: " (nth$ 2 (send ?habit get-indexDuration)) crlf)
 		(if (>= ?dur 0) then
 			(bind ?j 1)
 			(if (>= ?dur (nth$ 2 (send ?habit get-indexDuration))) then
@@ -172,42 +174,65 @@
 
 (defmessage-handler Person print primary ()
 	(printout t crlf crlf)
-	(printout t "------------Person Basic Information-------------" crlf crlf) 
+	(printout t "------------------------Person Basic Information-------------------------" crlf crlf) 
 	(printout t "    Name: " ?self:name_  crlf) 
 	(printout t "    LastName: " ?self:last_name  crlf) 
 	(printout t "    age: " ?self:age " years " crlf) 
 	(printout t "    goal: " ?self:goal  crlf) 
 	(if (not(eq ?self:difficulty_intensity [nil])) then
-		(printout t "    Initial difficulty or intensity can be supported: " ?self:difficulty_intensity  crlf) 
+		(printout t "    Initial difficulty or intensity supported " crlf "    (calculated by habits): " ?self:difficulty_intensity  crlf) 
 	)	
 	(if (eq (length$ ?self:habits) 0) then				;aqui miramos la longitud del slot (no es required)
-		(printout t "" crlf)
-		(printout t " -------------------------------------------------" crlf crlf) 	
+		(printout t crlf)
+		(printout t "------------------------------Person Habits------------------------------" crlf crlf) 
+		(printout t "    No habits selected " crlf)
 	else then
 		(printout t crlf)
-		(printout t "------------------Person Habits------------------" crlf crlf) 
+		(printout t "------------------------------Person Habits------------------------------" crlf crlf) 
 		(bind ?i 1)
 		(while (<= ?i (length$ ?self:habits)) do	;recorre el multislot de habitos de esta persona y los muestra
 			(bind ?habit (nth$ ?i ?self:habits))
 			(printout t "    "(class ?habit) ": " (send ?habit get-name_habit) " " (send ?habit get-duration) " min with frequency: '" (send ?habit get-frequency) "'" crlf)
 			(bind ?i (+ ?i 1))
 		)
-		(if (eq ?self:basicPhyCondition [nil]) then		;aqui comparamos a null el slot (es required)
-			(printout t crlf)
-			(printout t "-------------------------------------------------" crlf crlf) 
-		else then
-			(printout t crlf)
-			(printout t "--------Person Basic Physical Information--------" crlf crlf) 
-			(printout t "    height: "(send ?self:basicPhyCondition get-height) " cm " crlf) 
-			(printout t "    weight:" (send ?self:basicPhyCondition get-weight) " kg " crlf) 
-			(printout t "    index of body mass:" (send ?self:basicPhyCondition get-bodyMass)   crlf)
-			(printout t "    blood maximum pressure:" (send ?self:basicPhyCondition get-blood_max_pressure) " sistolic " crlf)
-			(printout t "    blood minimum pressure:" (send ?self:basicPhyCondition get-blood_min_pressure) " diastolic " crlf)
-			(printout t "    diet:" (send ?self:basicPhyCondition get-diet) crlf)
-			(printout t "    muscular problems:" (send ?self:basicPhyCondition get-muscular_problems) crlf)
-			(printout t "-------------------------------------------------" crlf crlf crlf) 
-		)
 	)
+	(if (eq ?self:basicPhyCondition [nil]) then		;aqui comparamos a null el slot (es required)
+		(printout t crlf)
+		(printout t "-------------------------------------------------------------------------" crlf crlf) 
+	else then
+		(printout t crlf)
+		(printout t "--------------------Person Basic Physical Information--------------------" crlf crlf) 
+		(printout t "    height: "(send ?self:basicPhyCondition get-height) " cm " crlf) 
+		(printout t "    weight:" (send ?self:basicPhyCondition get-weight) " kg " crlf) 
+		(printout t "    index of body mass:" (send ?self:basicPhyCondition get-bodyMass)   crlf)
+		(printout t "    blood maximum pressure:" (send ?self:basicPhyCondition get-blood_max_pressure) " sistolic " crlf)
+		(printout t "    blood minimum pressure:" (send ?self:basicPhyCondition get-blood_min_pressure) " diastolic " crlf)
+		(printout t "    diet:" (send ?self:basicPhyCondition get-diet) crlf)
+		(printout t "    muscular problems:" (send ?self:basicPhyCondition get-muscular_problems) crlf)
+	)
+	(if (eq ?self:test [nil]) then
+		(printout t "" crlf)
+		(printout t "-------------------------------------------------------------------------" crlf crlf crlf) 
+	else then
+		(printout t crlf)
+		(printout t "-----------------------Results Test Basic Exercises----------------------" crlf crlf) 
+		(printout t "    exercises done: " (send ?self:test get-testExercises) crlf)
+		(printout t "    pulsations per minute: "(send ?self:test get-pulsations_per_min) crlf) 
+		(if (>= (send ?self:test get-pulsations_per_min) 100) then
+			(printout t "        Your pulsations per min are normal" crlf)
+			(if (>= (send ?self:test get-pulsations_per_min) 180) then
+				(printout t "        You have tachycardia" crlf)
+			)
+		else then 
+			(printout t "        You are atheltic or you have bradycardia" crlf)
+		)
+		(printout t "    muscular tension: " (send ?self:test get-muscular_tension) crlf) 
+		(printout t "    tiredness sensation: " (send ?self:test get-tiredness_sensation) crlf)
+		(printout t "    dizziness: " (send ?self:test get-dizziness) crlf)
+	)
+	(printout t "" crlf)
+	(printout t "-------------------------------------------------------------------------" crlf crlf crlf) 
+	
 )
 
 
@@ -265,6 +290,7 @@
 	?inidata <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
 	=>
 	(bind ?usr (make-instance User1 of Person))
+	(send ?usr put-difficulty_intensity [nil])
 	(bind ?res (set-value "name"))
 	(bind ?res2 (set-value "last_name"))
 	(bind ?res3 (set-number "How old are you (between 16-130)" 16 130))
@@ -331,13 +357,58 @@
 		)
 	)
 	(send ?usr print)
-	(focus bpc-module)
+	(focus difficulty_intensity-module)
 )
 
-(defmodule bpc-module (export ?ALL)(import habits-module ?ALL))
+(defmodule existingPerson-module (export ?ALL)(import MAIN ?ALL))
+
+(defrule existing-person
+	(declare (salience 9990))
+	=>
+	;?pers <- (object (is-a Person)(name_ ?n))
+	;(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ ?*user* ?persons)) ;Cogemos el index que ha introducido el user...
+	=>
+	;(printout t ?pers get-name_ ?*user* crlf)
+	(send ?usr print) 
+	(focus difficulty_intensity-module)
+)
+
+(defmodule difficulty_intensity-module (export ?ALL)(import habits-module ?ALL)(import existingPerson-module ?ALL))
+
+(defrule difficulty-intensity
+	(declare (salience 9989))
+	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
+	=>
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr [nil])
+	(switch ?*opc*
+		(case 1 then
+			(bind ?usr (nth$ (length$ ?persons) ?persons)) 		
+		)
+		(case 2 then
+			(bind ?usr (nth$ ?*user* ?persons))
+		)
+	)
+	(bind ?di (set-difficulty ?usr))
+	(modify ?dif_intens (difficulty_intensity ?di))
+	(send ?usr put-difficulty_intensity ?di)
+	(send ?usr print)
+	(switch ?*opc*
+		(case 1 then
+			(focus bpc-module)
+		)
+		(case 2 then
+			;(focus exercises module)	;aun no existe :O
+		)
+	)
+)
+
+(defmodule bpc-module (export ?ALL)(import difficulty_intensity-module ?ALL))
 
 (defrule set-bpc
-	(declare (salience 9996))
+	(declare (salience 9988))
 	?bpc <- (basicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown) (diet unknown) (muscular_problems unknown))
 	=>
 	(bind ?h (set-number "How tall are you (in cm) (between 120-240)" 120 240))
@@ -361,52 +432,45 @@
 	(bind ?usr (nth$ (length$ ?persons) ?persons)) ; La que estamos tratando es la ultima que se ha creado
 	(send ?usr put-basicPhyCondition ?new)
 	(send ?usr print)
-	(focus difficulty_intensity-module)
-)
-
-(defmodule existingPerson-module (export ?ALL)(import MAIN ?ALL))
-
-(defrule existing-person
-	(declare (salience 9990))
-	=>
-	;?pers <- (object (is-a Person)(name_ ?n))
-	;(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
-	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-	(bind ?usr (nth$ ?*user* ?persons)) ;Cogemos el index que ha introducido el user...
-	=>
-	;(printout t ?pers get-name_ ?*user* crlf)
-	(send ?usr print) 
-)
-
-(defmodule difficulty_intensity-module (export ?ALL)(import bpc-module ?ALL)(import existingPerson-module ?ALL))
-
-(defrule difficulty-intensity
-	(declare (salience 9989))
-	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
-	=>
-	(bind ?di (set-difficulty))						; ESTO LLAMARA UNA FUNCION QUE CALCULARA LA DIFICULTAD A PARTIR DE LOS HABITOS
-	(modify ?dif_intens (difficulty_intensity ?di))
-	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-	(bind ?usr (nth$ (length$ ?persons) ?persons)) 		; CUIDADO, HAY QUE DIFERENCIAR CASOS EN LA VERSION EXTENDIDA, ESTA NORMA DEPENDE DE LA EXISTING PERSON TAMBIEN
-	(send ?usr put-difficulty_intensity ?di)
-	(send ?usr print)
 	(focus test-module)
 )
 
-(defmodule test-module (export ?ALL)(import difficulty_intensity-module ?ALL))
+(defmodule test-module (export ?ALL)(import bpc-module ?ALL))
 
 (defrule test-module
-	(declare (salience 9988))
+	(declare (salience 9987))
 	?testPers <- (testPerson (pulsations_per_min unknown) (muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
 	=>
-	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-	(bind ?usr (nth$ (length$ ?persons) ?persons))
+	(bind ?test (make-instance test of TestPerson))
+	(printout t "holaaaaaa1" crlf)
 	(bind ?muscTens set-single-from-list "What is your muscular tension" (slot-allowed-values TestPerson muscular_tension))
+	(printout t "holaaaaaa2" crlf)
 	(bind ?tired set-single-from-list "What is your tiredness sensation" (slot-allowed-values TestPerson tiredness_sensation))
+	(printout t "holaaaaaa3" crlf)
 	(bind ?dizz set-single-from-list "Are you dizzy" (slot-allowed-values TestPerson dizziness))
+	(printout t "holaaaaaa4" crlf)
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(printout t "holaaaaaa5" crlf)
+	(bind ?usr (nth$ (length$ ?persons) ?persons))
+	(printout t "holaaaaaa6" crlf)
 	(bind ?ppm (set-pulsations ?usr))
-	; Buscar ejercicios bici_easy y run_easy y añadirlos a testExercises con put-testExercises ?lexs
-	(modify ?testPers (pulsations_per_min ?ppm) (muscular_tension ?muscTens) (tiredness_sensation ?tired) (dizziness ?dizz))
+	(printout t "holaaaaaa7" crlf)
+	(bind ?lexs (send ?test get-testExercises))
+	(printout t "holaaaaaa8" crlf)
+	(modify ?testPers (pulsations_per_min ?ppm) (muscular_tension ?muscTens) (tiredness_sensation ?tired) (dizziness ?dizz) (testExercises ?lexs))
+	(printout t "holaaaaaa9" crlf)
+	(send ?usr put-test ?test)
+	(printout t "holaaaaaa10" crlf)
+	(send ?test put-pulsations_per_min ?ppm)
+	(printout t "holaaaaaa11" crlf)
+	(send ?test put-muscular_tension ?muscTens)
+	(printout t "holaaaaaa12" crlf)
+	(send ?test put-tiredness_sensation ?tired)
+	(printout t "holaaaaaa13" crlf)
+	(send ?test put-dizziness ?dizz)
+	(printout t "holaaaaaa14" crlf)
+	(send ?test put-testExercises ?lexs)
+	(printout t "holaaaaaa15" crlf)
 	(send ?usr print)
-	;(focus test2-module)
+	;(focus exercises-module)	;aun no existe :O
 )

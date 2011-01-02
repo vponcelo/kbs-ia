@@ -1,4 +1,4 @@
-; Sun Jan 02 13:53:07 CET 2011
+; Sun Jan 02 21:59:27 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -77,7 +77,6 @@
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write))
 	(multislot diet
@@ -108,7 +107,6 @@
 ;+		(comment "Dizzines sensation.")
 		(type SYMBOL)
 		(allowed-values no few quite high)
-		(default no)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot indexDuration
@@ -127,14 +125,12 @@
 	(single-slot muscular_tension
 		(type SYMBOL)
 		(allowed-values normal quite high)
-		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot tiredness_sensation
 ;+		(comment "Tiredness sensation.")
 		(type SYMBOL)
 		(allowed-values few normal quite huge)
-		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot habits
@@ -192,7 +188,7 @@
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot difficulty_intensity
-;+		(comment "Difficulty/intensity of the exercise and person (calculated by person and exercises features)")
+;+		(comment "Difficulty/intensity of the exercise and person (calculated by person and exercises ;features)")
 		(type SYMBOL)
 		(allowed-values easy medium hard)
 ;+		(cardinality 0 1)
@@ -359,7 +355,6 @@
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write)))
 
@@ -555,7 +550,6 @@
 	(single-slot muscular_tension
 		(type SYMBOL)
 		(allowed-values normal quite high)
-		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot testExercises
@@ -568,14 +562,12 @@
 ;+		(comment "Tiredness sensation.")
 		(type SYMBOL)
 		(allowed-values few normal quite huge)
-		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot dizziness
 ;+		(comment "Dizzines sensation.")
 		(type SYMBOL)
 		(allowed-values no few quite high)
-		(default no)
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
@@ -625,6 +617,5 @@
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write)))
