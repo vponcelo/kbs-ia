@@ -65,7 +65,7 @@
 )
 
 ; Template con la dificultad/intensidad inicial que puede soportar el usuario calculada a partir de sus habitos
-(deftemplate testExercices
+(deftemplate testPerson
 	(slot pulsations_per_min)	
 	(slot muscular_tension)
 	(slot tiredness_sensation)
@@ -73,8 +73,8 @@
 	(slot testExercises)
 )
 
-(deffacts testExs
-	(testExercices
+(deffacts testPers
+	(testPerson
 		(pulsations_per_min unknown)	
 		(muscular_tension unknown)
 		(tiredness_sensation unknown)

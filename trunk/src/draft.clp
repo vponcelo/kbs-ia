@@ -390,21 +390,23 @@
 	(bind ?usr (nth$ (length$ ?persons) ?persons)) 		; CUIDADO, HAY QUE DIFERENCIAR CASOS EN LA VERSION EXTENDIDA, ESTA NORMA DEPENDE DE LA EXISTING PERSON TAMBIEN
 	(send ?usr put-difficulty_intensity ?di)
 	(send ?usr print)
-	(focus test-exs-module)
+	(focus test-module)
 )
 
-(defmodule test-exs-module (export ?ALL)(import difficulty_intensity-module ?ALL))
+(defmodule test-module (export ?ALL)(import difficulty_intensity-module ?ALL))
 
-(defrule tests-exs-module
+(defrule test-module
 	(declare (salience 9988))
-	?testExs <- (testExercices (pulsations_per_min unknown)	(muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
+	?testPers <- (testPerson (pulsations_per_min unknown) (muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons))
 	(bind ?muscTens set-single-from-list "What is your muscular tension" (slot-allowed-values TestPerson muscular_tension))
 	(bind ?tired set-single-from-list "What is your tiredness sensation" (slot-allowed-values TestPerson tiredness_sensation))
 	(bind ?dizz set-single-from-list "Are you dizzy" (slot-allowed-values TestPerson dizziness))
-	;añadir ejercicios
 	(bind ?ppm (set-pulsations ?usr))
+	; Buscar ejercicios bici_easy y run_easy y añadirlos a testExercises con put-testExercises ?lexs
+	(modify ?testPers (pulsations_per_min ?ppm) (muscular_tension ?muscTens) (tiredness_sensation ?tired) (dizziness ?dizz))
 	(send ?usr print)
+	;(focus test2-module)
 )
