@@ -68,7 +68,65 @@
 		; media aproximada de dificultades en los hábitos = dificultad intensidad inicial
 	; Cuando habito es mucho o poco ejercicio?
 		; Ahora lo pienso, voy a cenar xD
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ (length$ ?persons) ?persons))
+	(bind ?habits (send ?usr get-habits))
+	(bind ?i 1)
+	(bind ?j -1)
+	(bind ?sum 0)
+	(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
+		(bind ?habit (nth$ ?i ?habits))
+		(printout t "    " (send ?habit get-name_habit)  crlf)
+		(bind ?dur (send ?habit get-duration))
+		(printout t "DURACION: " ?dur " nth: " (nth$ 2 (send ?habit get-indexDuration)) crlf)
+		(if (>= ?dur 0) then
+			(bind ?j 1)
+			(if (>= ?dur (nth$ 2 (send ?habit get-indexDuration))) then
+				(bind ?j 2)
+				(if (>= ?dur (nth$ 3 (send ?habit get-indexDuration))) then
+					(bind ?j 3)
+					(if (>= ?dur (nth$ 4 (send ?habit get-indexDuration))) then
+						(bind ?j 4)
+					)
+				)
+			)
+		)
+		(bind ?freq (send ?habit get-frequency))
+		(switch ?freq
+			(case few then
+				(bind ?j (* 1 ?j))				
+			)
+			(case medium then
+				(bind ?j (* 2 ?j))
+			)
+			(case quite then
+				(bind ?j (* 3 ?j))
+			)
+			(case very_high then
+				(bind ?j (* 4 ?j))
+			)
+		)
+		(if (send ?habit get-habit_class) then
+			(bind ?sum (+ ?sum ?j))
+		else then
+			(bind ?sum (- ?sum ?j))
+		)
+		(bind ?i (+ ?i 1))		
+	)
+	(if (< ?sum -8) then
+		(bind ?resp easy)
+	else (if (< ?sum 8) then
+		(bind ?resp medium)
+	     else then
+		(bind ?resp hard)
+	     )
+	)
+	?resp
 )
+;Esta función calcula la dificultad o intensidad inicial que puede soportar el usuario a partir de sus hábitos
+(deffunction set-pulsations ()
+)
+
 
 
 ;############## ESTO IRA EN MESSAGES ################
@@ -201,16 +259,20 @@
 				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
 					(bind ?habit (nth$ ?i ?habits))
 					(bind ?l (insert$ ?l 1 (sym-cat (send ?habit get-name_habit))))		
-					(printout t "    " (send ?habit get-name_habit)": " (send ?habit get-frequency)  " " (send ?habit get-duration)  crlf)
+					(printout t "    " (send ?habit get-name_habit)  crlf)
 					;(printout t ?habits crlf)
 					(bind ?i (+ ?i 1))
 				)
-				(bind ?h (set-single-from-list "Insert the name of your habit shown (BETWEEN \"\"!)" ?l))
+				(bind ?h (set-single-from-list "Insert the name of your habit shown" ?l))
 				(bind ?i 1)
 				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y busca el que tiene de nombre ?h
 					(bind ?habit (nth$ ?i ?habits))
 					(if (eq (sym-cat (send ?habit get-name_habit)) ?h) then
 						(bind ?lhabits (insert$ ?lhabits 1 ?habit))
+						(bind ?dur (set-number "What is the duration of your habit (between 0-500)" 0 500))
+						(bind ?freq (set-single-from-list "What is the frequency of your habit" (slot-allowed-values Habit frequency)))
+						(send ?habit put-duration ?dur)		
+						(send ?habit put-frequency ?freq)
 						(break)
 					)
 					(bind ?i (+ ?i 1))
@@ -280,10 +342,27 @@
 	(declare (salience 9989))
 	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
 	=>
-	(bind ?di easy)						; ESTO LLAMARA UNA FUNCION QUE CALCULARA LA DIFICULTAD A PARTIR DE LOS HABITOS
+	(bind ?di (set-difficulty))						; ESTO LLAMARA UNA FUNCION QUE CALCULARA LA DIFICULTAD A PARTIR DE LOS HABITOS
 	(modify ?dif_intens (difficulty_intensity ?di))
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons)) 		; CUIDADO, HAY QUE DIFERENCIAR CASOS EN LA VERSION EXTENDIDA, ESTA NORMA DEPENDE DE LA EXISTING PERSON TAMBIEN
 	(send ?usr put-difficulty_intensity ?di)
+	(send ?usr print)
+	(focus test-exs-module)
+)
+
+(defmodule test-exs-module (export ?ALL)(import difficulty_intensity-module ?ALL))
+
+(defrule tests-exs-module
+	(declare (salience 9988))
+	?testExs <- (testExercices (pulsations_per_min unknown)	(muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
+	=>
+	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+	(bind ?usr (nth$ (length$ ?persons) ?persons))
+	(bind ?muscTens set-single-from-list "What is your muscular tension" (slot-allowed-values TesPerson muscular_tension))
+	(bind ?tired set-single-from-list "What is your tiredness sensation" (slot-allowed-values TesPerson tiredness_sensation))
+	(bind ?dizz set-single-from-list "Are you dizzy" (slot-allowed-values TesPerson dizziness))
+	;añadir ejercicios
+	(bind ?puls set-pulsations)
 	(send ?usr print)
 )

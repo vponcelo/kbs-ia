@@ -1,4 +1,4 @@
-; Sun Jan 02 00:06:59 CET 2011
+; Sun Jan 02 16:31:35 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -87,6 +87,12 @@
 		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write))
+	(single-slot habit_class
+;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot test
 		(type INSTANCE)
 ;+		(allowed-classes TestPerson)
@@ -110,6 +116,13 @@
 		(type INTEGER)
 		(range 40 250)
 ;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot indexDuration
+;+		(comment "This index represents the interval of duration used to compute the duration/intensity of an habit. (1-4)")
+		(type INTEGER)
+		(range 0 500)
+		(default 0)
+		(cardinality 1 4)
 		(create-accessor read-write))
 	(single-slot muscular_tension
 		(type SYMBOL)
@@ -474,6 +487,19 @@
 		(type STRING)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
+	(multislot indexDuration
+;+		(comment "This index represents the interval of duration used to compute the duration/intensity of an habit. (1-4)")
+		(type INTEGER)
+		(range 0 500)
+		(default 0)
+		(cardinality 1 4)
+		(create-accessor read-write))
+	(single-slot habit_class
+;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot duration
 ;+		(comment "Duration of activity in minutes")
 		(type INTEGER)
@@ -507,7 +533,7 @@
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
-(defclass Movements
+(defclass Movement
 	(is-a Habit)
 	(role concrete)
 	(single-slot type_hab
