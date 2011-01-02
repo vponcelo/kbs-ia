@@ -123,8 +123,47 @@
 	)
 	?resp
 )
-;Esta función calcula la dificultad o intensidad inicial que puede soportar el usuario a partir de sus hábitos
-(deffunction set-pulsations ()
+;Esta función calcula las pulsaciones por minuto de la persona al realizar los ejercicios de test
+(deffunction set-pulsations (?usr)
+	(bind ?bpc (send ?usr get-basicPhyCondition))
+	(bind ?imc (send ?bpc get-bodyMass))
+	(bind ?ppm 100)
+	(bind ?var 0)
+	(if (> ?imc 0) then
+		(bind ?var (random -50 0))
+		(if (>= ?imc 20) then
+			(bind ?var (random 0 70))
+			(if (>= ?imc 25) then
+				(bind ?var (random 0 130))
+			)
+		)
+	)		
+	(bind ?ppm (+ ?ppm ?var))
+	(bind ?age (send ?usr get-age))
+	(if (>= ?age 16) then
+		(bind ?var (random 0 10))
+		(if (>= ?age 35) then
+			(bind ?var (random 0 20))
+			(if (>= ?age 67) then
+				(bind ?var (random 0 30))
+			)
+		)
+	)
+	(bind ?ppm (+ ?ppm ?var))
+	(bind ?i 1)
+	(while (<= ?i (length$ (send ?bpc get-diet))) do
+		(bind ?d (nth$ ?i (send ?bpc get-diet)))
+		(if (or (eq ?d lack_calcium) (eq ?d lack_vitamines) (eq ?d lack_iron)) then
+			(bind ?var (random -5 0))
+			(bind ?ppm (+ ?ppm ?var))
+		else (if (or (eq ?d excess_greases) (eq ?d excess_sal) (eq ?d snacking)) then
+			(bind ?var (random 0 5))
+			(bind ?ppm (+ ?ppm ?var))
+		     )
+		)
+		(bind ?i (+ ?i 1))
+	)
+	?ppm	
 )
 
 
@@ -263,20 +302,23 @@
 					;(printout t ?habits crlf)
 					(bind ?i (+ ?i 1))
 				)
-				(bind ?h (set-single-from-list "Insert the name of your habit shown" ?l))
-				(bind ?i 1)
-				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y busca el que tiene de nombre ?h
-					(bind ?habit (nth$ ?i ?habits))
-					(if (eq (sym-cat (send ?habit get-name_habit)) ?h) then
-						(bind ?lhabits (insert$ ?lhabits 1 ?habit))
-						(bind ?dur (set-number "What is the duration of your habit (between 0-500)" 0 500))
-						(bind ?freq (set-single-from-list "What is the frequency of your habit" (slot-allowed-values Habit frequency)))
-						(send ?habit put-duration ?dur)		
-						(send ?habit put-frequency ?freq)
-						(break)
+				(bind ?l (insert$ ?l 1 none))
+				(bind ?h (set-single-from-list "Insert the name of your habit (if it is shown)" ?l))
+				(if (not(eq ?h none)) then
+					(bind ?i 1)
+					(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y busca el que tiene de nombre ?h
+						(bind ?habit (nth$ ?i ?habits))
+						(if (eq (sym-cat (send ?habit get-name_habit)) ?h) then
+							(bind ?lhabits (insert$ ?lhabits 1 ?habit))
+							(bind ?dur (set-number "What is the duration of your habit (between 0-500)" 0 500))
+							(bind ?freq (set-single-from-list "What is the frequency of your habit" (slot-allowed-values Habit frequency)))
+							(send ?habit put-duration ?dur)		
+							(send ?habit put-frequency ?freq)
+							(break)
+						)
+						(bind ?i (+ ?i 1))
 					)
-					(bind ?i (+ ?i 1))
-				)				
+				)
 				(printout t "Do you want to add another habit? yes/no" crlf)
 				(bind ?add (read))
 			)
@@ -359,10 +401,10 @@
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons))
-	(bind ?muscTens set-single-from-list "What is your muscular tension" (slot-allowed-values TesPerson muscular_tension))
-	(bind ?tired set-single-from-list "What is your tiredness sensation" (slot-allowed-values TesPerson tiredness_sensation))
-	(bind ?dizz set-single-from-list "Are you dizzy" (slot-allowed-values TesPerson dizziness))
+	(bind ?muscTens set-single-from-list "What is your muscular tension" (slot-allowed-values TestPerson muscular_tension))
+	(bind ?tired set-single-from-list "What is your tiredness sensation" (slot-allowed-values TestPerson tiredness_sensation))
+	(bind ?dizz set-single-from-list "Are you dizzy" (slot-allowed-values TestPerson dizziness))
 	;añadir ejercicios
-	(bind ?puls set-pulsations)
+	(bind ?ppm (set-pulsations ?usr))
 	(send ?usr print)
 )
