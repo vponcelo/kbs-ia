@@ -1,6 +1,7 @@
-;########################################################
-;##################### CLASSES ##########################
-;########################################################
+; Sun Jan 02 13:53:07 CET 2011
+; 
+;+ (version "3.4.4")
+;+ (build "Build 579")
 
 
 (defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
@@ -18,6 +19,10 @@
 		(allowed-values maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)
 		(cardinality 1 7)
 		(create-accessor read-write))
+	(single-slot type_hab
+		(type SYMBOL)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot max_duration
 ;+		(comment "Maximum duration of exercise")
 		(type INTEGER)
@@ -33,6 +38,11 @@
 	(single-slot last_name
 		(type STRING)
 ;+		(cardinality 0 1)
+		(create-accessor read-write))
+	(single-slot name_habit
+;+		(comment "Name of the habit")
+		(type STRING)
+;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot exercises
 ;+		(comment "Exercises of person")
@@ -77,6 +87,12 @@
 		(default balanced)
 		(cardinality 1 7)
 		(create-accessor read-write))
+	(single-slot habit_class
+;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot test
 		(type INSTANCE)
 ;+		(allowed-classes TestPerson)
@@ -94,6 +110,13 @@
 		(allowed-values no few quite high)
 		(default no)
 ;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(multislot indexDuration
+;+		(comment "This index represents the interval of duration used to compute the duration/intensity of an habit. (1-4)")
+		(type INTEGER)
+		(range 0 500)
+		(default 0)
+		(cardinality 1 4)
 		(create-accessor read-write))
 	(single-slot pulsations_per_min
 ;+		(comment "Pulsations per minute. Between 100-180: Normal with the test done. More: Tachycardia. Less: Athletic or bradycardia")
@@ -134,7 +157,8 @@
 	(multislot testExercises
 		(type INSTANCE)
 ;+		(allowed-classes WithoutWeights)
-		(cardinality 1 3)
+		(default [bike_easy] [run_easy])
+		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot duration
 ;+		(comment "Duration of activity in minutes")
@@ -250,7 +274,7 @@
 	(single-slot age
 ;+		(comment "Age of the person.")
 		(type INTEGER)
-		(range 16 99)
+		(range 16 130)
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
@@ -463,6 +487,19 @@
 		(type STRING)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
+	(multislot indexDuration
+;+		(comment "This index represents the interval of duration used to compute the duration/intensity of an habit. (1-4)")
+		(type INTEGER)
+		(range 0 500)
+		(default 0)
+		(cardinality 1 4)
+		(create-accessor read-write))
+	(single-slot habit_class
+;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
+		(type SYMBOL)
+		(allowed-values FALSE TRUE)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot duration
 ;+		(comment "Duration of activity in minutes")
 		(type INTEGER)
@@ -480,7 +517,7 @@
 	(is-a Habit)
 	(role concrete)
 	(single-slot type_hab
-;+		(comment "Type of habit in Work")
+;+		(comment "Type of habit in work")
 		(type SYMBOL)
 		(allowed-values sitting weight_charge standing)
 ;+		(cardinality 1 1)
@@ -490,7 +527,7 @@
 	(is-a Habit)
 	(role concrete)
 	(single-slot type_hab
-;+		(comment "Type of habit out Work")
+;+		(comment "Type of habit out work")
 		(type SYMBOL)
 		(allowed-values stairs homeworks)
 ;+		(cardinality 1 1)
