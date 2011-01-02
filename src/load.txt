@@ -1,0 +1,7 @@
+(clear)
+(load classes.clp)
+(load instances.clp)
+(load facts_templates.CLP)
+(load draft.clp)
+(reset)
+(run)

@@ -1,0 +1,1 @@
+"C:\Program Files (x86)\CLIPS\Bin\CLIPSDOS.exe" -f load.txt
