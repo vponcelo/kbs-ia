@@ -70,7 +70,7 @@
 	(slot muscular_tension)
 	(slot tiredness_sensation)
 	(slot dizziness)
-	(slot testExercises)
+	(multislot testExercises)
 )
 
 (deffacts testPers
