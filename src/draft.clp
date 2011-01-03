@@ -372,7 +372,8 @@
 	=>
 	;(printout t ?pers get-name_ ?*user* crlf)
 	(send ?usr print) 
-	(focus difficulty_intensity-module)
+	;(focus difficulty_intensity-module)
+	(focus exercises-module)
 )
 
 (defmodule difficulty_intensity-module (export ?ALL)(import habits-module ?ALL)(import existingPerson-module ?ALL))
@@ -437,7 +438,7 @@
 
 (defmodule test-module (export ?ALL)(import bpc-module ?ALL))
 
-(defrule test-module
+(defrule set-test
 	(declare (salience 9987))
 	?testPers <- (testPerson (pulsations_per_min unknown) (muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
 	=>
@@ -458,5 +459,88 @@
 	(send ?test put-dizziness ?dizz)
 	(send ?test put-testExercises ?lexs)
 	(send ?usr print)
-	;(focus exercises-module)	;aun no existe :O
+	(focus exercises-module)	;aun no existe :O
+)
+
+(defmodule exercises-module (export ?ALL)(import test-module ?ALL)(import difficulty_intensity-module ?ALL))
+
+(defrule set-exercises
+	(declare (salience 9986))
+	=>
+	(switch ?*opc*
+	 (case 1 then
+	 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+    (bind ?usr (nth$ (length$ ?persons) ?persons))
+	 )
+	 (case 2 then
+	  (bind ?persons (find-all-instances ((?p Person)) TRUE))
+    (bind ?usr (nth$ ?*user* ?persons))
+	 )
+	)
+	(bind ?i 1)
+  (bind ?lexs (create$))
+  (while (<= ?i (length$ (send ?usr get-goal))) do
+    (bind ?g (nth$ ?i (send ?usr get-goal)))
+    (bind ?lexs (insert$ ?lexs 1 (find-all-instances ((?e Exercise)) (member ?g ?e:goal))))       ;COMPROBAR QUE NO SE REPITAN
+    (printout t "goals persona actual: "?g "--> lista ejercicios: "?lexs crlf)  
+    (bind ?i (+ ?i 1))
+  )
+  (bind ?i 1)
+  (while (<= ?i (length$ ?lexs)) do
+    (bind ?e (nth$ ?i ?lexs))
+    (if (not(eq (send ?e get-difficulty_intensity) (send ?usr get-difficulty_intensity))) then
+      (bind ?lexs (delete-member$ ?lexs ?e))
+      (printout t "elemento quitado (dif): "?e crlf)
+    else then 
+      (bind ?i (+ ?i 1))
+    )
+  )  
+  (bind ?bpc (find-all-instances ((?b BasicPhysicalCondition)) (eq (send ?usr get-basicPhyCondition) ?b)))    ; MODIFICAR BPC
+  (bind ?bpc [MAIN::bpc3])                                                                                   ; DIFERENCIAR ?opc
+  (printout t "BPC: " ?bpc crlf)
+  (bind ?i 1)
+  (while (<= ?i (length$ ?lexs)) do
+    (bind ?j 1)
+    (bind ?e (nth$ ?i ?lexs))
+    (while (<= ?j (length$ (send ?e get-contra_indications))) do
+      (bind ?contra (nth$ ?j (send ?e get-contra_indications)))
+      (if (or(member ?contra (send ?bpc get-muscular_problems)) (> (send ?bpc get-blood_max_pressure) (send ?e get-blood_max_pressure)) (> (send ?bpc get-blood_min_pressure) (send ?e get-blood_min_pressure))) then
+        (bind ?lexs (delete-member$ ?lexs ?e))
+        (printout t "elemento quitado (dif): "?e crlf)
+        (bind ?i (- ?i 1))    ; reasignar indices
+        (break)
+      else then 
+        (bind ?j (+ ?j 1))
+      )
+    )
+   (bind ?i (+ ?i 1))
+  )
+  (printout t ?lexs crlf)
+  (focus schedule-module)
+)
+
+(defmodule schedule-module (export ?ALL)(import test-module ?ALL)(import exercises-module ?ALL))
+
+(defrule set-schedule
+	(declare (salience 9985))
+	=>
+	; Obtener persona
+	;Obtener tiempo de la persona diario
+	;obtener suma del tiempo de los ejercicios y compararla con tiempo total de la persona
+	;si hay más ejercicios que tiempo total, se pone un boolean a true, sino a false;
+	;i=1
+	;dias=Arraylista(lunes="" martes="" miercoles="" jueves="" viernes="")
+	;mientras i<=5
+	   ;punterolista=dias ?i;
+	   ;mientras (tiempo_persona >0)
+	     ;tener en cuenta las prioridades sólo los dias impares
+	     ;coger ejercicios aleatorios nth$ random(0 length(?lexe)) el resto de dias y el resto del tiempo
+	     ; buscar ejercicio... Teniendo en cuenta las prioridades de dolores de musculos (comparar muscular_problems del user con muscular_problems de los ejercicios ), y calorias si quiere perder peso (reduce_weight, buscar primero ejercicios que quemen más calorias))
+	     ; Comprobar si se peude asignar (tiempo suficiente))
+	     ;Si se puede: decrementar tiempo de ese dia, y si el boolean esta a true, elimino este ejercicio
+	     ;else: si no se puede asignar, comprobar si hay algun ejercicio que entre en el tiempo restante, y si no se puede hacer un break;
+	;i++
+	
+;Mostrar todo el programa.
+	    
 )
