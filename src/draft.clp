@@ -65,6 +65,28 @@
 	?l
 )
 
+;Esta función recibe por parámetro dos listas y devuelve una lista generada con la suma de las dos, sin repeticiones de elementos
+(deffunction set-unique-list (?l1 ?l2)
+	(bind ?i 1)
+	(while (<= ?i (length$ ?l2))
+			(bind ?curEl (nth$ ?i ?l2))
+			(if (not(member ?curEl ?l1)) then
+				(bind ?l1 (insert$ ?l1 1 ?curEl))
+			)
+			(bind ?i (+ ?i 1))
+				
+	)
+	?l1
+)
+;Genera el programa a partir de la lista de ejercicios y de las preferencias del usuario
+(deffunction generate-schedule(?bpc ?lexs)
+(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
+(bind ?dias (create$ lunes martes miercoles jueves viernes)); una para cada dia, o un slot o 5 variables...
+;al no ser que hagamos algo así: (a 1 3 4 23 b 5 2 c d e f) donde a seria el día, y 1, 3, 4 serian las instancias de los ejercicios, diria que en clips no hay listas de listas xD)
+
+
+)
+
 ;Esta función calcula la dificultad o intensidad inicial que puede soportar el usuario a partir de sus hábitos
 (deffunction set-difficulty (?usr)
 	; Criterios usados:
@@ -369,7 +391,6 @@
 	;(test (eq ?n ?*user*))	;No se porque coño no compara bien :S
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ ?*user* ?persons)) ;Cogemos el index que ha introducido el user...
-	=>
 	;(printout t ?pers get-name_ ?*user* crlf)
 	(send ?usr print) 
 	;(focus difficulty_intensity-module)
@@ -462,29 +483,41 @@
 	(focus exercises-module)	;aun no existe :O
 )
 
-(defmodule exercises-module (export ?ALL)(import test-module ?ALL)(import difficulty_intensity-module ?ALL))
-
+;(defmodule exercises-module (export ?ALL)(import test-module ?ALL)(import difficulty_intensity-module ?ALL))
+(defmodule exercises-module (export ?ALL)(import existingPerson-module ?ALL));(import difficulty_intensity-module ?ALL))
 (defrule set-exercises
 	(declare (salience 9986))
 	=>
+	(bind ?bpc null)
 	(switch ?*opc*
 	 (case 1 then
 	 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
     (bind ?usr (nth$ (length$ ?persons) ?persons))
+    (bind ?bpc (send ?usr get-basicPhyCondition))
 	 )
 	 (case 2 then
 	  (bind ?persons (find-all-instances ((?p Person)) TRUE))
     (bind ?usr (nth$ ?*user* ?persons))
+    (bind ?userbpc (str-cat "MAIN::" (send ?usr get-basicPhyCondition)))
+    (bind ?bpcs (find-all-instances ((?b BasicPhysicalCondition)) (eq (str-cat ?b) (str-cat ?userbpc))))
+    (bind ?bpc (nth$ 1 ?bpcs))
+    ;(bind ?bpc (find-all-instances ((?b BasicPhysicalCondition)) TRUE))
+    ;(printout t ?userbpc (find-all-instances ((?b BasicPhysicalCondition)) TRUE) crlf)
+    ;(instances)
 	 )
 	)
+	;(printout t ?bpc crlf)
 	(bind ?i 1)
   (bind ?lexs (create$))
+  ;1. Buscamos todos los ejercicios que cumplan los goals del usuario
   (while (<= ?i (length$ (send ?usr get-goal))) do
     (bind ?g (nth$ ?i (send ?usr get-goal)))
-    (bind ?lexs (insert$ ?lexs 1 (find-all-instances ((?e Exercise)) (member ?g ?e:goal))))       ;COMPROBAR QUE NO SE REPITAN
-    (printout t "goals persona actual: "?g "--> lista ejercicios: "?lexs crlf)  
+    (bind ?lexs (set-unique-list ?lexs (find-all-instances ((?e Exercise)) (member ?g ?e:goal))))      
+    (printout t "goal actual: "?g "--> lista ejercicios: "?lexs crlf)  
     (bind ?i (+ ?i 1))
   )
+  
+  ;2. Eliminamos todos los que no sean de la misma intensidad a la que se puede someter el usuario
   (bind ?i 1)
   (while (<= ?i (length$ ?lexs)) do
     (bind ?e (nth$ ?i ?lexs))
@@ -495,9 +528,9 @@
       (bind ?i (+ ?i 1))
     )
   )  
-  (bind ?bpc (find-all-instances ((?b BasicPhysicalCondition)) (eq (send ?usr get-basicPhyCondition) ?b)))    ; MODIFICAR BPC
-  (bind ?bpc [MAIN::bpc3])                                                                                   ; DIFERENCIAR ?opc
-  (printout t "BPC: " ?bpc crlf)
+  
+  
+  ;3. Eliminamos también los que puedan ser perjudiciales para el usuario, teniendo en cuenta los problemas musculares y la presión sanguinea del usuario
   (bind ?i 1)
   (while (<= ?i (length$ ?lexs)) do
     (bind ?j 1)
@@ -515,15 +548,16 @@
     )
    (bind ?i (+ ?i 1))
   )
-  (printout t ?lexs crlf)
-  (focus schedule-module)
+  ;(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
+  (generate-schedule ?bpc ?lexs)
 )
 
-(defmodule schedule-module (export ?ALL)(import test-module ?ALL)(import exercises-module ?ALL))
 
-(defrule set-schedule
-	(declare (salience 9985))
-	=>
+;(defmodule schedule-module (export ?ALL)(import test-module ?ALL)(import exercises-module ?ALL))
+
+;(defrule set-schedule
+	;(declare (salience 9985))
+	;=>
 	; Obtener persona
 	;Obtener tiempo de la persona diario
 	;obtener suma del tiempo de los ejercicios y compararla con tiempo total de la persona
@@ -543,4 +577,4 @@
 	
 ;Mostrar todo el programa.
 	    
-)
+;)
