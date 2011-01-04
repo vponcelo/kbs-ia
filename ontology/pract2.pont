@@ -1,4 +1,4 @@
-; Mon Jan 03 18:46:20 CET 2011
+; Tue Jan 04 22:37:51 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -157,7 +157,6 @@
 	(multislot testExercises
 		(type INSTANCE)
 ;+		(allowed-classes WithoutWeights)
-		(default [bike_easy] [run_easy])
 		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot duration
@@ -224,6 +223,11 @@
 ;+		(comment "Type of weight of exercises with weights")
 		(type SYMBOL)
 		(allowed-values bar dumbbells apparatus)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot name_ex
+;+		(comment "Name of the exercise.")
+		(type STRING)
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
@@ -336,6 +340,11 @@
 		(range 1 5000)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
+	(single-slot name_ex
+;+		(comment "Name of the exercise.")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot min_rep
 ;+		(comment "Minimum number of repetitions")
 		(type INTEGER)
@@ -394,7 +403,7 @@
 ;+		(comment "Benefits of the exercise")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(default joins_pain high_pressure)
+		(default none)
 		(cardinality 0 4)
 		(create-accessor read-write))
 	(single-slot type
@@ -428,13 +437,6 @@
 		(allowed-values deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
 		(default deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
 		(cardinality 1 9)
-		(create-accessor read-write))
-	(multislot contra_indications
-;+		(comment "Benefits of the exercise")
-		(type SYMBOL)
-		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(default joins_pain cervical_pain high_pressure column_problems)
-		(cardinality 0 4)
 		(create-accessor read-write))
 	(single-slot type
 ;+		(comment "Type of exercises without weights")
@@ -561,7 +563,6 @@
 	(multislot testExercises
 		(type INSTANCE)
 ;+		(allowed-classes WithoutWeights)
-		(default [bike_easy] [run_easy])
 		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot tiredness_sensation

@@ -1,7 +1,6 @@
-; Sun Jan 02 21:59:27 CET 2011
-; 
-;+ (version "3.4.4")
-;+ (build "Build 579")
+;########################################################
+;##################### CLASSES ########################
+;########################################################
 
 
 (defclass %3ACLIPS_TOP_LEVEL_SLOT_CLASS "Fake class to save top-level slot information"
@@ -32,7 +31,7 @@
 	(multislot contra_indications
 ;+		(comment "Benefits of the exercise")
 		(type SYMBOL)
-		(allowed-values joins_pain cervical_pain high_pressure column_problems)
+		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
 		(cardinality 0 4)
 		(create-accessor read-write))
 	(single-slot last_name
@@ -77,6 +76,7 @@
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
+		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write))
 	(multislot diet
@@ -107,6 +107,7 @@
 ;+		(comment "Dizzines sensation.")
 		(type SYMBOL)
 		(allowed-values no few quite high)
+		(default no)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot indexDuration
@@ -125,12 +126,14 @@
 	(single-slot muscular_tension
 		(type SYMBOL)
 		(allowed-values normal quite high)
+		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot tiredness_sensation
 ;+		(comment "Tiredness sensation.")
 		(type SYMBOL)
 		(allowed-values few normal quite huge)
+		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot habits
@@ -153,7 +156,6 @@
 	(multislot testExercises
 		(type INSTANCE)
 ;+		(allowed-classes WithoutWeights)
-		(default [bike_easy] [run_easy])
 		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot duration
@@ -188,7 +190,7 @@
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot difficulty_intensity
-;+		(comment "Difficulty/intensity of the exercise and person (calculated by person and exercises ;features)")
+;+		(comment "Difficulty/intensity of the exercise and person (calculated by person and exercises features)")
 		(type SYMBOL)
 		(allowed-values easy medium hard)
 ;+		(cardinality 0 1)
@@ -220,6 +222,11 @@
 ;+		(comment "Type of weight of exercises with weights")
 		(type SYMBOL)
 		(allowed-values bar dumbbells apparatus)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot name_ex
+;+		(comment "Name of the exercise.")
+		(type STRING)
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
@@ -292,7 +299,7 @@
 	(multislot contra_indications
 ;+		(comment "Benefits of the exercise")
 		(type SYMBOL)
-		(allowed-values joins_pain cervical_pain high_pressure column_problems)
+		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
 		(cardinality 0 4)
 		(create-accessor read-write))
 	(single-slot difficulty_intensity
@@ -332,6 +339,11 @@
 		(range 1 5000)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
+	(single-slot name_ex
+;+		(comment "Name of the exercise.")
+		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(single-slot min_rep
 ;+		(comment "Minimum number of repetitions")
 		(type INTEGER)
@@ -355,6 +367,7 @@
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
+		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write)))
 
@@ -388,8 +401,8 @@
 	(multislot contra_indications
 ;+		(comment "Benefits of the exercise")
 		(type SYMBOL)
-		(allowed-values joins_pain cervical_pain high_pressure column_problems)
-		(default joins_pain high_pressure)
+		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
+		(default none)
 		(cardinality 0 4)
 		(create-accessor read-write))
 	(single-slot type
@@ -423,13 +436,6 @@
 		(allowed-values deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
 		(default deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
 		(cardinality 1 9)
-		(create-accessor read-write))
-	(multislot contra_indications
-;+		(comment "Benefits of the exercise")
-		(type SYMBOL)
-		(allowed-values joins_pain cervical_pain high_pressure column_problems)
-		(default joins_pain cervical_pain high_pressure column_problems)
-		(cardinality 0 4)
 		(create-accessor read-write))
 	(single-slot type
 ;+		(comment "Type of exercises without weights")
@@ -550,24 +556,26 @@
 	(single-slot muscular_tension
 		(type SYMBOL)
 		(allowed-values normal quite high)
+		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot testExercises
 		(type INSTANCE)
 ;+		(allowed-classes WithoutWeights)
-		(default [bike_easy] [run_easy])
 		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot tiredness_sensation
 ;+		(comment "Tiredness sensation.")
 		(type SYMBOL)
 		(allowed-values few normal quite huge)
+		(default normal)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot dizziness
 ;+		(comment "Dizzines sensation.")
 		(type SYMBOL)
 		(allowed-values no few quite high)
+		(default no)
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
@@ -617,5 +625,6 @@
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
+		(default none)
 		(cardinality 0 8)
 		(create-accessor read-write)))

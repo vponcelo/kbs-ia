@@ -14,7 +14,7 @@
 (deffunction set-number (?pregunta ?min ?max)
 	(printout t  ?pregunta "?" crlf)
 	(bind ?n (read))
-	(while(or(<= ?n  ?min)  (>= ?n ?max))
+	(while(or(< ?n  ?min)  (> ?n ?max))
 		(printout t ?pregunta "?" crlf)
 		(bind ?n (read))
 	)
@@ -182,9 +182,47 @@
 	?ppm	
 )
 
+; Esta funcion calcula el tiempo total de los ejercicios que se entran por parametro
+(deffunction calculate-totalTime (?lexs)
+	(bind ?sumMins 0)
+	(bind ?i 1)
+	(while (< ?i (length$ ?lexs)) do
+		(bind ?sumMins (+ ?sumMins (send (nth$ ?i ?lexs) get-max_duration)))
+		(bind ?i (+ ?i 1))
+	)
+	?sumMins
+)
+
+; Esta funcion comprueba que hay algun ejercicio con tiempo menor que ?hours entrado por parametro
+(deffunction enoughTime (?hours ?lexs)
+	(bind ?i 1)
+	(while (< ?i (length$ ?lexs)) do
+		(bind ?elem (nth$ ?i ?lexs))
+		(if (< (* (send ?elem get-max_duration) (send ?elem get-max_rep)) ?hours) then
+			?elem
+		)
+		(bind ?i (+ ?i 1))
+	)
+	FALSE
+)
+
+; Esta funcion muestra el programa calculado
+(deffunction show-program (?schedule)
+	(bind ?i 1)
+	(while (<= ?i (length$ ?schedule)) do
+		(bind ?elem (nth$ ?i ?schedule))
+		(if (or(eq ?elem monday) (eq ?elem tuesday) (eq ?elem wednesday) (eq ?elem thursday) (eq ?elem friday)) then
+			(printout t "" crlf)
+			(printout t "-------------------"?elem"-------------------" crlf)
+		else 
+			(printout t "		EXERCISE: "(send ?elem get-name_ex) crlf)
+		)
+		(bind ?i (+ ?i 1))
+	)
+)
+
 ;Genera el programa a partir de la lista de ejercicios y de las preferencias del usuario
 (deffunction generate-schedule(?bpc ?lexs)
-	(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
 	;Obtener tiempo de la persona diario
 	;obtener suma del tiempo de los ejercicios y compararla con tiempo total (diaria x 5?) de la persona
 	;si hay más ejercicios que tiempo total, se pone un boolean a true, sino a false;
@@ -202,9 +240,46 @@
 	    ;else: si no se puede asignar, comprobar si hay algun ejercicio que entre en el tiempo restante, y si no se puede hacer un break;
 		;i++
 	;Mostrar todo el programa.
-	
-	(bind ?dias (create$ lunes martes miercoles jueves viernes)); una para cada dia, o un slot o 5 variables...
-	;al no ser que hagamos algo así: (a 1 3 4 23 b 5 2 c d e f) donde a seria el día, y 1, 3, 4 serian las instancias de los ejercicios, diria que en clips no hay listas de listas xD)
+	;(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
+	(bind ?hoursday (set-number "How many minutes per day can you dedicate (in minutes) (between 30 and 960)" 30 960))
+	(bind ?schedule (create$ monday tuesday wednesday thursday friday))
+	(bind ?total_time (calculate-totalTime ?lexs))
+	(if (> ?total_time (* ?hoursday 5)) then
+		(bind ?remove TRUE)
+	else then
+		(bind ?remove FALSE)
+	)
+	(bind ?i 1)
+	(bind ?index 2)
+	(while (<= ?i 5) do
+		(bind ?hours ?hoursday)
+		(while (> ?hours 0) do
+			(bind ?ex (nth$ (random 1 (length$ ?lexs)) ?lexs))
+			(if (< (* (send ?ex get-max_duration) (send ?ex get-max_rep)) ?hours) then
+				(bind ?schedule (insert$ ?schedule ?index ?ex))
+				(bind ?index (+ ?index 1))
+				(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+				(if ?remove then
+					(bind ?lexs (delete-member$ ?lexs ?ex))
+				)
+			else then
+				(bind ?e (enoughTime ?hours ?lexs))
+				(if (not ?e) then
+					(break)
+				else then
+					(bind ?schedule (insert$ ?schedule ?index ?e))
+					(bind ?index (+ ?index 1))
+					(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+					(if ?remove then
+						(bind ?lexs (delete-member$ ?lexs ?e))
+					)
+				)
+			)
+		)	
+		(bind ?index (+ ?index 1))
+		(bind ?i (+ ?i 1))
+	)
+	(show-program ?schedule)
 )
 
 
@@ -325,7 +400,7 @@
 
 (defrule create-person
 	(declare (salience 9998))
-	?inidata <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
+	?persDat <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
 	=>
 	(bind ?usr (make-instance User1 of Person))
 	(send ?usr put-difficulty_intensity [nil])
@@ -333,7 +408,7 @@
 	(bind ?res2 (set-value "last_name"))
 	(bind ?res3 (set-number "How old are you (between 16-130)" 16 130))
 	(bind ?res4 (set-multi-from-list "What is/are your goal/s in the gym (select one firstly)" (slot-allowed-values Person goal)))
-        (modify ?inidata (name_ ?res) (last_name ?res2) (age ?res3) (goal ?res4))
+	(modify ?persDat (name_ ?res) (last_name ?res2) (age ?res3) (goal ?res4))
 	(send ?usr put-name_ ?res)
 	(send ?usr put-last_name ?res2)
 	(send ?usr put-age ?res3)
@@ -349,50 +424,42 @@
 	?habs <- (habitsPerson (habits unknown))
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
-	(switch ?*opc*
-		(case 1 then
-			(bind ?usr (nth$ (length$ ?persons) ?persons))	; En este caso hay que asignarle los habitos existentes
-			(bind ?lhabits (create$))	;lista de instancias Habit a añadir a la persona
-			(bind ?add yes)
-			(while(eq ?add yes) do
-				(bind ?l (create$))
-				(bind ?subhabit (set-single-from-list "Insert the type of your habit" InWork OutWork Movement))
-				(bind ?habits (find-all-instances ((?h ?subhabit)) TRUE))
+		(bind ?usr (nth$ (length$ ?persons) ?persons))	; En este caso hay que asignarle los habitos existentes
+		(bind ?lhabits (create$))	;lista de instancias Habit a añadir a la persona
+		(bind ?add yes)
+		(while(eq ?add yes) do
+			(bind ?l (create$))
+			(bind ?subhabit (set-single-from-list "Insert the type of your habit" InWork OutWork Movement))
+			(bind ?habits (find-all-instances ((?h ?subhabit)) TRUE))
+			(bind ?i 1)
+			(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
+				(bind ?habit (nth$ ?i ?habits))
+				(bind ?l (insert$ ?l 1 (sym-cat (send ?habit get-name_habit))))		
+				(printout t "    " (send ?habit get-name_habit)  crlf)
+				;(printout t ?habits crlf)
+				(bind ?i (+ ?i 1))
+			)
+			(bind ?l (insert$ ?l 1 none))
+			(bind ?h (set-single-from-list "Insert the name of your habit (if it is shown)" ?l))
+			(if (not(eq ?h none)) then
 				(bind ?i 1)
-				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y los muestra
+				(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y busca el que tiene de nombre ?h
 					(bind ?habit (nth$ ?i ?habits))
-					(bind ?l (insert$ ?l 1 (sym-cat (send ?habit get-name_habit))))		
-					(printout t "    " (send ?habit get-name_habit)  crlf)
-					;(printout t ?habits crlf)
+					(if (eq (sym-cat (send ?habit get-name_habit)) ?h) then
+						(bind ?lhabits (insert$ ?lhabits 1 ?habit))
+						(bind ?dur (set-number "What is the duration of your habit (between 0-500)" 0 500))
+						(bind ?freq (set-single-from-list "What is the frequency of your habit" (slot-allowed-values Habit frequency)))
+						(send ?habit put-duration ?dur)		
+						(send ?habit put-frequency ?freq)
+						(break)
+					)
 					(bind ?i (+ ?i 1))
 				)
-				(bind ?l (insert$ ?l 1 none))
-				(bind ?h (set-single-from-list "Insert the name of your habit (if it is shown)" ?l))
-				(if (not(eq ?h none)) then
-					(bind ?i 1)
-					(while (<= ?i (length$ ?habits)) do	;recorre el multislot de habitos y busca el que tiene de nombre ?h
-						(bind ?habit (nth$ ?i ?habits))
-						(if (eq (sym-cat (send ?habit get-name_habit)) ?h) then
-							(bind ?lhabits (insert$ ?lhabits 1 ?habit))
-							(bind ?dur (set-number "What is the duration of your habit (between 0-500)" 0 500))
-							(bind ?freq (set-single-from-list "What is the frequency of your habit" (slot-allowed-values Habit frequency)))
-							(send ?habit put-duration ?dur)		
-							(send ?habit put-frequency ?freq)
-							(break)
-						)
-						(bind ?i (+ ?i 1))
-					)
-				)
-				(printout t "Do you want to add another habit? yes/no" crlf)
-				(bind ?add (read))
 			)
-			(modify ?habs (habits ?lhabits))
-			(send ?usr put-habits ?lhabits)
-		)
-		(case 2 then 
-			(bind ?usr (nth$ ?*user* ?persons))	;En este caso el usuario introducido ya tiene asignado unos habitos
-			; Para la version extendida
-		)
+			(printout t "Do you want to add another habit? yes/no" crlf)
+			(bind ?add (read))
+		(modify ?habs (habits ?lhabits))
+		(send ?usr put-habits ?lhabits)
 	)
 	(send ?usr print)
 	(focus difficulty_intensity-module)
@@ -408,9 +475,18 @@
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ ?*user* ?persons)) ;Cogemos el index que ha introducido el user...
 	;(printout t ?pers get-name_ ?*user* crlf)
+	(bind ?userbpc (str-cat "MAIN::" (send ?usr get-basicPhyCondition)))
+  (bind ?bpcs (find-all-instances ((?b BasicPhysicalCondition)) (eq (str-cat ?b) (str-cat ?userbpc))))
+	(bind ?bpc (nth$ 1 ?bpcs))
+	(bind ?h (send ?bpc get-height))
+	(bind ?w (send ?bpc get-weight))
+	(bind ?hmeters (/ ?h 100))
+	(bind ?ibm (/ ?w (* ?hmeters ?hmeters)))
+	(send ?bpc put-bodyMass ?ibm)
+	(send ?usr put-basicPhyCondition ?bpc)
 	(send ?usr print) 
-	;(focus difficulty_intensity-module)
-	(focus exercises-module)
+	(focus difficulty_intensity-module)
+	;(focus exercises-module)
 )
 
 (defmodule difficulty_intensity-module (export ?ALL)(import habits-module ?ALL)(import existingPerson-module ?ALL))
@@ -429,7 +505,12 @@
 			(bind ?usr (nth$ ?*user* ?persons))
 		)
 	)
-	(bind ?di (set-difficulty ?usr))
+	(bind ?bpc (send ?usr get-basicPhyCondition))
+	(if (or(> (send ?bpc get-bodyMass) 27) (< (send ?bpc get-bodyMass) 18)) then			
+		(bind ?di easy)											; se asigna dificultad o intensidad easy a las personas con indice de masa corporal muy por debajo o encima de lo normal
+	else then 
+		(bind ?di (set-difficulty ?usr))		; si no se calcula a partir de sus habitos
+	)
 	(modify ?dif_intens (difficulty_intensity ?di))
 	(send ?usr put-difficulty_intensity ?di)
 	(send ?usr print)
@@ -478,6 +559,7 @@
 (defrule set-test
 	(declare (salience 9987))
 	?testPers <- (testPerson (pulsations_per_min unknown) (muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
+	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
 	=>
 	(bind ?test (make-instance test of TestPerson))
 	(bind ?lexs (send ?test get-testExercises))
@@ -488,6 +570,10 @@
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons))
 	(bind ?ppm (set-pulsations ?usr))
+	(if (or(eq ?muscTens high) (eq ?dizz high) (eq ?tired huge) (> ?ppm 180)) then
+		(send ?usr put-difficulty_intensity easy)				; personas con taquicardia o tension muscular, mareos o cansancio muy elevados asignar dificultad easy
+		(modify ?dif_intens (difficulty_intensity easy))
+	)
 	(modify ?testPers (pulsations_per_min ?ppm) (muscular_tension ?muscTens) (tiredness_sensation ?tired) (dizziness ?dizz) (testExercises ?lexs))
 	(send ?usr put-test ?test)
 	(send ?test put-pulsations_per_min ?ppm)
@@ -516,9 +602,10 @@
 	 (case 2 then
 	  (bind ?persons (find-all-instances ((?p Person)) TRUE))
     (bind ?usr (nth$ ?*user* ?persons))
-    (bind ?userbpc (str-cat "MAIN::" (send ?usr get-basicPhyCondition)))
-    (bind ?bpcs (find-all-instances ((?b BasicPhysicalCondition)) (eq (str-cat ?b) (str-cat ?userbpc))))
-		(bind ?bpc (nth$ 1 ?bpcs))
+    ;(bind ?userbpc (str-cat "MAIN::" (send ?usr get-basicPhyCondition)))
+    ;(bind ?bpcs (find-all-instances ((?b BasicPhysicalCondition)) (eq (str-cat ?b) (str-cat ?userbpc))))
+		;(bind ?bpc (nth$ 1 ?bpcs))
+		(bind ?bpc (send ?usr get-basicPhyCondition))
 	 )
 	)
 	;(printout t ?userbpc crlf)
@@ -529,17 +616,17 @@
   (while (<= ?i (length$ (send ?usr get-goal))) do
     (bind ?g (nth$ ?i (send ?usr get-goal)))
     (bind ?lexs (set-unique-list ?lexs (find-all-instances ((?e Exercise)) (member ?g ?e:goal))))      
-    (printout t "goal actual: "?g "--> lista ejercicios: "?lexs crlf)  
+    ;(printout t "goal actual: "?g "--> lista ejercicios: "?lexs crlf)  
     (bind ?i (+ ?i 1))
   )
   
-  ;2. Eliminamos todos los que no sean de la misma intensidad a la que se puede someter el usuario
+  ;2. Eliminamos todos los los ejercicios de la lista creada que no sean de la misma intensidad a la que se puede someter el usuario
   (bind ?i 1)
   (while (<= ?i (length$ ?lexs)) do
     (bind ?e (nth$ ?i ?lexs))
     (if (not(eq (send ?e get-difficulty_intensity) (send ?usr get-difficulty_intensity))) then
       (bind ?lexs (delete-member$ ?lexs ?e))
-      (printout t "elemento quitado (dif): "?e crlf)
+      ;(printout t "Exercise deleted because of intensity: "?e crlf)
     else then 
       (bind ?i (+ ?i 1))
     )
@@ -554,7 +641,7 @@
       (bind ?contra (nth$ ?j (send ?e get-contra_indications)))
       (if (or(member ?contra (send ?bpc get-muscular_problems)) (> (send ?bpc get-blood_max_pressure) (send ?e get-blood_max_pressure)) (> (send ?bpc get-blood_min_pressure) (send ?e get-blood_min_pressure))) then
         (bind ?lexs (delete-member$ ?lexs ?e))
-        (printout t "elemento quitado (dif): "?e crlf)
+        (printout t "Exercise deleted because of muscular problems or pressure: "?e crlf)
         (bind ?i (- ?i 1))    ; reasignar indices
         (break)
       else then 
