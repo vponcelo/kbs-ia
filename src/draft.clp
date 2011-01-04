@@ -78,14 +78,6 @@
 	)
 	?l1
 )
-;Genera el programa a partir de la lista de ejercicios y de las preferencias del usuario
-(deffunction generate-schedule(?bpc ?lexs)
-(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
-(bind ?dias (create$ lunes martes miercoles jueves viernes)); una para cada dia, o un slot o 5 variables...
-;al no ser que hagamos algo así: (a 1 3 4 23 b 5 2 c d e f) donde a seria el día, y 1, 3, 4 serian las instancias de los ejercicios, diria que en clips no hay listas de listas xD)
-
-
-)
 
 ;Esta función calcula la dificultad o intensidad inicial que puede soportar el usuario a partir de sus hábitos
 (deffunction set-difficulty (?usr)
@@ -190,6 +182,30 @@
 	?ppm	
 )
 
+;Genera el programa a partir de la lista de ejercicios y de las preferencias del usuario
+(deffunction generate-schedule(?bpc ?lexs)
+	(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
+	;Obtener tiempo de la persona diario
+	;obtener suma del tiempo de los ejercicios y compararla con tiempo total (diaria x 5?) de la persona
+	;si hay más ejercicios que tiempo total, se pone un boolean a true, sino a false;
+	;i=1
+	;dias=Arraylista(lunes="" martes="" miercoles="" jueves="" viernes="")
+	;mientras i<=5
+		;punterolista=dias ?i;
+	  ;mientras (tiempo_persona >0)
+	  	;tener en cuenta las prioridades sólo los dias impares (que sea/n el/los primero/s a realizar)
+	  	; buscar ejercicio... Teniendo en cuenta las prioridades de dolores de musculos (comparar muscular_problems del user con muscular_problems de los ejercicios ), y calorias si quiere perder peso (reduce_weight, buscar primero ejercicios que quemen más calorias))
+	    ; Comprobar si se peude asignar (tiempo suficiente))
+	  	; eliminar los ejercicios de prioridad de ?lexs
+	    ;coger ejercicios aleatorios nth$ random(0 length(?lexe) (- los ya asignados por prioridad)) el resto de dias y el resto del tiempo
+	    ;Si se puede: decrementar tiempo de ese dia, y si el boolean esta a true, elimino este ejercicio (podria hacer que ejercicios con prioridad se quitaran y otros que no no se quitaran)
+	    ;else: si no se puede asignar, comprobar si hay algun ejercicio que entre en el tiempo restante, y si no se puede hacer un break;
+		;i++
+	;Mostrar todo el programa.
+	
+	(bind ?dias (create$ lunes martes miercoles jueves viernes)); una para cada dia, o un slot o 5 variables...
+	;al no ser que hagamos algo así: (a 1 3 4 23 b 5 2 c d e f) donde a seria el día, y 1, 3, 4 serian las instancias de los ejercicios, diria que en clips no hay listas de listas xD)
+)
 
 
 ;############## ESTO IRA EN MESSAGES ################
@@ -225,12 +241,12 @@
 		(printout t crlf)
 		(printout t "--------------------Person Basic Physical Information--------------------" crlf crlf) 
 		(printout t "    height: "(send ?self:basicPhyCondition get-height) " cm " crlf) 
-		(printout t "    weight:" (send ?self:basicPhyCondition get-weight) " kg " crlf) 
-		(printout t "    index of body mass:" (send ?self:basicPhyCondition get-bodyMass)   crlf)
-		(printout t "    blood maximum pressure:" (send ?self:basicPhyCondition get-blood_max_pressure) " sistolic " crlf)
-		(printout t "    blood minimum pressure:" (send ?self:basicPhyCondition get-blood_min_pressure) " diastolic " crlf)
-		(printout t "    diet:" (send ?self:basicPhyCondition get-diet) crlf)
-		(printout t "    muscular problems:" (send ?self:basicPhyCondition get-muscular_problems) crlf)
+		(printout t "    weight: " (send ?self:basicPhyCondition get-weight) " kg " crlf) 
+		(printout t "    index of body mass: " (send ?self:basicPhyCondition get-bodyMass)   crlf)
+		(printout t "    blood maximum pressure: " (send ?self:basicPhyCondition get-blood_max_pressure) " sistolic " crlf)
+		(printout t "    blood minimum pressure: " (send ?self:basicPhyCondition get-blood_min_pressure) " diastolic " crlf)
+		(printout t "    diet: " (send ?self:basicPhyCondition get-diet) crlf)
+		(printout t "    muscular problems: " (send ?self:basicPhyCondition get-muscular_problems) crlf)
 	)
 	(if (eq ?self:test [nil]) then
 		(printout t "" crlf)
@@ -422,7 +438,7 @@
 			(focus bpc-module)
 		)
 		(case 2 then
-			;(focus exercises module)	;aun no existe :O
+			(focus exercises-module)	
 		)
 	)
 )
@@ -480,13 +496,15 @@
 	(send ?test put-dizziness ?dizz)
 	(send ?test put-testExercises ?lexs)
 	(send ?usr print)
-	(focus exercises-module)	;aun no existe :O
+	(focus exercises-module)
 )
 
 ;(defmodule exercises-module (export ?ALL)(import test-module ?ALL)(import difficulty_intensity-module ?ALL))
 (defmodule exercises-module (export ?ALL)(import existingPerson-module ?ALL));(import difficulty_intensity-module ?ALL))
+
 (defrule set-exercises
 	(declare (salience 9986))
+	?exsPerson <- (exercisesPerson (exercises unknown))
 	=>
 	(bind ?bpc null)
 	(switch ?*opc*
@@ -500,13 +518,11 @@
     (bind ?usr (nth$ ?*user* ?persons))
     (bind ?userbpc (str-cat "MAIN::" (send ?usr get-basicPhyCondition)))
     (bind ?bpcs (find-all-instances ((?b BasicPhysicalCondition)) (eq (str-cat ?b) (str-cat ?userbpc))))
-    (bind ?bpc (nth$ 1 ?bpcs))
-    ;(bind ?bpc (find-all-instances ((?b BasicPhysicalCondition)) TRUE))
-    ;(printout t ?userbpc (find-all-instances ((?b BasicPhysicalCondition)) TRUE) crlf)
-    ;(instances)
+		(bind ?bpc (nth$ 1 ?bpcs))
 	 )
 	)
-	;(printout t ?bpc crlf)
+	;(printout t ?userbpc crlf)
+	;(printout t ?bpc crlf)	; xD
 	(bind ?i 1)
   (bind ?lexs (create$))
   ;1. Buscamos todos los ejercicios que cumplan los goals del usuario
@@ -529,7 +545,6 @@
     )
   )  
   
-  
   ;3. Eliminamos también los que puedan ser perjudiciales para el usuario, teniendo en cuenta los problemas musculares y la presión sanguinea del usuario
   (bind ?i 1)
   (while (<= ?i (length$ ?lexs)) do
@@ -548,33 +563,6 @@
     )
    (bind ?i (+ ?i 1))
   )
-  ;(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
+  (modify ?exsPerson (exercises ?lexs))
   (generate-schedule ?bpc ?lexs)
 )
-
-
-;(defmodule schedule-module (export ?ALL)(import test-module ?ALL)(import exercises-module ?ALL))
-
-;(defrule set-schedule
-	;(declare (salience 9985))
-	;=>
-	; Obtener persona
-	;Obtener tiempo de la persona diario
-	;obtener suma del tiempo de los ejercicios y compararla con tiempo total de la persona
-	;si hay más ejercicios que tiempo total, se pone un boolean a true, sino a false;
-	;i=1
-	;dias=Arraylista(lunes="" martes="" miercoles="" jueves="" viernes="")
-	;mientras i<=5
-	   ;punterolista=dias ?i;
-	   ;mientras (tiempo_persona >0)
-	     ;tener en cuenta las prioridades sólo los dias impares
-	     ;coger ejercicios aleatorios nth$ random(0 length(?lexe)) el resto de dias y el resto del tiempo
-	     ; buscar ejercicio... Teniendo en cuenta las prioridades de dolores de musculos (comparar muscular_problems del user con muscular_problems de los ejercicios ), y calorias si quiere perder peso (reduce_weight, buscar primero ejercicios que quemen más calorias))
-	     ; Comprobar si se peude asignar (tiempo suficiente))
-	     ;Si se puede: decrementar tiempo de ese dia, y si el boolean esta a true, elimino este ejercicio
-	     ;else: si no se puede asignar, comprobar si hay algun ejercicio que entre en el tiempo restante, y si no se puede hacer un break;
-	;i++
-	
-;Mostrar todo el programa.
-	    
-;)

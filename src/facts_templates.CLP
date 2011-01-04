@@ -82,3 +82,14 @@
 		(testExercises unknown)
 	)
 )
+
+; Template con los ejercicios que puede realizar la persona a partir de sus características
+(deftemplate exercisesPerson
+	(multislot exercises)
+)
+
+(deffacts exsPerson
+	(exercisesPerson
+		(exercises unknown)
+	)
+)
