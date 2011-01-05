@@ -1,4 +1,4 @@
-; Tue Jan 04 22:37:51 CET 2011
+; Wed Jan 05 20:44:26 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -35,14 +35,14 @@
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
 		(cardinality 0 4)
 		(create-accessor read-write))
-	(single-slot last_name
-		(type STRING)
-;+		(cardinality 0 1)
-		(create-accessor read-write))
 	(single-slot name_habit
 ;+		(comment "Name of the habit")
 		(type STRING)
 ;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot last_name
+		(type STRING)
+;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(multislot exercises
 ;+		(comment "Exercises of person")
@@ -73,19 +73,19 @@
 		(allowed-values few medium quite very_high)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
-	(multislot muscular_problems
-;+		(comment "Muscular problems of a person")
-		(type SYMBOL)
-		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(default none)
-		(cardinality 0 8)
-		(create-accessor read-write))
 	(multislot diet
 ;+		(comment "Diet of the person")
 		(type SYMBOL)
 		(allowed-values balanced lack_calcium lack_vitamines lack_iron excess_greases excess_sal snacking)
 		(default balanced)
 		(cardinality 1 7)
+		(create-accessor read-write))
+	(multislot muscular_problems
+;+		(comment "Muscular problems of a person")
+		(type SYMBOL)
+		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
+		(default none)
+		(cardinality 0 8)
 		(create-accessor read-write))
 	(single-slot habit_class
 ;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
@@ -111,18 +111,18 @@
 		(default no)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
+	(single-slot pulsations_per_min
+;+		(comment "Pulsations per minute. Between 100-180: Normal with the test done. More: Tachycardia. Less: Athletic or bradycardia")
+		(type INTEGER)
+		(range 40 250)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
 	(multislot indexDuration
 ;+		(comment "This index represents the interval of duration used to compute the duration/intensity of an habit. (1-4)")
 		(type INTEGER)
 		(range 0 500)
 		(default 0)
 		(cardinality 1 4)
-		(create-accessor read-write))
-	(single-slot pulsations_per_min
-;+		(comment "Pulsations per minute. Between 100-180: Normal with the test done. More: Tachycardia. Less: Athletic or bradycardia")
-		(type INTEGER)
-		(range 40 250)
-;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot muscular_tension
 		(type SYMBOL)
@@ -148,16 +148,16 @@
 		(range 1 5000)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
+	(multislot testExercises
+		(type INSTANCE)
+;+		(allowed-classes WithoutWeights)
+		(cardinality 1 2)
+		(create-accessor read-write))
 	(single-slot type
 ;+		(comment "Type of exercises without weights")
 		(type SYMBOL)
 		(allowed-values apparatus floor)
 ;+		(cardinality 1 1)
-		(create-accessor read-write))
-	(multislot testExercises
-		(type INSTANCE)
-;+		(allowed-classes WithoutWeights)
-		(cardinality 1 2)
 		(create-accessor read-write))
 	(single-slot duration
 ;+		(comment "Duration of activity in minutes")
@@ -206,12 +206,6 @@
 		(range 1 200)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
-	(multislot muscular_groups
-;+		(comment "Muscular groups trained by the exercise")
-		(type SYMBOL)
-		(allowed-values deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
-		(cardinality 1 9)
-		(create-accessor read-write))
 	(single-slot blood_max_pressure
 ;+		(comment "Maximun pressure in mm Hg (sistolic pressure). Normal: 90-120. Sports: 75-120. : lower: Hypotension. Higher: Hypertension")
 		(type INTEGER)
@@ -219,15 +213,21 @@
 		(default 120)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
-	(single-slot type_weight
-;+		(comment "Type of weight of exercises with weights")
+	(multislot muscular_groups
+;+		(comment "Muscular groups trained by the exercise")
 		(type SYMBOL)
-		(allowed-values bar dumbbells apparatus)
-;+		(cardinality 1 1)
+		(allowed-values deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
+		(cardinality 1 9)
 		(create-accessor read-write))
 	(single-slot name_ex
 ;+		(comment "Name of the exercise.")
 		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot type_weight
+;+		(comment "Type of weight of exercises with weights")
+		(type SYMBOL)
+		(allowed-values bar dumbbells apparatus)
 ;+		(cardinality 1 1)
 		(create-accessor read-write)))
 
@@ -238,16 +238,16 @@
 		(type STRING)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot exercises
-;+		(comment "Exercises of person")
-		(type INSTANCE)
-;+		(allowed-classes Exercise)
-		(create-accessor read-write))
 	(multislot goal
 ;+		(comment "Goal of the exercise")
 		(type SYMBOL)
 		(allowed-values maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)
 		(cardinality 1 7)
+		(create-accessor read-write))
+	(multislot exercises
+;+		(comment "Exercises of person")
+		(type INSTANCE)
+;+		(allowed-classes Exercise)
 		(create-accessor read-write))
 	(single-slot basicPhyCondition
 ;+		(comment "Basic Physical conditions for person")
@@ -321,12 +321,6 @@
 		(range 1 200)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
-	(multislot muscular_groups
-;+		(comment "Muscular groups trained by the exercise")
-		(type SYMBOL)
-		(allowed-values deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
-		(cardinality 1 9)
-		(create-accessor read-write))
 	(single-slot blood_max_pressure
 ;+		(comment "Maximun pressure in mm Hg (sistolic pressure). Normal: 90-120. Sports: 75-120. : lower: Hypotension. Higher: Hypertension")
 		(type INTEGER)
@@ -334,15 +328,21 @@
 		(default 120)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
-	(single-slot num_cal_burned
-;+		(comment "Number of calories burned")
-		(type INTEGER)
-		(range 1 5000)
-;+		(cardinality 1 1)
+	(multislot muscular_groups
+;+		(comment "Muscular groups trained by the exercise")
+		(type SYMBOL)
+		(allowed-values deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
+		(cardinality 1 9)
 		(create-accessor read-write))
 	(single-slot name_ex
 ;+		(comment "Name of the exercise.")
 		(type STRING)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot num_cal_burned
+;+		(comment "Number of calories burned")
+		(type INTEGER)
+		(range 1 5000)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot min_rep
@@ -548,16 +548,16 @@
 (defclass TestPerson
 	(is-a USER)
 	(role concrete)
-	(single-slot pulsations_per_min
-;+		(comment "Pulsations per minute. Between 100-180: Normal with the test done. More: Tachycardia. Less: Athletic or bradycardia")
-		(type INTEGER)
-		(range 40 250)
-;+		(cardinality 1 1)
-		(create-accessor read-write))
 	(single-slot muscular_tension
 		(type SYMBOL)
 		(allowed-values normal quite high)
 		(default normal)
+;+		(cardinality 1 1)
+		(create-accessor read-write))
+	(single-slot pulsations_per_min
+;+		(comment "Pulsations per minute. Between 100-180: Normal with the test done. More: Tachycardia. Less: Athletic or bradycardia")
+		(type INTEGER)
+		(range 40 250)
 ;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot testExercises
@@ -615,17 +615,17 @@
 		(default 80)
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
-	(multislot diet
-;+		(comment "Diet of the person")
-		(type SYMBOL)
-		(allowed-values balanced lack_calcium lack_vitamines lack_iron excess_greases excess_sal snacking)
-		(default balanced)
-		(cardinality 1 7)
-		(create-accessor read-write))
 	(multislot muscular_problems
 ;+		(comment "Muscular problems of a person")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
 		(default none)
 		(cardinality 0 8)
+		(create-accessor read-write))
+	(multislot diet
+;+		(comment "Diet of the person")
+		(type SYMBOL)
+		(allowed-values balanced lack_calcium lack_vitamines lack_iron excess_greases excess_sal snacking)
+		(default balanced)
+		(cardinality 1 7)
 		(create-accessor read-write)))
