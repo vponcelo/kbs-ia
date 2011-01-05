@@ -7,6 +7,7 @@
 
 (defmodule MAIN (export ?ALL))
 
+; Starting rule
 (defrule start "Startup rule"
 	(declare (salience 9999))
 	=>
@@ -52,6 +53,7 @@
 
 (defmodule createPerson-module (export ?ALL)(import MAIN ?ALL))
 
+; Rule for initial prototype (*opc* = 1)
 (defrule create-person
 	(declare (salience 9998))
 	?persDat <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
@@ -73,6 +75,7 @@
 
 (defmodule habits-module (export ?ALL)(import createPerson-module ?ALL))
 
+; Rule for initial prototype (*opc* = 1)
 (defrule set-habits
 	(declare (salience 9997))
 	?habs <- (habitsPerson (habits unknown))
@@ -115,12 +118,12 @@
 		(modify ?habs (habits ?lhabits))
 		(send ?usr put-habits ?lhabits)
 	)
-	(send ?usr print)
 	(focus difficulty_intensity-module)
 )
 
 (defmodule existingPerson-module (export ?ALL)(import MAIN ?ALL))
 
+; Rule for both prototypes (*opc* = 1 or 2)
 (defrule existing-person
 	(declare (salience 9990))
 	?persDat <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
@@ -149,9 +152,9 @@
 
 (defmodule difficulty_intensity-module (export ?ALL)(import habits-module ?ALL)(import existingPerson-module ?ALL))
 
+; Rule for both prototypes (*opc* = 1 or 2)
 (defrule difficulty-intensity
 	(declare (salience 9989))
-	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(switch ?*opc*
@@ -167,7 +170,6 @@
 			)
 		)
 	)	
-	(modify ?dif_intens (difficulty_intensity ?di))
 	(send ?usr put-difficulty_intensity ?di)
 	(send ?usr print)
 	(switch ?*opc*
@@ -182,11 +184,11 @@
 
 (defmodule bpc-module (export ?ALL)(import difficulty_intensity-module ?ALL))
 
+; Rule for initial prototype (*opc* 1)
 (defrule set-bpc
 	(declare (salience 9988))
 	?bpc <- (basicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown) (diet unknown) (muscular_problems unknown))
 	?basicPC <- (basicPhysicalCond (basicPhyCondition unknown))
-	;?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
 	=>
 	(bind ?h (set-number "How tall are you (in cm) (between 120-240)" 120 240))
 	(bind ?w (set-number "How much you weigh (in kg) (between 25-150)" 25 150))
@@ -210,7 +212,6 @@
 	(send ?usr put-basicPhyCondition ?new)
 	(modify ?basicPC (basicPhyCondition ?new))
 	(if (or(> ?ibm 27) (< ?ibm 18)) then
-		;(modify ?dif_intens (difficulty_intensity easy))
 		(send ?usr put-difficulty_intensity easy)
 	)
 	(send ?usr print)
@@ -219,11 +220,11 @@
 
 (defmodule test-module (export ?ALL)(import bpc-module ?ALL))
 
+; Rule for initial prototype (*opc* 1)
 (defrule set-test
 	(declare (salience 9987))
 	?testPers <- (testPerson (pulsations_per_min unknown) (muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
 	?exsPerson <- (exercisesPerson (exercises unknown))
-	;?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
 	=>
 	(bind ?test (make-instance test of TestPerson))
 	(bind ?ltotalexs (find-all-instances ((?e Exercise)) TRUE))
@@ -245,7 +246,6 @@
 	(bind ?ppm (set-pulsations ?usr))
 	(if (or(eq ?muscTens high) (eq ?dizz high) (eq ?tired huge) (> ?ppm 180)) then
 		(send ?usr put-difficulty_intensity easy)				; personas con taquicardia o tension muscular, mareos o cansancio muy elevados asignar dificultad easy
-	;	(modify ?dif_intens (difficulty_intensity easy))
 	)
 	(modify ?testPers (pulsations_per_min ?ppm) (muscular_tension ?muscTens) (tiredness_sensation ?tired) (dizziness ?dizz) (testExercises ?lexs))
 	(send ?usr put-test ?test)
@@ -260,8 +260,10 @@
 
 (defmodule exercises-module (export ?ALL)(import existingPerson-module ?ALL)(import difficulty_intensity-module ?ALL))
 
+; Rule for both prototypes (*opc* = 1 or 2)
 (defrule set-exercises
 	(declare (salience 9986))
+	?dif_intens <- (difficultyIntensity (difficulty_intensity unknown))
 	?exsPerson <- (exercisesPerson (exercises unknown))
 	=>
 	(bind ?bpc null)
@@ -277,6 +279,7 @@
     (bind ?bpc (send ?usr get-basicPhyCondition))
 	 )
 	)
+	(modify ?dif_intens (difficulty_intensity (send ?usr get-difficulty_intensity)))
 	(bind ?i 1)
   (bind ?lexs (create$))
   ;1. Buscamos todos los ejercicios que cumplan los goals del usuario
