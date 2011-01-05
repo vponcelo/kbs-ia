@@ -944,7 +944,7 @@
 	(min_rep 1)
 	(muscular_groups deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
 	(muscular_problems limited_mobility knee_ligaments ankle_sprain)
-	(name_ex "Run Easy Level 1")
+	(name_ex "Run Easy")
 	(num_cal_burned 270)
 	(series 1)
 	(type apparatus))
