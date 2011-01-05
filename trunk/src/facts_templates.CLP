@@ -64,6 +64,17 @@
 	)
 )
 
+; Template con las condiciones físicas básicas
+(deftemplate basicPhysicalCond
+	(slot basicPhyCondition)
+)
+
+(deffacts basicPC
+	(basicPhysicalCond
+		(basicPhyCondition unknown)
+	)
+)
+
 ; Template con la dificultad/intensidad inicial que puede soportar el usuario calculada a partir de sus habitos
 (deftemplate testPerson
 	(slot pulsations_per_min)	
