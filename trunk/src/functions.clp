@@ -1,6 +1,7 @@
 ;########################################################
 ;##################### FUNCTIONS ########################
 ;########################################################
+
 (defglobal ?*user* = null)
 (defglobal ?*opc* = null)
 
@@ -312,7 +313,13 @@
 	    ;else: si no se puede asignar, comprobar si hay algun ejercicio que entre en el tiempo restante, y si no se puede hacer un break;
 		;i++
 	;Mostrar todo el programa.
-	(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
+	(printout t "List of exercises filtered to assign to the schedule: " crlf)
+	(bind ?i 1)
+	(while (<= ?i (length$ ?lexs)) do
+		(printout t "	"(send (nth$ ?i ?lexs) get-name_ex) crlf)
+		(bind ?i (+ ?i 1))
+	)
+	(printout t crlf)
 	(if (eq (length$ ?lexs) 0) then
 		(printout t "Sorry, our gym doesn't have exercises for you" crlf)
 		(exit)
