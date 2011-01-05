@@ -199,7 +199,7 @@
 	(bind ?i 1)
 	(while (< ?i (length$ ?lexs)) do
 		(bind ?elem (nth$ ?i ?lexs))				; Siempre pillara el primero que encuentre
-		(if (< (* (send ?elem get-max_duration) (send ?elem get-max_rep)) ?hours) then
+		(if (< (* (send ?elem get-max_duration) (send ?elem get-series)) ?hours) then
 			?elem
 		)
 		(bind ?i (+ ?i 1))
@@ -233,7 +233,7 @@
 		(while (<= ?j (length$ ?lexs)) do
 			(bind ?curex (nth$ ?j ?lexs))
 				;(printout t "ejercicio:" (send ?curex get-muscular_problems) crlf)
-			(if (and (member ?curprob (send ?curex get-muscular_problems))(>= ?hours (*(send ?curex get-max_duration) (send ?curex get-max_rep)))) then
+			(if (and (member ?curprob (send ?curex get-muscular_problems))(>= ?hours (*(send ?curex get-max_duration) (send ?curex get-series)))) then
 				(bind ?sublist (insert$ ?sublist 1 ?curex))
 			)	
 			(bind ?j (+ ?j 1))
@@ -244,7 +244,7 @@
 		FALSE
 	else
 		(bind ?random (nth$ (random 1 (length$ ?sublist)) ?sublist))
-		(printout t "Asignando ejercicio destinado a mejorar problemas musculares." ?random crlf)
+		;(printout t "Asignando ejercicio destinado a mejorar problemas musculares." ?random crlf)
 		?random
 	)
 )
@@ -279,10 +279,10 @@
 	(bind ?ret FALSE)
 	(while (<= ?j (length$ ?ordered)) do
 		(bind ?curex (nth$ ?j ?ordered))
-		(if (>= ?hours (*(send ?curex get-max_duration) (send ?curex get-max_rep))) then
+		(if (>= ?hours (*(send ?curex get-max_duration) (send ?curex get-series))) then
 			;(printout t " O K " ?ntry " - " ?try crlf)
 			(if (>= ?ntry ?try) then
-				(printout t "Asignando ejercicio con maximas calorias." ?curex crlf)
+				;(printout t "Asignando ejercicio con maximas calorias." ?curex crlf)
 				(bind ?ret ?curex)
 				(break)
 		  	else
@@ -336,7 +336,7 @@
     (bind ?usr (nth$ ?*user* ?persons))
 	 )
 	)
-	(printout t "Eliminando ejercicios:" ?remove crlf)
+	;(printout t "Eliminando ejercicios:" ?remove crlf)
 	(bind ?muscularproblems (not(eq (send ?bpc get-muscular_problems) none)))
 	(bind ?reduceweight (member reduce_weight (send ?usr get-goal)))
 	(halt)
@@ -355,7 +355,7 @@
 							(while (not (eq ?ex FALSE)) do
 								(bind ?schedule (insert$ ?schedule ?index ?ex))
 								(bind ?index (+ ?index 1))
-								(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+								(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-series))))
 								(if ?remove then
 									(bind ?lexs (delete-member$ ?lexs ?ex))
 								)
@@ -371,7 +371,7 @@
 							(while (not (eq ?ex FALSE)) do
 								(bind ?schedule (insert$ ?schedule ?index ?ex))
 								(bind ?index (+ ?index 1))
-								(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+								(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-series))))
 								(if ?remove then
 									(bind ?lexs (delete-member$ ?lexs ?ex))
 								else (bind ?try (+ ?try 1))
@@ -383,10 +383,10 @@
 					(bind ?unasigned FALSE)
 				)
 			(bind ?ex (nth$ (random 1 (length$ ?lexs)) ?lexs))
-			(if (< (* (send ?ex get-max_duration) (send ?ex get-max_rep)) ?hours) then
+			(if (< (* (send ?ex get-max_duration) (send ?ex get-series)) ?hours) then
 				(bind ?schedule (insert$ ?schedule ?index ?ex))
 				(bind ?index (+ ?index 1))
-				(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+				(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-series))))
 				(if ?remove then
 					(bind ?lexs (delete-member$ ?lexs ?ex))
 				)
@@ -397,7 +397,7 @@
 				else then
 					(bind ?schedule (insert$ ?schedule ?index ?e))
 					(bind ?index (+ ?index 1))
-					(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+					(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-series))))
 					(if ?remove then
 						(bind ?lexs (delete-member$ ?lexs ?e))
 					)
