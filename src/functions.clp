@@ -1,6 +1,8 @@
 ;########################################################
 ;##################### FUNCTIONS ########################
 ;########################################################
+(defglobal ?*user* = null)
+(defglobal ?*opc* = null)
 
 ;Esta función recibe por parámetro la pregunta y devuelve el valor que introduce el usuario
 (deffunction set-value (?pregunta)
@@ -220,6 +222,77 @@
 	)
 )
 
+;Genera una sublista con los ejercicios que sirvan para mejorar los problemas del usuario y devuelve un ejercicio
+(deffunction get-ex-musc (?muscular_problems ?hours ?lexs)
+	(bind ?i 1)
+	(bind ?sublist (create$))
+	(while (<= ?i (length$ ?muscular_problems)) do
+		(bind ?curprob(nth$ ?i ?muscular_problems))
+			;(printout t "Buscando ejercicios para problema " ?curprob crlf)
+		(bind ?j 1)
+		(while (<= ?j (length$ ?lexs)) do
+			(bind ?curex (nth$ ?j ?lexs))
+				;(printout t "ejercicio:" (send ?curex get-muscular_problems) crlf)
+			(if (and (member ?curprob (send ?curex get-muscular_problems))(>= ?hours (*(send ?curex get-max_duration) (send ?curex get-max_rep)))) then
+				(bind ?sublist (insert$ ?sublist 1 ?curex))
+			)	
+			(bind ?j (+ ?j 1))
+		)
+		(bind ?i (+ ?i 1))
+	)
+	(if (eq (length$ ?sublist) 0) then
+		FALSE
+	else
+		(bind ?random (nth$ (random 1 (length$ ?sublist)) ?sublist))
+		(printout t "Asignando ejercicio destinado a mejorar problemas musculares." ?random crlf)
+		?random
+	)
+)
+;Devuelve el ejercicio que más calorías quema, primero genera una lista ordenada de ejercicios
+(deffunction get-ex-cal (?hours ?try ?lexs)
+ ;(printout t "Buscando ejercicio: " ?hours "intento " ?try crlf)
+	;(printout t "Lista original:" ?lexs crlf)
+	(bind ?j 1)
+	(bind ?origlength (length$ ?lexs))
+	(bind ?ordered (create$))
+	(while (<= ?j ?origlength) do
+		(bind ?maxc 0)
+		(bind ?index 1)
+	  (bind ?i 1)
+		(while(<= ?i (length$ ?lexs)) do
+			(bind ?curex (nth$ ?i ?lexs))
+			(if (> (send ?curex get-num_cal_burned) ?maxc) then
+				(bind ?maxc (send ?curex get-num_cal_burned))
+				(bind ?index ?i)
+			)
+			(bind ?i (+ ?i 1))
+		)
+		;(printout t "Borrando" ?index crlf)
+		(bind ?ordered (insert$ ?ordered ?j (nth$ ?index ?lexs)))
+		(bind ?lexs (delete-member$ ?lexs (nth$ ?index ?lexs)))
+		;(printout t "Borrando" ?lexs crlf)
+		(bind ?j (+ ?j 1))
+	)
+	;(printout t "Lista ordenada:" ?ordered crlf crlf)
+	(bind ?j 1)
+	(bind ?ntry 1)
+	(bind ?ret FALSE)
+	(while (<= ?j (length$ ?ordered)) do
+		(bind ?curex (nth$ ?j ?ordered))
+		(if (>= ?hours (*(send ?curex get-max_duration) (send ?curex get-max_rep))) then
+			;(printout t " O K " ?ntry " - " ?try crlf)
+			(if (>= ?ntry ?try) then
+				(printout t "Asignando ejercicio con maximas calorias." ?curex crlf)
+				(bind ?ret ?curex)
+				(break)
+		  	else
+		  	(bind ?ntry (+ ?ntry 1))
+		  	)
+		)
+		(bind ?j (+ ?j 1))
+	)
+	?ret
+)
 ;Genera el programa a partir de la lista de ejercicios y de las preferencias del usuario
 (deffunction generate-schedule(?bpc ?lexs)
 	;Obtener tiempo de la persona diario
@@ -242,6 +315,7 @@
 	(printout t "Lista de ejercicios a asignar:" crlf ?lexs crlf)
 	(if (eq (length$ ?lexs) 0) then
 		(printout t "Sorry, our gym doesn't have exercises for you" crlf)
+		(exit)
 	)
 	(bind ?hoursday (set-number "How many minutes per day can you dedicate (in minutes) (between 30 and 960)" 30 960))
 	(bind ?schedule (create$ monday tuesday wednesday thursday friday))
@@ -251,22 +325,63 @@
 	else then
 		(bind ?remove FALSE)
 	)
+	(bind ?usr)
+	(switch ?*opc*
+	 (case 1 then
+	 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
+    (bind ?usr (nth$ (length$ ?persons) ?persons))
+	 )
+	 (case 2 then
+	  (bind ?persons (find-all-instances ((?p Person)) TRUE))
+    (bind ?usr (nth$ ?*user* ?persons))
+	 )
+	)
+	(printout t "Eliminando ejercicios:" ?remove crlf)
+	(bind ?muscularproblems (not(eq (send ?bpc get-muscular_problems) none)))
+	(bind ?reduceweight (member reduce_weight (send ?usr get-goal)))
+	(halt)
 	(bind ?i 1)
 	(bind ?index 2)
 	(while (<= ?i 5) do
 		(bind ?hours ?hoursday)
+		(bind ?unasigned TRUE)
 		(while (> ?hours 0) do
-			;(if (eq (mod ?i 2) 1) then ; hay que añadir algo para que no asigne siempre el mismo ejercicio en caso de que el boolean no permita borrar...
-				;(if (not(eq (send ?bpc get-muscular_problems) none)) then
-					;(bind ?ex (nth$ (random 1 (length$ ?lexs) ?lexs)))		;funcion para buscar ejercicios buenos...
-					;(while (not(eq (send ?bpc get-muscular_problems))) do
-					
-					;)					
-				;)
-				;(if (member (send ?usr get-goal) reduce_weight) then
-					;funcion para buscar ejercicios que quemen calorias...
-				;)
-			;)
+			(if ?unasigned then
+					(if (eq (mod ?i 2) 1) then ;Los días impares se trabajan problemas musculares, si los hay
+					;(printout t "impar" ?i crlf)
+						(if ?muscularproblems then
+							;(printout t "Tiene problemas musculares" crlf)
+							(bind ?ex (get-ex-musc (send ?bpc get-muscular_problems) ?hours ?lexs))		;funcion para buscar ejercicios buenos...	
+							(while (not (eq ?ex FALSE)) do
+								(bind ?schedule (insert$ ?schedule ?index ?ex))
+								(bind ?index (+ ?index 1))
+								(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+								(if ?remove then
+									(bind ?lexs (delete-member$ ?lexs ?ex))
+								)
+								(bind ?ex (get-ex-musc (send ?bpc get-muscular_problems) ?hours ?lexs))
+							)			
+						)
+					else then ;los dias pares se realizan ejercicios que ayuden a perder peso, en caso de que sea uno de los objetivos
+					;(printout t "par" ?i crlf)
+						(if ?reduceweight then
+							;(printout t "Quiere reducir peso" crlf)
+							(bind ?try 1)
+							(bind ?ex (get-ex-cal ?hours ?try ?lexs)) 		;funcion para buscar ejercicios que quemen más calorias...
+							(while (not (eq ?ex FALSE)) do
+								(bind ?schedule (insert$ ?schedule ?index ?ex))
+								(bind ?index (+ ?index 1))
+								(bind ?hours (- ?hours (* (send ?ex get-max_duration) (send ?ex get-max_rep))))
+								(if ?remove then
+									(bind ?lexs (delete-member$ ?lexs ?ex))
+								else (bind ?try (+ ?try 1))
+								)
+								(bind ?ex (get-ex-cal ?hours ?try ?lexs))
+							)	
+						)
+					)
+					(bind ?unasigned FALSE)
+				)
 			(bind ?ex (nth$ (random 1 (length$ ?lexs)) ?lexs))
 			(if (< (* (send ?ex get-max_duration) (send ?ex get-max_rep)) ?hours) then
 				(bind ?schedule (insert$ ?schedule ?index ?ex))
