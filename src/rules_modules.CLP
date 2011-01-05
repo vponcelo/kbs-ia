@@ -2,9 +2,6 @@
 ;################## RULES & MODULES #####################
 ;########################################################
 
-(defglobal ?*user* = null)
-(defglobal ?*opc* = null)
-
 (defmodule MAIN (export ?ALL))
 
 ; Starting rule
@@ -129,7 +126,7 @@
 	?persDat <- (personalData (name_ unknown) (last_name unknown) (age unknown) (goal unknown))
 	?habs <- (habitsPerson (habits unknown))
 	?bpc <- (basicPhyCond (bodyMass unknown) (height unknown) (blood_max_pressure unknown) (weight unknown) (blood_min_pressure unknown) (diet unknown) (muscular_problems unknown))
-	?exsPerson <- (exercisesPerson (exercises unknown))
+	?testPerson <- (testPerson (pulsations_per_min unknown) (muscular_tension unknown) (tiredness_sensation unknown) (dizziness unknown) (testExercises unknown))
 	=>
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ ?*user* ?persons)) ;Cogemos el index que ha introducido el user...
@@ -145,8 +142,10 @@
 	(send ?b_p_c put-bodyMass ?ibm)
 	(send ?usr put-basicPhyCondition ?b_p_c)
 	(modify ?bpc (bodyMass ?ibm) (height ?h) (blood_max_pressure (send ?b_p_c get-blood_max_pressure)) (weight ?w) (blood_min_pressure (send ?b_p_c get-blood_min_pressure)) (diet (send ?b_p_c get-diet)) (muscular_problems (send ?b_p_c get-muscular_problems)))
-	(modify ?exsPerson (exercises (send ?usr get-exercises)))
-	(send ?usr print) 
+	(bind ?usertest (str-cat "MAIN::" (send ?usr get-test)))
+  (bind ?tests (find-all-instances ((?t TestPerson)) (eq (str-cat ?t) (str-cat ?usertest))))
+	(bind ?test (nth$ 1 ?tests))
+	(modify ?testPerson (pulsations_per_min (send ?test get-pulsations_per_min)) (muscular_tension (send ?test get-muscular_tension)) (tiredness_sensation (send ?test get-tiredness_sensation)) (dizziness (send ?test get-dizziness)) (testExercises (send ?test get-testExercises)))
 	(focus difficulty_intensity-module)
 )
 
@@ -167,6 +166,8 @@
 			(bind ?bpc (send ?usr get-basicPhyCondition))
 			(if (or(> (send ?bpc get-bodyMass) 27) (< (send ?bpc get-bodyMass) 18)) then			
 				(bind ?di easy)										; se asigna dificultad o intensidad easy a las personas con indice de masa corporal muy por debajo o encima de lo normal
+			else then
+				(bind ?di (set-difficulty ?usr))
 			)
 		)
 	)	
@@ -244,9 +245,6 @@
 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
 	(bind ?usr (nth$ (length$ ?persons) ?persons))
 	(bind ?ppm (set-pulsations ?usr))
-	(if (or(eq ?muscTens high) (eq ?dizz high) (eq ?tired huge) (> ?ppm 180)) then
-		(send ?usr put-difficulty_intensity easy)				; personas con taquicardia o tension muscular, mareos o cansancio muy elevados asignar dificultad easy
-	)
 	(modify ?testPers (pulsations_per_min ?ppm) (muscular_tension ?muscTens) (tiredness_sensation ?tired) (dizziness ?dizz) (testExercises ?lexs))
 	(send ?usr put-test ?test)
 	(send ?test put-pulsations_per_min ?ppm)
@@ -258,7 +256,7 @@
 	(focus exercises-module)
 )
 
-(defmodule exercises-module (export ?ALL)(import existingPerson-module ?ALL)(import difficulty_intensity-module ?ALL))
+(defmodule exercises-module (export ?ALL)(import test-module ?ALL)(import difficulty_intensity-module ?ALL))
 
 ; Rule for both prototypes (*opc* = 1 or 2)
 (defrule set-exercises
@@ -279,6 +277,15 @@
     (bind ?bpc (send ?usr get-basicPhyCondition))
 	 )
 	)
+	(bind ?usertest (str-cat "MAIN::" (send ?usr get-test)))
+  (bind ?tests (find-all-instances ((?t TestPerson)) (eq (str-cat ?t) (str-cat ?usertest))))
+	(bind ?test (nth$ 1 ?tests))
+	(if (or(eq (send ?test get-muscular_tension) high) (eq (send ?test get-dizziness) high) (eq (send ?test get-tiredness_sensation) huge) (> (send ?test get-pulsations_per_min) 180)) then
+		(send ?usr put-difficulty_intensity easy)				; personas con taquicardia o tension muscular, mareos o cansancio muy elevados asignar dificultad easy
+		(printout t crlf)
+		(printout t "Difficulty_intensity modified to 'easy' because of results of the test done" crlf "Re-showing person info..." crlf)
+		(send ?usr print)
+	)
 	(modify ?dif_intens (difficulty_intensity (send ?usr get-difficulty_intensity)))
 	(bind ?i 1)
   (bind ?lexs (create$))
@@ -289,14 +296,13 @@
     ;(printout t "goal actual: "?g "--> lista ejercicios: "?lexs crlf)  
     (bind ?i (+ ?i 1))
   )
-  
   ;2. Eliminamos todos los los ejercicios de la lista creada que no sean de la misma intensidad a la que se puede someter el usuario
   (bind ?i 1)
   (while (<= ?i (length$ ?lexs)) do
     (bind ?e (nth$ ?i ?lexs))
     (if (not(eq (send ?e get-difficulty_intensity) (send ?usr get-difficulty_intensity))) then
       (bind ?lexs (delete-member$ ?lexs ?e))
-      (printout t "Exercise deleted because of intensity: "?e crlf)
+      ;(printout t "Exercise deleted because of intensity: "?e crlf)
     else then 
       (bind ?i (+ ?i 1))
     )
@@ -311,7 +317,7 @@
       (bind ?contra (nth$ ?j (send ?e get-contra_indications)))
       (if (or(and(member ?contra (send ?bpc get-muscular_problems)) (not(eq ?contra none))) (> (send ?bpc get-blood_max_pressure) (send ?e get-blood_max_pressure)) (> (send ?bpc get-blood_min_pressure) (send ?e get-blood_min_pressure))) then
         (bind ?lexs (delete-member$ ?lexs ?e))
-       	(printout t "Exercise deleted because of muscular problems or pressure: "?e crlf)
+       	;(printout t "Exercise deleted because of muscular problems or pressure: "?e crlf)
         (bind ?i (- ?i 1))    ; reasignar indices
         (break)
       else then 
