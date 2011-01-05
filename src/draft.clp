@@ -254,6 +254,14 @@
 	(while (<= ?i 5) do
 		(bind ?hours ?hoursday)
 		(while (> ?hours 0) do
+			;(if (eq (mod ?i 2) 0) then ; hay que añadir algo para que no asigne siempre el mismo ejercicio en caso de que el boolean no permita borrar...
+				;(if (not(eq (send ?bpc get-muscular_problems) none)) then
+					;funcion para buscar ejercicios buenos...
+				;)
+				;(if (member (send ?usr get-goal) reduce_weight) then
+					;funcion para buscar ejercicios que quemen calorias...
+				;)
+			;)
 			(bind ?ex (nth$ (random 1 (length$ ?lexs)) ?lexs))
 			(if (< (* (send ?ex get-max_duration) (send ?ex get-max_rep)) ?hours) then
 				(bind ?schedule (insert$ ?schedule ?index ?ex))
