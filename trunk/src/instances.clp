@@ -1200,5 +1200,61 @@
 	(num_cal_burned 270)
 	(series 5)
 	(type_weight dumbbells))
+)
 
+(definstances Habits
+
+([sitting] of  InWork
+
+	(duration 300)
+	(frequency very_high)
+	(habit_class FALSE)
+	(indexDuration 0 50 100 200)
+	(name_habit "sitting")
+	(type_hab sitting))
+
+([weight_charge] of  InWork
+
+	(duration 10)
+	(frequency few)
+	(habit_class TRUE)
+	(indexDuration 0 50 100 200)
+	(name_habit "weight_charge")
+	(type_hab weight_charge))
+
+([up_stairs] of  OutWork
+
+	(duration 5)
+	(frequency quite)
+	(habit_class TRUE)
+	(indexDuration 0 5 10 15)
+	(name_habit "up_stairs")
+	(type_hab stairs))
+
+([homework] of  OutWork
+
+	(duration 5)
+	(frequency few)
+	(habit_class TRUE)
+	(indexDuration 0 7 14 21)
+	(name_habit "hung_clothes")
+	(type_hab homeworks))
+
+([walk] of  Movement
+
+	(duration 30)
+	(frequency medium)
+	(habit_class TRUE)
+	(indexDuration 0 30 60 120)
+	(name_habit "walk")
+	(type_hab walking))
+
+([bike] of  Movement
+
+	(duration 10)
+	(frequency medium)
+	(habit_class TRUE)
+	(indexDuration 0 15 30 60)
+	(name_habit "bike")
+	(type_hab with_bike))
 )
