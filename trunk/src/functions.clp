@@ -4,6 +4,8 @@
 
 (defglobal ?*user* = null)
 (defglobal ?*opc* = null)
+(defglobal ?*musc* = 0)
+(defglobal ?*rw* = 0)
 
 ;Esta función recibe por parámetro la pregunta y devuelve el valor que introduce el usuario
 (deffunction set-value (?pregunta)
@@ -147,23 +149,15 @@
 	(bind ?imc (send ?bpc get-bodyMass))
 	(bind ?ppm 100)
 	(bind ?var 0)
-	(if (> ?imc 0) then
-		(bind ?var (random -50 0))
-		(if (>= ?imc 20) then
-			(bind ?var (random 0 70))
-			(if (>= ?imc 25) then
-				(bind ?var (random 0 130))
-			)
-		)
-	)		
+	; las pulsaciones vendran 
 	(bind ?ppm (+ ?ppm ?var))
 	(bind ?age (send ?usr get-age))
 	(if (>= ?age 16) then
-		(bind ?var (random 0 10))
-		(if (>= ?age 35) then
-			(bind ?var (random 0 20))
+		(bind ?var (random -5 30))
+		(if (>= ?age 40) then
+			(bind ?var (random 5 35))
 			(if (>= ?age 67) then
-				(bind ?var (random 0 30))
+				(bind ?var (random 10 50))
 			)
 		)
 	)
@@ -171,13 +165,9 @@
 	(bind ?i 1)
 	(while (<= ?i (length$ (send ?bpc get-diet))) do
 		(bind ?d (nth$ ?i (send ?bpc get-diet)))
-		(if (or (eq ?d lack_calcium) (eq ?d lack_vitamines) (eq ?d lack_iron)) then
-			(bind ?var (random -5 0))
+		(if (or (eq ?d excess_greases) (eq ?d excess_sal) (eq ?d snacking)) then
+			(bind ?var (random 0 10))
 			(bind ?ppm (+ ?ppm ?var))
-		else (if (or (eq ?d excess_greases) (eq ?d excess_sal) (eq ?d snacking)) then
-			(bind ?var (random 0 5))
-			(bind ?ppm (+ ?ppm ?var))
-		     )
 		)
 		(bind ?i (+ ?i 1))
 	)
@@ -217,7 +207,7 @@
 			(printout t "" crlf)
 			(printout t "-------------------"?elem"-------------------" crlf)
 		else 
-			(printout t "		EXERCISE: "(send ?elem get-name_ex) crlf)
+			(printout t "	EXERCISE: "(send ?elem get-name_ex) crlf)
 		)
 		(bind ?i (+ ?i 1))
 	)
@@ -234,18 +224,27 @@
 		(while (<= ?j (length$ ?lexs)) do
 			(bind ?curex (nth$ ?j ?lexs))
 				;(printout t "ejercicio:" (send ?curex get-muscular_problems) crlf)
-			(if (and (member ?curprob (send ?curex get-muscular_problems))(>= ?hours (*(send ?curex get-max_duration) (send ?curex get-series)))) then
+			(if (and (member ?curprob (send ?curex get-muscular_problems))(>= ?hours (* (send ?curex get-max_duration) (send ?curex get-series)))) then
 				(bind ?sublist (insert$ ?sublist 1 ?curex))
 			)	
 			(bind ?j (+ ?j 1))
 		)
 		(bind ?i (+ ?i 1))
 	)
-	(if (eq (length$ ?sublist) 0) then
+	; Si la lista esta vacia o ya se ha asignado anteriormente 2 veces el mismo ejercicio, se devuelve falso para buscar otro ejercicio
+	(if (or(eq (length$ ?sublist) 0) (>= ?*musc* 2)) then
+		(printout t "hola1" crlf)
+		(bind ?*musc* 0)
 		FALSE
-	else
+	else then
+		(printout t "hola2" crlf)
 		(bind ?random (nth$ (random 1 (length$ ?sublist)) ?sublist))
 		;(printout t "Asignando ejercicio destinado a mejorar problemas musculares." ?random crlf)
+		(if (or(eq (length$ ?sublist) 1) (eq (length$ ?sublist) 2)) then
+			(bind ?*musc* (+ ?*musc* 1))			; se incrementa en contador de (probablemente) el mismo ejercicio
+		else then
+			(bind ?*musc* 0)
+		)
 		?random
 	)
 )
@@ -280,7 +279,7 @@
 	(bind ?ret FALSE)
 	(while (<= ?j (length$ ?ordered)) do
 		(bind ?curex (nth$ ?j ?ordered))
-		(if (>= ?hours (*(send ?curex get-max_duration) (send ?curex get-series))) then
+		(if (>= ?hours (* (send ?curex get-max_duration) (send ?curex get-series))) then
 			;(printout t " O K " ?ntry " - " ?try crlf)
 			(if (>= ?ntry ?try) then
 				;(printout t "Asignando ejercicio con maximas calorias." ?curex crlf)

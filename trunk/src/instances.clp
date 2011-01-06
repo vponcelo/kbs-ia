@@ -315,7 +315,7 @@
 	(muscular_groups abdominal)
 	(muscular_problems limited_mobility)
 	(name_ex "Abdominals Easy")
-	(num_cal_burned 180)
+	(num_cal_burned 240)
 	(series 2)
 	(type floor))
 
@@ -333,7 +333,7 @@
 	(muscular_groups abdominal)
 	(muscular_problems limited_mobility)
 	(name_ex "Abdominals Hard Level 1 (without Contraindications)")
-	(num_cal_burned 230)
+	(num_cal_burned 300)
 	(series 5)
 	(type floor))
 
@@ -351,7 +351,7 @@
 	(muscular_groups abdominal)
 	(muscular_problems none)
 	(name_ex "Abdominals Hard Level 2")
-	(num_cal_burned 250)
+	(num_cal_burned 320)
 	(series 8)
 	(type floor))
 
@@ -369,7 +369,7 @@
 	(muscular_groups abdominal)
 	(muscular_problems limited_mobility)
 	(name_ex "Abdominals Medium Level 1 (without Contraindications)")
-	(num_cal_burned 200)
+	(num_cal_burned 260)
 	(series 4)
 	(type floor))
 
@@ -387,10 +387,10 @@
 	(muscular_groups abdominal)
 	(muscular_problems none)
 	(name_ex "Abdominals Medium Level 2")
-	(num_cal_burned 215)
+	(num_cal_burned 280)
 	(series 6)
 	(type floor))
-	
+
 ([back_easy] of  WithWeights
 
 	(blood_max_pressure 150)
@@ -570,7 +570,7 @@
 	(num_cal_burned 250)
 	(series 3)
 	(type_weight dumbbells))
-	
+
 ([bike_easy] of  Bike
 
 	(blood_max_pressure 150)
@@ -585,7 +585,7 @@
 	(muscular_groups quadriceps twins abdominal)
 	(muscular_problems limited_mobility knee_ligaments)
 	(name_ex "Bike Easy 10 Minutes")
-	(num_cal_burned 210)
+	(num_cal_burned 280)
 	(series 1)
 	(type apparatus))
 
@@ -603,7 +603,7 @@
 	(muscular_groups quadriceps twins abdominal)
 	(muscular_problems limited_mobility knee_ligaments)
 	(name_ex "Bike Hard Level 1 (without Contraindications)")
-	(num_cal_burned 300)
+	(num_cal_burned 370)
 	(series 1)
 	(type apparatus))
 
@@ -621,7 +621,7 @@
 	(muscular_groups quadriceps twins abdominal)
 	(muscular_problems none)
 	(name_ex "Bike Hard Level 2")
-	(num_cal_burned 350)
+	(num_cal_burned 400)
 	(series 1)
 	(type apparatus))
 
@@ -639,7 +639,7 @@
 	(muscular_groups quadriceps twins abdominal)
 	(muscular_problems limited_mobility knee_ligaments)
 	(name_ex "Bike Medium Level 1 (without Contraindications)")
-	(num_cal_burned 250)
+	(num_cal_burned 300)
 	(series 1)
 	(type apparatus))
 
@@ -657,10 +657,10 @@
 	(muscular_groups quadriceps twins abdominal)
 	(muscular_problems none)
 	(name_ex "Bike Medium Level 2")
-	(num_cal_burned 280)
+	(num_cal_burned 320)
 	(series 1)
 	(type apparatus))
-	
+
 ([dominates_easy] of  Floor
 
 	(blood_max_pressure 150)
@@ -675,7 +675,7 @@
 	(muscular_groups deltoids biceps dorsals)
 	(muscular_problems back_pain arm_pain)
 	(name_ex "Dominates Easy")
-	(num_cal_burned 250)
+	(num_cal_burned 220)
 	(series 3)
 	(type apparatus))
 
@@ -693,7 +693,7 @@
 	(muscular_groups deltoids biceps dorsals)
 	(muscular_problems none)
 	(name_ex "Dominates Hard Level 1 (without Contraindications)")
-	(num_cal_burned 350)
+	(num_cal_burned 300)
 	(series 3)
 	(type apparatus))
 
@@ -711,7 +711,7 @@
 	(muscular_groups deltoids biceps dorsals)
 	(muscular_problems none)
 	(name_ex "Dominates Hard Level 2")
-	(num_cal_burned 375)
+	(num_cal_burned 330)
 	(series 4)
 	(type apparatus))
 
@@ -729,7 +729,7 @@
 	(muscular_groups deltoids biceps dorsals)
 	(muscular_problems back_pain)
 	(name_ex "Dominates Medium Level 1 (without Contraindications)")
-	(num_cal_burned 300)
+	(num_cal_burned 260)
 	(series 3)
 	(type apparatus))
 
@@ -747,10 +747,10 @@
 	(muscular_groups deltoids biceps dorsals)
 	(muscular_problems none)
 	(name_ex "Dominates Medium Level 2")
-	(num_cal_burned 330)
+	(num_cal_burned 280)
 	(series 4)
 	(type apparatus))
-	
+
 ([pectorals_easy] of  WithWeights
 
 	(blood_max_pressure 150)
@@ -840,7 +840,7 @@
 	(num_cal_burned 250)
 	(series 3)
 	(type_weight apparatus))
-	
+
 ([quadriceps_easy] of  WithWeights
 
 	(blood_max_pressure 150)
@@ -945,7 +945,7 @@
 	(muscular_groups deltoids biceps triceps quadriceps pectoralis abdominal lumbar twins dorsals)
 	(muscular_problems limited_mobility knee_ligaments ankle_sprain)
 	(name_ex "Run Easy")
-	(num_cal_burned 270)
+	(num_cal_burned 290)
 	(series 1)
 	(type apparatus))
 
@@ -1020,7 +1020,7 @@
 	(num_cal_burned 350)
 	(series 1)
 	(type apparatus))
-	
+
 ([stretching_easy] of  Floor
 
 	(blood_max_pressure 150)
@@ -1200,67 +1200,5 @@
 	(num_cal_burned 270)
 	(series 5)
 	(type_weight dumbbells))
-)
 
-(definstances InWork
-
-([sitting] of  InWork
-
-	(duration 300)
-	(frequency very_high)
-	(habit_class FALSE)
-	(indexDuration 0 50 100 200)
-	(name_habit "sitting")
-	(type_hab sitting))
-
-([weight_charge] of  InWork
-
-	(duration 10)
-	(frequency few)
-	(habit_class TRUE)
-	(indexDuration 0 50 100 200)
-	(name_habit "weight_charge")
-	(type_hab weight_charge))
-)
-
-(definstances OutWork
-
-([up_stairs] of  OutWork
-
-	(duration 5)
-	(frequency quite)
-	(habit_class TRUE)
-	(indexDuration 0 5 10 15)
-	(name_habit "up_stairs")
-	(type_hab stairs))
-
-([homework] of  OutWork
-
-	(duration 5)
-	(frequency few)
-	(habit_class TRUE)
-	(indexDuration 0 7 14 21)
-	(name_habit "hung_clothes")
-	(type_hab homeworks))
-)
-
-(definstances Movements
-
-([walk] of  Movement
-
-	(duration 30)
-	(frequency medium)
-	(habit_class TRUE)
-	(indexDuration 0 30 60 120)
-	(name_habit "walk")
-	(type_hab walking))
-
-([bike] of  Movement
-
-	(duration 10)
-	(frequency medium)
-	(habit_class TRUE)
-	(indexDuration 0 15 30 60)
-	(name_habit "bike")
-	(type_hab with_bike))
 )
