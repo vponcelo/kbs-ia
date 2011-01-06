@@ -327,6 +327,7 @@
     )
    (bind ?i (+ ?i 1))
   )
+  (send ?usr put-exercises ?lexs)
   (modify ?exsPerson (exercises ?lexs))
   (generate-schedule ?bpc ?lexs)
 )

@@ -148,7 +148,6 @@
 	(bind ?imc (send ?bpc get-bodyMass))
 	(bind ?ppm 100)
 	(bind ?var 0)
-	; las pulsaciones vendran 
 	(bind ?ppm (+ ?ppm ?var))
 	(bind ?age (send ?usr get-age))
 	(if (>= ?age 16) then
