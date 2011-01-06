@@ -232,11 +232,9 @@
 	)
 	; Si la lista esta vacia o ya se ha asignado anteriormente 2 veces el mismo ejercicio, se devuelve falso para buscar otro ejercicio
 	(if (or(eq (length$ ?sublist) 0) (>= ?*musc* 2)) then
-		(printout t "hola1" crlf)
 		(bind ?*musc* 0)
 		FALSE
 	else then
-		(printout t "hola2" crlf)
 		(bind ?random (nth$ (random 1 (length$ ?sublist)) ?sublist))
 		;(printout t "Asignando ejercicio destinado a mejorar problemas musculares." ?random crlf)
 		(if (or(eq (length$ ?sublist) 1) (eq (length$ ?sublist) 2)) then
