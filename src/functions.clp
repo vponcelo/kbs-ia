@@ -5,7 +5,6 @@
 (defglobal ?*user* = null)
 (defglobal ?*opc* = null)
 (defglobal ?*musc* = 0)
-(defglobal ?*rw* = 0)
 
 ;Esta función recibe por parámetro la pregunta y devuelve el valor que introduce el usuario
 (deffunction set-value (?pregunta)
