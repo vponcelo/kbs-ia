@@ -270,16 +270,17 @@
 	 	(bind ?persons (find-all-instances ((?p Person)) TRUE))
     (bind ?usr (nth$ (length$ ?persons) ?persons))
     (bind ?bpc (send ?usr get-basicPhyCondition))
+    (bind ?test (send ?usr get-test))
 	 )
 	 (case 2 then
 	  (bind ?persons (find-all-instances ((?p Person)) TRUE))
     (bind ?usr (nth$ ?*user* ?persons))
     (bind ?bpc (send ?usr get-basicPhyCondition))
+    (bind ?usertest (str-cat "MAIN::" (send ?usr get-test)))
+  	(bind ?tests (find-all-instances ((?t TestPerson)) (eq (str-cat ?t) (str-cat ?usertest))))
+		(bind ?test (nth$ 1 ?tests))
 	 )
 	)
-	(bind ?usertest (str-cat "MAIN::" (send ?usr get-test)))
-  (bind ?tests (find-all-instances ((?t TestPerson)) (eq (str-cat ?t) (str-cat ?usertest))))
-	(bind ?test (nth$ 1 ?tests))
 	(if (or(eq (send ?test get-muscular_tension) high) (eq (send ?test get-dizziness) high) (eq (send ?test get-tiredness_sensation) huge) (> (send ?test get-pulsations_per_min) 180)) then
 		(send ?usr put-difficulty_intensity easy)				; personas con taquicardia o tension muscular, mareos o cansancio muy elevados asignar dificultad easy
 		(printout t crlf)
