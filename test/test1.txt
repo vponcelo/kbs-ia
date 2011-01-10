@@ -1,0 +1,49 @@
+(clear)
+(load ../src/classes.clp)
+(load ../src/instances.clp)
+(load ../src/facts_templates.CLP)
+(load ../src/messages.clp)
+(load ../src/functions.clp)
+(load ../src/rules_modules.clp)
+(reset)
+(run)
+1
+John
+Lup
+56
+reduce_weight
+yes
+get_fit
+no
+Movement
+walk
+20
+few
+yes
+OutWork
+up_stairs
+4
+few
+yes
+InWork
+sitting
+240
+medium
+no
+180
+92
+124
+84
+excess_greases
+yes
+excess_sal
+yes
+lack_iron
+back_pain
+yes
+limited_mobility
+no
+normal
+huge
+quite
+60

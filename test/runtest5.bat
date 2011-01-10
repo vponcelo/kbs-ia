@@ -1,0 +1,1 @@
+"%programfiles%\CLIPS\Bin\CLIPSDOS.exe" -f test5.txt >output_test5.txt

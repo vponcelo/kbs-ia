@@ -1,0 +1,41 @@
+(clear)
+(load ../src/classes.clp)
+(load ../src/instances.clp)
+(load ../src/facts_templates.CLP)
+(load ../src/messages.clp)
+(load ../src/functions.clp)
+(load ../src/rules_modules.clp)
+(reset)
+(run)
+1
+Robbin
+Walter
+31
+flexibility
+yes
+balance
+yes
+rehabilitate
+no
+Movement
+bike
+20
+medium
+no
+180
+81
+122
+81
+excess_sal
+no
+balanced
+knee_ligaments
+yes
+back_pain
+yes
+neck_pain
+no
+quite
+normal
+few
+90

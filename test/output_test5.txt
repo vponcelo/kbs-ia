@@ -1,0 +1,230 @@
+         CLIPS (Quicksilver Beta 3/26/08)
+CLIPS> (clear)
+CLIPS> (load classes.clp)
+Defining defclass: %3ACLIPS_TOP_LEVEL_SLOT_CLASS
+Defining defclass: Person
+Defining defclass: Exercise
+Defining defclass: WithoutWeights
+Defining defclass: Bike
+Defining defclass: Run
+Defining defclass: Floor
+Defining defclass: WithWeights
+Defining defclass: Habit
+Defining defclass: InWork
+Defining defclass: OutWork
+Defining defclass: Movement
+Defining defclass: TestPerson
+Defining defclass: BasicPhysicalCondition
+TRUE
+CLIPS> (load instances.clp)
+Defining definstances: Persons
+Defining definstances: BasicPhysicalCondition
+Defining definstances: TestPerson
+Defining definstances: Exercises
+Defining definstances: Habits
+TRUE
+CLIPS> (load facts_templates.CLP)
+Defining deftemplate: personalData
+Defining deffacts: persDat
+Defining deftemplate: habitsPerson
+Defining deffacts: habs
+Defining deftemplate: basicPhyCond
+Defining deffacts: bpc
+Defining deftemplate: difficultyIntensity
+Defining deffacts: dif_intens
+Defining deftemplate: basicPhysicalCond
+Defining deffacts: basicPC
+Defining deftemplate: testPerson
+Defining deffacts: testPers
+Defining deftemplate: exercisesPerson
+Defining deffacts: exsPerson
+TRUE
+CLIPS> (load messages.clp)
+Defining defmessage-handler: Person
+   Handler print primary defined.
+TRUE
+CLIPS> (load functions.clp)
+Defining defglobal: user
+Defining defglobal: opc
+Defining defglobal: musc
+Defining deffunction: set-value
+Defining deffunction: set-number
+Defining deffunction: set-single-from-list
+Defining deffunction: set-multi-from-list
+Defining deffunction: set-unique-list
+Defining deffunction: set-difficulty
+Defining deffunction: set-pulsations
+Defining deffunction: calculate-totalTime
+Defining deffunction: enoughTime
+Defining deffunction: show-program
+Defining deffunction: get-ex-musc
+Defining deffunction: get-ex-cal
+Defining deffunction: generate-schedule
+TRUE
+CLIPS> (load rules_modules.clp)
+
+[CSTRCPSR1] WARNING: Redefining defmodule: MAIN
+Defining defrule: start +j+j
+Defining defmodule: createPerson-module
+Defining defrule: create-person +j+j
+Defining defmodule: habits-module
+Defining defrule: set-habits +j+j
+Defining defmodule: existingPerson-module
+Defining defrule: existing-person =j+j+j+j+j
+Defining defmodule: difficulty_intensity-module
+Defining defrule: difficulty-intensity +j
+Defining defmodule: bpc-module
+Defining defrule: set-bpc +j+j+j
+Defining defmodule: test-module
+Defining defrule: set-test +j+j+j
+Defining defmodule: exercises-module
+Defining defrule: set-exercises +j+j+j
+TRUE
+CLIPS> (reset)
+CLIPS> (run)
+
++-------------------------------------------+
+|                                           |
+|         WELCOME TO OUR FITNESS GYM        |
+|                                           |
++-------------------------------------------+
+Select an option:
+1. Create a new person
+2. Select an existing person
+3. Exit
+2
+Seleccionando existente
+1. - Alex
+2. - Anna
+3. - Javi
+4. - Juan
+5. - Kevin
+6. - Lucas
+7. - Maite
+8. - Marc
+9. - Pepe
+10. - Victor
+7
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: Maite
+    LastName: 
+    age: 25 years 
+    goal: (musculation get_fit rehabilitate)
+    Initial difficulty or intensity supported 
+    (calculated by habits): medium
+
+------------------------------Person Habits------------------------------
+
+    No habits selected 
+
+--------------------Person Basic Physical Information--------------------
+
+    height: 162 cm 
+    weight: 52 kg 
+    index of body mass: 19.8140527358634
+    blood maximum pressure: 110 sistolic 
+    blood minimum pressure: 70 diastolic 
+    diet: (lack_vitamines)
+    muscular problems: (knee_ligaments)
+
+-----------------------Results Test Basic Exercises----------------------
+
+    exercises done: ([bike_easy] [run_easy])
+    pulsations per minute: 155
+        Your pulsations per min are normal
+    muscular tension: high
+    tiredness sensation: normal
+    dizziness: no
+
+-------------------------------------------------------------------------
+
+
+
+Difficulty_intensity modified to 'easy' because of results of the test done
+Re-showing person info...
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: Maite
+    LastName: 
+    age: 25 years 
+    goal: (musculation get_fit rehabilitate)
+    Initial difficulty or intensity supported 
+    (calculated by habits): easy
+
+------------------------------Person Habits------------------------------
+
+    No habits selected 
+
+--------------------Person Basic Physical Information--------------------
+
+    height: 162 cm 
+    weight: 52 kg 
+    index of body mass: 19.8140527358634
+    blood maximum pressure: 110 sistolic 
+    blood minimum pressure: 70 diastolic 
+    diet: (lack_vitamines)
+    muscular problems: (knee_ligaments)
+
+-----------------------Results Test Basic Exercises----------------------
+
+    exercises done: ([bike_easy] [run_easy])
+    pulsations per minute: 155
+        Your pulsations per min are normal
+    muscular tension: high
+    tiredness sensation: normal
+    dizziness: no
+
+-------------------------------------------------------------------------
+
+
+List of exercises filtered to assign to the schedule: 
+	Quadriceps Easy
+	Pectorals Easy
+	Biceps Easy
+	Back Easy
+	Stretching Easy
+	Triceps Easy
+	Dominates Easy
+	Abdominals Easy
+	Run Easy
+	Bike Easy 10 Minutes
+
+How many minutes per day can you dedicate (in minutes) (between 30 and 960)?
+45
+
+-------------------monday-------------------
+	EXERCISE: Run Easy
+	EXERCISE: Run Easy
+	EXERCISE: Run Easy
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Stretching Easy
+
+-------------------tuesday-------------------
+	EXERCISE: Triceps Easy
+	EXERCISE: Biceps Easy
+
+-------------------wednesday-------------------
+	EXERCISE: Bike Easy 10 Minutes
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Bike Easy 10 Minutes
+	EXERCISE: Stretching Easy
+	EXERCISE: Run Easy
+
+-------------------thursday-------------------
+	EXERCISE: Biceps Easy
+	EXERCISE: Pectorals Easy
+	EXERCISE: Dominates Easy
+
+-------------------friday-------------------
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Stretching Easy
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Stretching Easy
+	EXERCISE: Stretching Easy
+CLIPS> 
