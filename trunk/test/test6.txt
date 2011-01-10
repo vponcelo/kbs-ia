@@ -1,0 +1,13 @@
+(clear)
+(load ../src/classes.clp)
+(load ../src/instances.clp)
+(load ../src/facts_templates.CLP)
+(load ../src/messages.clp)
+(load ../src/functions.clp)
+(load ../src/rules_modules.clp)
+(reset)
+(run)
+2
+5
+60
+

@@ -1,0 +1,428 @@
+         CLIPS (Quicksilver Beta 3/26/08)
+CLIPS> (clear)
+CLIPS> (load classes.clp)
+Defining defclass: %3ACLIPS_TOP_LEVEL_SLOT_CLASS
+Defining defclass: Person
+Defining defclass: Exercise
+Defining defclass: WithoutWeights
+Defining defclass: Bike
+Defining defclass: Run
+Defining defclass: Floor
+Defining defclass: WithWeights
+Defining defclass: Habit
+Defining defclass: InWork
+Defining defclass: OutWork
+Defining defclass: Movement
+Defining defclass: TestPerson
+Defining defclass: BasicPhysicalCondition
+TRUE
+CLIPS> (load instances.clp)
+Defining definstances: Persons
+Defining definstances: BasicPhysicalCondition
+Defining definstances: TestPerson
+Defining definstances: Exercises
+Defining definstances: Habits
+TRUE
+CLIPS> (load facts_templates.CLP)
+Defining deftemplate: personalData
+Defining deffacts: persDat
+Defining deftemplate: habitsPerson
+Defining deffacts: habs
+Defining deftemplate: basicPhyCond
+Defining deffacts: bpc
+Defining deftemplate: difficultyIntensity
+Defining deffacts: dif_intens
+Defining deftemplate: basicPhysicalCond
+Defining deffacts: basicPC
+Defining deftemplate: testPerson
+Defining deffacts: testPers
+Defining deftemplate: exercisesPerson
+Defining deffacts: exsPerson
+TRUE
+CLIPS> (load messages.clp)
+Defining defmessage-handler: Person
+   Handler print primary defined.
+TRUE
+CLIPS> (load functions.clp)
+Defining defglobal: user
+Defining defglobal: opc
+Defining defglobal: musc
+Defining deffunction: set-value
+Defining deffunction: set-number
+Defining deffunction: set-single-from-list
+Defining deffunction: set-multi-from-list
+Defining deffunction: set-unique-list
+Defining deffunction: set-difficulty
+Defining deffunction: set-pulsations
+Defining deffunction: calculate-totalTime
+Defining deffunction: enoughTime
+Defining deffunction: show-program
+Defining deffunction: get-ex-musc
+Defining deffunction: get-ex-cal
+Defining deffunction: generate-schedule
+TRUE
+CLIPS> (load rules_modules.clp)
+
+[CSTRCPSR1] WARNING: Redefining defmodule: MAIN
+Defining defrule: start +j+j
+Defining defmodule: createPerson-module
+Defining defrule: create-person +j+j
+Defining defmodule: habits-module
+Defining defrule: set-habits +j+j
+Defining defmodule: existingPerson-module
+Defining defrule: existing-person =j+j+j+j+j
+Defining defmodule: difficulty_intensity-module
+Defining defrule: difficulty-intensity +j
+Defining defmodule: bpc-module
+Defining defrule: set-bpc +j+j+j
+Defining defmodule: test-module
+Defining defrule: set-test +j+j+j
+Defining defmodule: exercises-module
+Defining defrule: set-exercises +j+j+j
+TRUE
+CLIPS> (reset)
+CLIPS> (run)
+
++-------------------------------------------+
+|                                           |
+|         WELCOME TO OUR FITNESS GYM        |
+|                                           |
++-------------------------------------------+
+Select an option:
+1. Create a new person
+2. Select an existing person
+3. Exit
+1
+Creando persona
+What is your name?
+John
+What is your last_name?
+Lup
+How old are you (between 16-130)?
+56
+What is/are your goal/s in the gym (select one firstly)?
+(maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)?
+reduce_weight
+Do you wish to add another? (yes/no)
+yes
+(reduce_weight)
+What is/are your goal/s in the gym (select one firstly)?
+(maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)?
+get_fit
+Do you wish to add another? (yes/no)
+no
+(get_fit reduce_weight)
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: John
+    LastName: Lup
+    age: 56 years 
+    goal: (get_fit reduce_weight)
+
+------------------------------Person Habits------------------------------
+
+    No habits selected 
+
+-------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------
+
+
+Insert the type of your habit?
+(InWork OutWork Movement)?
+Movement
+    walk
+    bike
+Insert the name of your habit (if it is shown)?
+(none bike walk)?
+walk
+What is the duration of your habit (between 0-500)?
+20
+What is the frequency of your habit?
+(few medium quite very_high)?
+few
+Do you want to add another habit? yes/no
+yes
+Insert the type of your habit?
+(InWork OutWork Movement)?
+OutWork
+    up_stairs
+    hung_clothes
+Insert the name of your habit (if it is shown)?
+(none hung_clothes up_stairs)?
+up_stairs
+What is the duration of your habit (between 0-500)?
+4
+What is the frequency of your habit?
+(few medium quite very_high)?
+few
+Do you want to add another habit? yes/no
+yes
+Insert the type of your habit?
+(InWork OutWork Movement)?
+InWork
+    sitting
+    weight_charge
+Insert the name of your habit (if it is shown)?
+(none weight_charge sitting)?
+sitting
+What is the duration of your habit (between 0-500)?
+240
+What is the frequency of your habit?
+(few medium quite very_high)?
+medium
+Do you want to add another habit? yes/no
+no
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: John
+    LastName: Lup
+    age: 56 years 
+    goal: (get_fit reduce_weight)
+    Initial difficulty or intensity supported 
+    (calculated by habits): medium
+
+------------------------------Person Habits------------------------------
+
+    InWork: sitting 240 min with frequency: 'medium'
+    OutWork: up_stairs 4 min with frequency: 'few'
+    Movement: walk 20 min with frequency: 'few'
+
+-------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------
+
+
+How tall are you (in cm) (between 120-240)?
+180
+How much you weigh (in kg) (between 25-150)?
+92
+What is your blood maximum presure (between 30-200)?
+124
+What is your blood minimum presure (between 30-200)?
+84
+What is/are the feature/s or problem/s of your kind of diet (select from this list)?
+(balanced lack_calcium lack_vitamines lack_iron excess_greases excess_sal snacking)?
+excess_greases
+Do you wish to add another? (yes/no)
+yes
+(excess_greases)
+What is/are the feature/s or problem/s of your kind of diet (select from this list)?
+(balanced lack_calcium lack_vitamines lack_iron excess_greases excess_sal snacking)?
+excess_sal
+Do you wish to add another? (yes/no)
+yes
+(excess_sal excess_greases)
+What is/are the feature/s or problem/s of your kind of diet (select from this list)?
+(balanced lack_calcium lack_vitamines lack_iron excess_greases excess_sal snacking)?
+lack_iron
+Do you wish to add another? (yes/no)
+back_pain
+(lack_iron excess_sal excess_greases)
+What is/are your muscular problems (select from this list)?
+(none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)?
+yes
+You have selected something which is not shown in the list
+What is/are your muscular problems (select from this list)?
+(none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)?
+limited_mobility
+Do you wish to add another? (yes/no)
+no
+(limited_mobility)
+
+Difficulty_intensity modified to 'easy' because of bodyMass
+Re-showing person info...
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: John
+    LastName: Lup
+    age: 56 years 
+    goal: (get_fit reduce_weight)
+    Initial difficulty or intensity supported 
+    (calculated by habits): easy
+
+------------------------------Person Habits------------------------------
+
+    InWork: sitting 240 min with frequency: 'medium'
+    OutWork: up_stairs 4 min with frequency: 'few'
+    Movement: walk 20 min with frequency: 'few'
+
+--------------------Person Basic Physical Information--------------------
+
+    height: 180 cm 
+    weight: 92 kg 
+    index of body mass: 28.3950617283951
+    blood maximum pressure: 124 sistolic 
+    blood minimum pressure: 84 diastolic 
+    diet: (lack_iron excess_sal excess_greases)
+    muscular problems: (limited_mobility)
+
+-------------------------------------------------------------------------
+
+
+
+-------------------------------------------------------------------------
+
+
+please answer the questions of the exercises done: 
+([MAIN::run_easy] [MAIN::bike_easy])
+
+What is your muscular tension?
+(normal quite high)?
+normal
+What is your tiredness sensation?
+(few normal quite huge)?
+huge
+Are you dizzy?
+(no few quite high)?
+quite
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: John
+    LastName: Lup
+    age: 56 years 
+    goal: (get_fit reduce_weight)
+    Initial difficulty or intensity supported 
+    (calculated by habits): easy
+
+------------------------------Person Habits------------------------------
+
+    InWork: sitting 240 min with frequency: 'medium'
+    OutWork: up_stairs 4 min with frequency: 'few'
+    Movement: walk 20 min with frequency: 'few'
+
+--------------------Person Basic Physical Information--------------------
+
+    height: 180 cm 
+    weight: 92 kg 
+    index of body mass: 28.3950617283951
+    blood maximum pressure: 124 sistolic 
+    blood minimum pressure: 84 diastolic 
+    diet: (lack_iron excess_sal excess_greases)
+    muscular problems: (limited_mobility)
+
+-----------------------Results Test Basic Exercises----------------------
+
+    exercises done: ([MAIN::run_easy] [MAIN::bike_easy])
+    pulsations per minute: 145
+        Your pulsations per min are normal
+    muscular tension: normal
+    tiredness sensation: huge
+    dizziness: quite
+
+-------------------------------------------------------------------------
+
+
+
+Difficulty_intensity modified to 'easy' because of results of the test done
+Re-showing person info...
+
+
+------------------------Person Basic Information-------------------------
+
+    Name: John
+    LastName: Lup
+    age: 56 years 
+    goal: (get_fit reduce_weight)
+    Initial difficulty or intensity supported 
+    (calculated by habits): easy
+
+------------------------------Person Habits------------------------------
+
+    InWork: sitting 240 min with frequency: 'medium'
+    OutWork: up_stairs 4 min with frequency: 'few'
+    Movement: walk 20 min with frequency: 'few'
+
+--------------------Person Basic Physical Information--------------------
+
+    height: 180 cm 
+    weight: 92 kg 
+    index of body mass: 28.3950617283951
+    blood maximum pressure: 124 sistolic 
+    blood minimum pressure: 84 diastolic 
+    diet: (lack_iron excess_sal excess_greases)
+    muscular problems: (limited_mobility)
+
+-----------------------Results Test Basic Exercises----------------------
+
+    exercises done: ([MAIN::run_easy] [MAIN::bike_easy])
+    pulsations per minute: 145
+        Your pulsations per min are normal
+    muscular tension: normal
+    tiredness sensation: huge
+    dizziness: quite
+
+-------------------------------------------------------------------------
+
+
+List of exercises filtered to assign to the schedule: 
+	Triceps Easy
+	Quadriceps Easy
+	Pectorals Easy
+	Biceps Easy
+	Back Easy
+	Stretching Easy
+	Dominates Easy
+	Abdominals Easy
+	Run Easy
+	Bike Easy 10 Minutes
+
+How many minutes per day can you dedicate (in minutes) (between 30 and 960)?
+60
+
+-------------------monday-------------------
+	EXERCISE: Stretching Easy
+	EXERCISE: Stretching Easy
+	EXERCISE: Pectorals Easy
+	EXERCISE: Stretching Easy
+	EXERCISE: Back Easy
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Stretching Easy
+	EXERCISE: Back Easy
+
+-------------------tuesday-------------------
+	EXERCISE: Run Easy
+	EXERCISE: Bike Easy 10 Minutes
+	EXERCISE: Abdominals Easy
+	EXERCISE: Triceps Easy
+
+-------------------wednesday-------------------
+	EXERCISE: Pectorals Easy
+	EXERCISE: Biceps Easy
+	EXERCISE: Back Easy
+	EXERCISE: Pectorals Easy
+	EXERCISE: Quadriceps Easy
+	EXERCISE: Run Easy
+
+-------------------thursday-------------------
+	EXERCISE: Run Easy
+	EXERCISE: Bike Easy 10 Minutes
+	EXERCISE: Abdominals Easy
+	EXERCISE: Triceps Easy
+
+-------------------friday-------------------
+	EXERCISE: Abdominals Easy
+	EXERCISE: Biceps Easy
+	EXERCISE: Bike Easy 10 Minutes
+	EXERCISE: Stretching Easy
+	EXERCISE: Bike Easy 10 Minutes
+	EXERCISE: Stretching Easy
+CLIPS> 

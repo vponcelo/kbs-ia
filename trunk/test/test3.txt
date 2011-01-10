@@ -1,0 +1,39 @@
+(clear)
+(load ../src/classes.clp)
+(load ../src/instances.clp)
+(load ../src/facts_templates.CLP)
+(load ../src/messages.clp)
+(load ../src/functions.clp)
+(load ../src/rules_modules.clp)
+(reset)
+(run)
+1
+Alex
+White
+28
+musculation
+yes
+get_fit
+yes
+maintenance
+no
+Movement
+bike
+20
+quite
+yes
+Movement
+walk
+20
+medium
+no
+190
+88
+120
+79
+balanced
+none
+normal
+few
+no
+150
