@@ -13,7 +13,7 @@
 ;+		(cardinality 0 1)
 		(create-accessor read-write))
 	(multislot goal
-;+		(comment "Goal of the exercise")
+;+		(comment "Goal of the exercise and person")
 		(type SYMBOL)
 		(allowed-values maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)
 		(cardinality 1 7)
@@ -32,7 +32,7 @@
 ;+		(comment "Benefits of the exercise")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(cardinality 0 4)
+		(cardinality 1 8)
 		(create-accessor read-write))
 	(single-slot last_name
 		(type STRING)
@@ -87,7 +87,7 @@
 		(cardinality 1 7)
 		(create-accessor read-write))
 	(single-slot habit_class
-;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
+;+		(comment "Specifies If is the habit is positive (TRUE) or negative (FALSE) for the health of the person.")
 		(type SYMBOL)
 		(allowed-values FALSE TRUE)
 ;+		(cardinality 1 1)
@@ -169,7 +169,7 @@
 		(type INTEGER)
 		(range 30 100)
 		(default 80)
-;+		(cardinality 0 1)
+;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(single-slot age
 ;+		(comment "Age of the person.")
@@ -243,7 +243,7 @@
 ;+		(allowed-classes Exercise)
 		(create-accessor read-write))
 	(multislot goal
-;+		(comment "Goal of the exercise")
+;+		(comment "Goal of the person")
 		(type SYMBOL)
 		(allowed-values maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)
 		(cardinality 1 7)
@@ -300,7 +300,7 @@
 ;+		(comment "Benefits of the exercise")
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
-		(cardinality 0 4)
+		(cardinality 1 8)
 		(create-accessor read-write))
 	(single-slot difficulty_intensity
 ;+		(comment "Difficulty/intensity of the exercise and person (calculated by person and exercises features)")
@@ -361,7 +361,7 @@
 		(type INTEGER)
 		(range 30 100)
 		(default 80)
-;+		(cardinality 0 1)
+;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot muscular_problems
 ;+		(comment "Muscular problems of a person")
@@ -385,7 +385,7 @@
 	(is-a WithoutWeights)
 	(role concrete)
 	(multislot goal
-;+		(comment "Goal of the exercise")
+;+		(comment "Goal of the exercise and person")
 		(type SYMBOL)
 		(allowed-values maintenance get_fit reduce_weight musculation flexibility balance rehabilitate)
 		(default maintenance get_fit reduce_weight musculation balance rehabilitate)
@@ -403,7 +403,7 @@
 		(type SYMBOL)
 		(allowed-values none back_pain limited_mobility ankle_sprain wrist_sprain neck_pain arm_pain knee_ligaments)
 		(default none)
-		(cardinality 0 4)
+		(cardinality 1 8)
 		(create-accessor read-write))
 	(single-slot type
 ;+		(comment "Type of exercises without weights")
@@ -496,7 +496,7 @@
 		(cardinality 1 4)
 		(create-accessor read-write))
 	(single-slot habit_class
-;+		(comment "Specifies If is the habit is positive or negative for the health of the person.")
+;+		(comment "Specifies If is the habit is positive (TRUE) or negative (FALSE) for the health of the person.")
 		(type SYMBOL)
 		(allowed-values FALSE TRUE)
 ;+		(cardinality 1 1)
@@ -612,7 +612,7 @@
 		(type INTEGER)
 		(range 30 100)
 		(default 80)
-;+		(cardinality 0 1)
+;+		(cardinality 1 1)
 		(create-accessor read-write))
 	(multislot diet
 ;+		(comment "Diet of the person")

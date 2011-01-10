@@ -2,9 +2,7 @@
 ;##################### FUNCTIONS ########################
 ;########################################################
 
-(defglobal ?*user* = null)
-(defglobal ?*opc* = null)
-(defglobal ?*musc* = 0)
+
 
 ;Esta función recibe por parámetro la pregunta y devuelve el valor que introduce el usuario
 (deffunction set-value (?pregunta)
@@ -142,6 +140,9 @@
 	)
 	?resp
 )
+(defglobal ?*user* = null)
+(defglobal ?*opc* = null)
+
 ;Esta función calcula las pulsaciones por minuto de la persona al realizar los ejercicios de test
 (deffunction set-pulsations (?usr)
 	(bind ?bpc (send ?usr get-basicPhyCondition))
@@ -166,6 +167,10 @@
 		(if (or (eq ?d excess_greases) (eq ?d excess_sal) (eq ?d snacking)) then
 			(bind ?var (random 0 10))
 			(bind ?ppm (+ ?ppm ?var))
+		else (if (or(eq ?d lack_iron) (eq ?d lack_calcium) (eq ?d lack_vitamines)) then
+			(bind ?var (random -3 0))
+			(bind ?ppm (+ ?ppm ?var))
+			)
 		)
 		(bind ?i (+ ?i 1))
 	)
@@ -210,6 +215,7 @@
 		(bind ?i (+ ?i 1))
 	)
 )
+(defglobal ?*musc* = 0)
 
 ;Genera una sublista con los ejercicios que sirvan para mejorar los problemas del usuario y devuelve un ejercicio
 (deffunction get-ex-musc (?muscular_problems ?hours ?lexs)

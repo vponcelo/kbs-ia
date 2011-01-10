@@ -68,7 +68,7 @@
 
 	(age 25)
 	(basicPhyCondition [bpc7])
-	(goal musculation)
+	(goal musculation get_fit rehabilitate)
 	(name_ "Maite")
 	(test [test7]))
 
@@ -109,7 +109,7 @@
 	(blood_max_pressure 120)
 	(blood_min_pressure 80)
 	(diet balanced)
-	(height 170)
+	(height 180)
 	(muscular_problems none)
 	(weight 80))
 
