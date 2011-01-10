@@ -213,6 +213,8 @@
 	(send ?usr put-basicPhyCondition ?new)
 	(modify ?basicPC (basicPhyCondition ?new))
 	(if (or(> ?ibm 27) (< ?ibm 18)) then
+		(printout t crlf)
+		(printout t "Difficulty_intensity modified to 'easy' because of bodyMass" crlf "Re-showing person info..." crlf)
 		(send ?usr put-difficulty_intensity easy)
 	)
 	(send ?usr print)

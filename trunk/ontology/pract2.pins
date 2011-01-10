@@ -1,4 +1,4 @@
-; Thu Jan 06 02:53:19 CET 2011
+; Fri Jan 07 17:35:00 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -397,7 +397,7 @@
 	(blood_max_pressure 120)
 	(blood_min_pressure 80)
 	(diet balanced)
-	(height 170)
+	(height 180)
 	(muscular_problems none)
 	(weight 80))
 
@@ -624,7 +624,7 @@
 
 	(age 25)
 	(basicPhyCondition [bpc7])
-	(goal musculation)
+	(goal musculation get_fit rehabilitate)
 	(name "Maite")
 	(test [test7]))
 

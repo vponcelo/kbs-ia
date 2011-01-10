@@ -1,4 +1,4 @@
-; Thu Jan 06 02:53:09 CET 2011
+; Fri Jan 07 17:09:50 CET 2011
 ; 
 ;+ (version "3.4.4")
 ;+ (build "Build 579")
@@ -21,12 +21,12 @@
 ([BROWSER_SLOT_NAMES] of  Property_List
 
 	(properties
-		[pract2_ProjectKB_Class10219]
-		[pract2_ProjectKB_Class10220]
-		[pract2_ProjectKB_Class10221]
-		[pract2_ProjectKB_Class10222]
-		[pract2_ProjectKB_Class10223]
-		[pract2_ProjectKB_Class10224]))
+		[pract2_ProjectKB_Class10308]
+		[pract2_ProjectKB_Class10309]
+		[pract2_ProjectKB_Class10310]
+		[pract2_ProjectKB_Class10311]
+		[pract2_ProjectKB_Class10312]
+		[pract2_ProjectKB_Class10313]))
 
 ([CLSES_TAB] of  Widget
 
@@ -68,9 +68,6 @@
 
 	(widget_class_name "edu.stanford.smi.protege.widget.InstancesTab"))
 
-([KB_237472_Class6] of  Map
-)
-
 ([KB_580083_Class0] of  String
 
 	(name "factory_class_name")
@@ -79,12 +76,12 @@
 ([KB_580083_Class1] of  Map
 
 	(entries
-		[pract2_ProjectKB_Class10225]
-		[pract2_ProjectKB_Class10226]
-		[pract2_ProjectKB_Class10227]
-		[pract2_ProjectKB_Class10228]
-		[pract2_ProjectKB_Class10230])
-	(referenced_maps [pract2_ProjectKB_Class10229]))
+		[pract2_ProjectKB_Class10314]
+		[pract2_ProjectKB_Class10315]
+		[pract2_ProjectKB_Class10316]
+		[pract2_ProjectKB_Class10317]
+		[pract2_ProjectKB_Class10319])
+	(referenced_maps [pract2_ProjectKB_Class10318]))
 
 ([KB_580083_Class100] of  Property_List
 )
@@ -194,6 +191,9 @@
 ([KB_580083_Class99] of  Property_List
 )
 
+([KB_806465_Class6] of  Map
+)
+
 ([LAYOUT_PROPERTIES] of  Property_List
 
 	(name "layout properties")
@@ -280,72 +280,72 @@
 ([pract2_ProjectKB_Class10] of  Property_List
 )
 
-([pract2_ProjectKB_Class10219] of  String
+([pract2_ProjectKB_Class10308] of  String
 
 	(name ":INSTANCE-ANNOTATION")
 	(string_value "%3AANNOTATION-TEXT"))
 
-([pract2_ProjectKB_Class10220] of  String
-
-	(name ":META-CLASS")
-	(string_value "%3ANAME"))
-
-([pract2_ProjectKB_Class10221] of  String
+([pract2_ProjectKB_Class10309] of  String
 
 	(name ":PAL-CONSTRAINT")
 	(string_value "%3APAL-NAME"))
 
-([pract2_ProjectKB_Class10222] of  String
+([pract2_ProjectKB_Class10310] of  String
+
+	(name ":META-CLASS")
+	(string_value "%3ANAME"))
+
+([pract2_ProjectKB_Class10311] of  String
 
 	(name "Person")
 	(string_value "name"))
 
-([pract2_ProjectKB_Class10223] of  String
-
-	(name "TestPerson")
-	(string_value "pulsations_per_min"))
-
-([pract2_ProjectKB_Class10224] of  String
+([pract2_ProjectKB_Class10312] of  String
 
 	(name "BasicPhysicalCondition")
 	(string_value "weight"))
 
-([pract2_ProjectKB_Class10225] of  Map_Entry
+([pract2_ProjectKB_Class10313] of  String
+
+	(name "TestPerson")
+	(string_value "pulsations_per_min"))
+
+([pract2_ProjectKB_Class10314] of  Map_Entry
 
 	(key "show_collaboration_panel")
 	(key_class "java.lang.String")
 	(value "true")
 	(value_class "java.lang.Boolean"))
 
-([pract2_ProjectKB_Class10226] of  Map_Entry
+([pract2_ProjectKB_Class10315] of  Map_Entry
 
 	(key "chaoProject")
 	(key_class "java.lang.String")
 	(value "annotation_pract2.pprj")
 	(value_class "java.lang.String"))
 
-([pract2_ProjectKB_Class10227] of  Map_Entry
+([pract2_ProjectKB_Class10316] of  Map_Entry
 
 	(key "edu.stanford.smi.protege.collab.annotation.gui.panel.ChatPanel")
 	(key_class "java.lang.String")
 	(value "false")
 	(value_class "java.lang.String"))
 
-([pract2_ProjectKB_Class10228] of  Map_Entry
+([pract2_ProjectKB_Class10317] of  Map_Entry
 
 	(key "change_tracking_active")
 	(key_class "java.lang.String")
 	(value "true")
 	(value_class "java.lang.String"))
 
-([pract2_ProjectKB_Class10229] of  Map
+([pract2_ProjectKB_Class10318] of  Map
 )
 
-([pract2_ProjectKB_Class10230] of  Map_Entry
+([pract2_ProjectKB_Class10319] of  Map_Entry
 
 	(key "InstanceDisplay.yellow_stickies")
 	(key_class "java.lang.String")
-	(value "pract2_ProjectKB_Class10229")
+	(value "pract2_ProjectKB_Class10318")
 	(value_class "java.util.Map"))
 
 ([pract2_ProjectKB_Class11] of  Widget
@@ -721,8 +721,8 @@
 	(browser_slot_names [BROWSER_SLOT_NAMES])
 	(customized_instance_widgets
 		[INSTANCE_ANNOTATION_FORM_WIDGET]
-		[STANDARD_SLOT_FORM_WIDGET]
 		[STANDARD_FACET_FORM_WIDGET]
+		[STANDARD_SLOT_FORM_WIDGET]
 		[PAL_FORM_WIDGET]
 		[STANDARD_CLASS_FORM_WIDGET])
 	(default_cls_metaclass ":STANDARD-CLASS")
